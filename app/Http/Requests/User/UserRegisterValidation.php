@@ -23,9 +23,9 @@ class UserRegisterValidation extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'mobile'=>'required|numeric|digits:11',
-            'email' => 'required|string|email|max:150',
-            'password' => ['required','string','min:6','regex:/^(?=.*[A-Z])(?=.*[!@#$&*_-])(?=.*[0-9])(?=.*[a-z]).{8,}$/','confirmed'],
+            'phone'=>'required|numeric|digits:11',
+            'email' => 'string|email|max:150',
+            'password' => ['required','string','min:6','confirmed'],
             'req_co_net'=>'nullable|numeric|min:0|max:1',
         ];
     }

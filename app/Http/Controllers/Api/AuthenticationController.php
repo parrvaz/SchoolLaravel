@@ -14,7 +14,7 @@ class AuthenticationController extends Controller
         $formData = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
+            'phone' => $request->phone,
         ];
 
         $formData['password'] = bcrypt($request->password);
@@ -31,7 +31,7 @@ class AuthenticationController extends Controller
     public function login(Request $request)
     {
         $credentials = [
-            'email'    => $request->email,
+            'phone'    => $request->phone,
             'password' => $request->password
         ];
 

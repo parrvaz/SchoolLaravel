@@ -22,7 +22,7 @@ class UserRegisterValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'mobile'=>'required|numeric|digits:11',
             'email' => 'required|string|email|max:150',
             'password' => ['required','string','min:6','regex:/^(?=.*[A-Z])(?=.*[!@#$&*_-])(?=.*[0-9])(?=.*[a-z]).{8,}$/','confirmed'],

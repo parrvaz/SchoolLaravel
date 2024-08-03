@@ -3,12 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\RemoteController;
 use App\Http\Requests\User\UserRegisterValidation;
-use App\Repositories\BusinessRepository;
-use App\Traits\Auth\WelcomeTrait;
-use App\Traits\General\MessageTrait;
-use App\Traits\Guzzle\GuzzleTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;

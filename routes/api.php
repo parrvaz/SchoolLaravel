@@ -14,7 +14,10 @@ Route::post('register', [AuthenticationController::class, 'register'])->name('re
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
 
 Route::middleware('auth:api')->prefix("grades")->group(function () {
-    Route::get('/store',[UserGradeController::class,'store']  );
+    Route::post('/store',[UserGradeController::class,'store']  );
+    Route::post('/update/{user_grade}',[UserGradeController::class,'update']  );
+    Route::get('/show',[UserGradeController::class,'show']  );
+    Route::post('/delete/{user_grade}',[UserGradeController::class,'delete']  );
 });
 
 

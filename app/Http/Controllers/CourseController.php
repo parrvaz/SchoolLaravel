@@ -2,64 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Course\CourseValidation;
+use App\Models\ClassCourseTeacher;
 use App\Models\Course;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * store class and teacher of courses
      */
-    public function index()
-    {
-        //
-    }
+   public function store(Request $request, CourseValidation $validation){
+       //delete all
+       ClassCourseTeacher::whereHas('classroom', function($query) use($request) {
+           return $query->where('user_grade_id', $request['userGrade']->id);})->delete();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+       //create new
+        ClassCourseTeacher::insert($validation->validated()['list']);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        return $this->successMessage();
+   }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Course $course)
-    {
-        //
-    }
+   public function show(Request $request){
+      return Course::where('grade_id',$request['userGrade']->grade_id)->paginate(config("constant.bidPaginate"));
+   }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Course $course)
-    {
-        //
-    }
+   public function showSingle(Course $course){
+    return $course;
+   }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Course $course)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Course $course)
-    {
-        //
-    }
+   public function showClassroom(Request $request){
+       return ClassCourseTeacher::whereHas('classroom', function($query) use($request) {
+           return $query->where('user_grade_id', $request['userGrade']->id);})->get();
+   }
 }

@@ -33,9 +33,7 @@ class ClassroomController extends Controller
      */
     public function show(Request $request)
     {
-        return $request['userGrade']->classrooms;
-
-//        return new ClassroomCollection(Classroom::where('user_grade_id',auth()->user()->id)->paginate(config("const.paginate")));
+        return new ClassroomCollection($request['userGrade']->classrooms()->paginate(config("constant.paginate")));
     }
 
     public function showSingle(Classroom $classroom)

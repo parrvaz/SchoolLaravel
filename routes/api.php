@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Http\Request;
@@ -54,6 +55,7 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/delete/{teacher}', [TeacherController::class, 'delete']);
         });
 
+        //Course Api
         Route::prefix("courses")->group(function () {
             Route::post('/store', [CourseController::class, 'store']);
             Route::get('/show', [CourseController::class, 'show']);
@@ -61,6 +63,13 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/classroom/show', [CourseController::class, 'showClassroom']);
         });
 
+        //Exam Api
+        Route::prefix("exams")->group(function () {
+            Route::post('/store', [ExamController::class, 'store']);
+            Route::get('/show', [ExamController::class, 'show']);
+            Route::get('/show/{exam}', [ExamController::class, 'showSingle']);
+            Route::post('/delete/{exam}', [ExamController::class, 'delete']);
+        });
     });
 
 });

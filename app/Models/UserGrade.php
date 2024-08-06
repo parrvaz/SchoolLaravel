@@ -17,4 +17,8 @@ class UserGrade extends Model
     public function teachers(){
         return $this->hasMany(Teacher::class);
     }
+
+    public function exams(){
+        return $this->hasMany(Exam::class);
+    }
 }

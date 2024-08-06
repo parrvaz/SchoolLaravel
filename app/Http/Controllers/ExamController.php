@@ -2,64 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Exam\ExamValidation;
+use App\Http\Resources\Exam\ExamCollection;
+use App\Http\Resources\Exam\ExamResource;
 use App\Models\Exam;
+use App\Models\StudentExam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ExamController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+   public function store(Request $request, ExamValidation $validation){
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+       return DB::transaction(function () use($request,$validation) {
+           $exam = Exam::create([
+               'user_grade_id' => $request['userGrade']->id,
+               'classroom_id' => $validation->classroom_id,
+               'date' => $validation->date,
+               'course_id' => $validation->course_id,
+               'expected' => $validation->expected,
+               'totalScore' => $validation->totalScore,
+           ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+           $exam->contents()->attach($validation->contents);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Exam $exam)
-    {
-        //
-    }
+           $exam->students()->createMany($validation->students);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Exam $exam)
-    {
-        //
-    }
+           return $this->successMessage();
+       });
+   }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Exam $exam)
-    {
-        //
-    }
+   public function show(Request $request){
+       return new ExamCollection($request['userGrade']->exams()->paginate(config('constant.bigPaginate')));
+   }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Exam $exam)
-    {
-        //
-    }
+   public function showSingle(Exam $exam){
+       return new ExamResource($exam);
+   }
+
+   public function delete(Exam $exam){
+       
+
+
+   }
 }

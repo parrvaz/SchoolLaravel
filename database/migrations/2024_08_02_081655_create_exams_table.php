@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_grade_id')->constrained();
+            $table->foreignId('classroom_id')->constrained();
             $table->date("date");
             $table->foreignId("course_id")->constrained();
             $table->integer("expected")->default(0);
@@ -20,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('exam_contents', function (Blueprint $table) {
+        Schema::create('content_exam', function (Blueprint $table) {
             $table->id();
             $table->foreignId("exam_id")->constrained();
             $table->foreignId("content_id")->constrained();

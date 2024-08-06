@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('classScores', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_grade_id')->constrained();
+            $table->foreignId('classroom_id')->constrained();
             $table->date("date");
             $table->foreignId("course_id")->constrained();
             $table->integer("expected")->default(0);

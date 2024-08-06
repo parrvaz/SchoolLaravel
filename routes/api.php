@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GradeController;
@@ -41,6 +42,15 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show', [StudentController::class, 'show']);
             Route::get('/show/{student}', [StudentController::class, 'showSingle']);
             Route::post('/delete/{student}', [StudentController::class, 'delete']);
+        });
+
+        //Teachers Api
+        Route::prefix("teachers")->group(function () {
+            Route::post('/store', [TeacherController::class, 'store']);
+            Route::post('/update/{teacher}', [TeacherController::class, 'update']);
+            Route::get('/show', [TeacherController::class, 'show']);
+            Route::get('/show/{teacher}', [TeacherController::class, 'showSingle']);
+            Route::post('/delete/{teacher}', [TeacherController::class, 'delete']);
         });
 
     });

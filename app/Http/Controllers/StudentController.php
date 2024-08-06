@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Student\StudentValidation;
-use App\Http\Resources\Students\StudentResource;
+use App\Http\Resources\Student\StudentCollection;
+use App\Http\Resources\Student\StudentResource;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -39,9 +40,9 @@ class StudentController extends Controller
      */
     public function show(Request $request)
     {
-        return Student::whereHas('classroom', function($query) use($request) {
+        return new StudentCollection( Student::whereHas('classroom', function($query) use($request) {
             return $query->where('user_grade_id', $request['userGrade']->id);
-        })->paginate(config('constant.bigPaginate'));
+        })->paginate(config('constant.bigPaginate')));
     }
 
     public function showSingle(Student $student)

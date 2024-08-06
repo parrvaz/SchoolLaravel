@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Grades\UserGradesValidation;
-use App\Http\Resources\Grades\UserGradeCollection;
-use App\Http\Resources\Grades\ClassroomResource;
-use App\Http\Resources\Grades\UserGradeResource;
+use App\Http\Resources\Grade\UserGradeCollection;
+use App\Http\Resources\Grade\UserGradeResource;
 use App\Models\UserGrade;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class UserGradeController extends Controller

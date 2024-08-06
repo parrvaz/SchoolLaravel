@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Students;
+namespace App\Http\Resources\Student;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -16,6 +16,7 @@ class StudentCollection extends ResourceCollection
     {
         return ['data'=>$this->collection->map(function ($item){
             return[
+                'id'=>$item->id,
                 'firstName'=>$item->firstName,
                 'lastName'=>$item->lastName,
                 'nationalId'=>$item->nationalId,

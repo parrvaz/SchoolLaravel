@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Resources\Grades;
+namespace App\Http\Resources\Grade;
 
-use App\Repositories\BankRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

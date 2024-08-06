@@ -12,4 +12,11 @@ trait MessageTrait
             'status' => 'success',
         ], 200);
     }
+
+    public function error(){
+        return response()->json([
+            'message' => "wrong data",
+            'status' => 'error',
+        ], 422);
+    }
 }

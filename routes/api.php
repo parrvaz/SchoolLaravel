@@ -23,7 +23,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/delete/{user_grade}', [UserGradeController::class, 'delete']);
     });
 
-    Route::prefix('{code}')->middleware("findUserGrade")->group(function () {
+    Route::middleware("findUserGrade")->group(function () {
         //Classroom Api
         Route::prefix("classrooms")->group(function () {
             Route::post('/store', [ClassroomController::class, 'store']);

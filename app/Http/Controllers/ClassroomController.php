@@ -31,14 +31,14 @@ class ClassroomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $code,Request $request)
+    public function show(Request $request)
     {
         return $request['userGrade']->classrooms;
 
 //        return new ClassroomCollection(Classroom::where('user_grade_id',auth()->user()->id)->paginate(config("const.paginate")));
     }
 
-    public function showSingle(string $code,Classroom $classroom)
+    public function showSingle(Classroom $classroom)
     {
         return new ClassroomResource($classroom);
     }
@@ -46,7 +46,7 @@ class ClassroomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ClassroomValidation $validation,string $code, Classroom $classroom)
+    public function update(ClassroomValidation $validation, Classroom $classroom)
     {
         $classroom->update([
             'title'=>$validation->title,

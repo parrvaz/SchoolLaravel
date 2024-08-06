@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticationController;
+use App\Http\Controllers\ClassroomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GradeController;
@@ -13,11 +14,25 @@ Route::get('/user', function (Request $request) {
 Route::post('register', [AuthenticationController::class, 'register'])->name('register');
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
 
-Route::middleware('auth:api')->prefix("grades")->group(function () {
-    Route::post('/store',[UserGradeController::class,'store']  );
-    Route::post('/update/{user_grade}',[UserGradeController::class,'update']  );
-    Route::get('/show',[UserGradeController::class,'show']  );
-    Route::post('/delete/{user_grade}',[UserGradeController::class,'delete']  );
+Route::middleware('auth:api')->group(function () {
+    //UserGrades Api
+    Route::prefix("grades")->group(function () {
+        Route::post('/store', [UserGradeController::class, 'store']);
+        Route::post('/update/{user_grade}', [UserGradeController::class, 'update']);
+        Route::get('/show', [UserGradeController::class, 'show']);
+        Route::post('/delete/{user_grade}', [UserGradeController::class, 'delete']);
+    });
+
+    Route::prefix('{code}')->middleware("findUserGrade")->group(function () {
+        //Classroom Api
+        Route::prefix("classrooms")->group(function () {
+            Route::post('/store', [ClassroomController::class, 'store']);
+            Route::post('/update/{classroom}', [ClassroomController::class, 'update']);
+            Route::get('/show', [ClassroomController::class, 'show']);
+            Route::get('/show/{classroom}', [ClassroomController::class, 'showSingle']);
+            Route::post('/delete/{classroom}', [ClassroomController::class, 'delete']);
+        });
+
+    });
+
 });
-
-

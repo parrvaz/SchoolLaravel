@@ -9,4 +9,8 @@ class UserGrade extends Model
 {
     use HasFactory;
     protected $guarded=[];
+
+    public function classrooms(){
+        return $this->hasMany(Classroom::class);
+    }
 }

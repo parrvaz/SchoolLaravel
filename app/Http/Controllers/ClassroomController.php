@@ -2,64 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Classroom\ClassroomValidation;
+use App\Http\Resources\Classroom\ClassroomCollection;
+use App\Http\Resources\Classroom\ClassroomResource;
 use App\Models\Classroom;
+use App\Models\UserGrade;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function store(Request $request,ClassroomValidation $validation)
     {
-        //
+        $classroom = Classroom::create([
+            'title'=>$validation->title,
+            'number'=>$validation->number,
+            'floor'=>$validation->floor,
+            'user_grade_id'=>$request->userGrade->id,
+            'field_id'=>$validation->field_id,
+        ]);
+
+        return new ClassroomResource($classroom);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
      */
-    public function show(Classroom $classroom)
+    public function show(string $code,Request $request)
     {
-        //
+        return $request['userGrade']->classrooms;
+
+//        return new ClassroomCollection(Classroom::where('user_grade_id',auth()->user()->id)->paginate(config("const.paginate")));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Classroom $classroom)
+    public function showSingle(string $code,Classroom $classroom)
     {
-        //
+        return new ClassroomResource($classroom);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Classroom $classroom)
+    public function update(ClassroomValidation $validation,string $code, Classroom $classroom)
     {
-        //
+        $classroom->update([
+            'title'=>$validation->title,
+            'number'=>$validation->number,
+            'floor'=>$validation->floor,
+            'field_id'=>$validation->field_id,
+        ]);
+
+        return new ClassroomResource($classroom);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Classroom $classroom)
+    public function delete(Classroom $classroom)
     {
-        //
+        $classroom->delete();
+        return $this->successMessage();
     }
 }

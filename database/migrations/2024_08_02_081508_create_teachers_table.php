@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('nationalId')->nullable();
             $table->string('degree')->nullable();
             $table->string('personalId')->nullable();
-            $table->foreignId('grade_id')->constrained();
-
+            $table->foreignId('user_grade_id')->constrained();
             $table->timestamps();
         });
 

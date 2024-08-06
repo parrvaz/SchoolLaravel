@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('classrooms', function (Blueprint $table) {
             $table->id();
-            $table->integer("number");
+            $table->string('title');
+            $table->integer("number")->nullable();
             $table->integer("floor")->nullable();
-            $table->foreignId("grade_id")->constrained();
+            $table->foreignId("user_grade_id")->constrained();
             $table->foreignId("field_id")->constrained();
             $table->timestamps();
         });

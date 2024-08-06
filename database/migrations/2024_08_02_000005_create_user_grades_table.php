@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("user_id")->constrained();
             $table->foreignId("grade_id")->constrained();
+            $table->string("code")->unique();
             $table->string("title");
             $table->boolean("isActive")->default(false);
             $table->date("deadline")->nullable();

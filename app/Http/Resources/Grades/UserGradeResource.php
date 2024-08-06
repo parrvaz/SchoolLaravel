@@ -18,6 +18,7 @@ class UserGradeResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'grade_id' => $this->grade_id,
+            'code' => $this->code,
         ];
     }
 }

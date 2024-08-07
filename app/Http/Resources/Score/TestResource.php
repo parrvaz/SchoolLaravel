@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Score;
 
+use App\Models\StudentTestCourse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

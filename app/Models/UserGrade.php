@@ -25,4 +25,8 @@ class UserGrade extends Model
     public function classScores(){
         return $this->hasMany(ClassScore::class);
     }
+
+    public function tests(){
+        return $this->hasMany(Test::class);
+    }
 }

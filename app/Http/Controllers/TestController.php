@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Score\ScoreValidation;
+use App\Http\Requests\Score\StudentTestValidation;
 use App\Http\Requests\Score\TestValidation;
+use App\Http\Resources\Score\StudentTestScoreCollection;
+use App\Http\Resources\Score\TestCollection;
 use App\Http\Resources\Score\TestResource;
+use App\Models\StudentTestCourse;
 use App\Models\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,12 +47,33 @@ class TestController extends Controller
         });
     }
 
+    public function storeStudents(Test $test,StudentTestValidation $validation){
+        return DB::transaction(function () use($test,$validation) {
+            //todo:check test course ids
+            $data = [];
+            foreach ($validation->students as $std) {
+                foreach ($std['scores'] as $score) {
+                    $row = [];
+                    $row['test_course_id'] = $score['test_course_id'];
+                    $row['student_id'] = $std['student_id'];
+                    $row['score'] = $score['score'];
+                    $row['balance'] = $score['balance'] ?? 0;
+
+                    array_push($data, $row);
+                }
+            }
+
+            $studentTestCourse = StudentTestCourse::insert($data);
+            return new StudentTestScoreCollection($studentTestCourse);
+        });
+    }
+
     public function show(Request $request){
-        return new ScoreCollection($request['userGrade']->tests()->paginate(config('constant.bigPaginate')));
+        return new TestCollection($request['userGrade']->tests()->paginate(config('constant.bigPaginate')));
     }
 
     public function showSingle(Test $test){
-        return new ScoreResource($test);
+        return new TestResource($test);
     }
 
     public function update(ScoreValidation $validation, Test $test){

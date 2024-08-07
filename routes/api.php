@@ -86,8 +86,11 @@ Route::middleware('auth:api')->group(function () {
         //Test Api
         Route::prefix("tests")->group(function () {
             Route::post('/store', [TestController::class, 'store']);
+            Route::post('/{test}/store', [TestController::class, 'storeStudents']);
             Route::get('/show', [TestController::class, 'show']);
             Route::get('/show/{test}', [TestController::class, 'showSingle']);
+
+
             Route::post('/update/{test}', [TestController::class, 'update']);
             Route::post('/delete/{test}', [TestController::class, 'delete']);
         });

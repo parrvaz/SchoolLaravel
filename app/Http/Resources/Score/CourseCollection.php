@@ -21,7 +21,10 @@ class CourseCollection extends ResourceCollection
                 'course_name' => $item->course->name,
                 'expected' => $item->expected,
                 'average' => $item->average,
-                'contents'=>new ContentCollection($item->contents)
+                'contents'=>new ContentCollection($item->contents),
+                'students'=>new StudentTestScoreCollection($item->students),
+//                'students'=>new StudentScoreCollection($item->students),
+
             ];
         })->toArray();
     }

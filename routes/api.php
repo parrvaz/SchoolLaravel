@@ -90,9 +90,9 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show', [TestController::class, 'show']);
             Route::get('/show/{test}', [TestController::class, 'showSingle']);
 
-
-            Route::post('/update/{test}', [TestController::class, 'update']);
-            Route::post('/delete/{test}', [TestController::class, 'delete']);
+            //todo update and delete
+//            Route::post('/update/{test}', [TestController::class, 'update']);
+//            Route::post('/delete/{test}', [TestController::class, 'delete']);
         });
     });
 

@@ -76,6 +76,8 @@ class TestController extends Controller
         return new TestResource($test);
     }
 
+
+
     public function update(ScoreValidation $validation, Test $test){
         return DB::transaction(function () use($test,$validation) {
 
@@ -98,15 +100,19 @@ class TestController extends Controller
             //create student items
             $test->students()->createMany($validation->students);
 
-            return new ScoreResource($test);
+            return new TestResource($test);
         });
     }
 
     public function delete(Test $test){
         return DB::transaction(function () use($test) {
+            foreach ($test->courses() as $course){
+                $this->deleteTestContents($test);
+                $this->deleteTestStudents($test);
+            }
 
-            $this->deleteTestContents($test);
-            $this->deleteTestStudents($test);
+
+            $this->deleteTestCourses($test);
             $test->delete();
             return $this->successMessage();
         });
@@ -120,5 +126,9 @@ class TestController extends Controller
     private function deleteTestStudents(Test $test)
     {
         $test->students()->delete();
+    }
+
+    private function deleteTestCourses(Test $test)
+    {
     }
 }

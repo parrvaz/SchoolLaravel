@@ -68,6 +68,7 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/store', [ExamController::class, 'store']);
             Route::get('/show', [ExamController::class, 'show']);
             Route::get('/show/{exam}', [ExamController::class, 'showSingle']);
+            Route::post('/update/{exam}', [ExamController::class, 'update']);
             Route::post('/delete/{exam}', [ExamController::class, 'delete']);
         });
     });

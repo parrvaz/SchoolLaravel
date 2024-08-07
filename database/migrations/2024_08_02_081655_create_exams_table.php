@@ -24,15 +24,15 @@ return new class extends Migration
 
         Schema::create('content_exam', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("exam_id")->constrained();
-            $table->foreignId("content_id")->constrained();
+            $table->foreignId("exam_id")->constrained()->onDelete("cascade");
+            $table->foreignId("content_id")->constrained()->onDelete("cascade");
             $table->timestamps();
         });
 
         Schema::create('student_exam', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("student_id")->constrained();
-            $table->foreignId("exam_id")->constrained();
+            $table->foreignId("student_id")->constrained()->onDelete("cascade");
+            $table->foreignId("exam_id")->constrained()->onDelete("cascade");
             $table->integer("score")->default(0);
             $table->string("description")->nullable();
             $table->timestamps();

@@ -40,9 +40,43 @@ class ExamController extends Controller
        return new ExamResource($exam);
    }
 
-   public function delete(Exam $exam){
-       
+   public function update(ExamValidation $validation,Exam $exam){
+       //delete old items
+       $this->deleteExamContents($exam);
+       $this->deleteExamStudents($exam);
 
+       //update exam main data
+       $exam->update([
+           'classroom_id' => $validation->classroom_id,
+           'date' => $validation->date,
+           'course_id' => $validation->course_id,
+           'expected' => $validation->expected,
+           'totalScore' => $validation->totalScore,
+       ]);
 
+       //create content items
+       $exam->contents()->attach($validation->contents);
+
+       //create student items
+       $exam->students()->createMany($validation->students);
+
+       return new ExamResource($exam);
    }
+
+   public function delete(Exam $exam){
+       $this->deleteExamContents($exam);
+       $this->deleteExamStudents($exam);
+       $exam->delete();
+       return $this->successMessage();
+   }
+
+    private function deleteExamContents(Exam $exam)
+    {
+        $exam->contents()->detach();
+    }
+
+    private function deleteExamStudents(Exam $exam)
+    {
+        $exam->students()->delete();
+    }
 }

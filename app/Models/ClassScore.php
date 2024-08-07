@@ -10,4 +10,11 @@ class ClassScore extends Model
     use HasFactory;
     protected $guarded=[];
 
+    public function contents(){
+        return $this->belongsToMany(Content::class);
+    }
+
+    public function students(){
+        return $this->hasMany(StudentClassScore::class);
+    }
 }

@@ -2,64 +2,81 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Score\ScoreValidation;
+use App\Http\Resources\Score\ScoreCollection;
+use App\Http\Resources\Score\ScoreResource;
 use App\Models\ClassScore;
+use App\Models\Exam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClassScoreController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function store(Request $request, ScoreValidation $validation){
+
+        return DB::transaction(function () use($request,$validation) {
+            $classScore = ClassScore::create([
+                'user_grade_id' => $request['userGrade']->id,
+                'classroom_id' => $validation->classroom_id,
+                'date' => $validation->date,
+                'course_id' => $validation->course_id,
+                'expected' => $validation->expected,
+                'totalScore' => $validation->totalScore,
+            ]);
+
+            $classScore->contents()->attach($validation->contents);
+
+            $classScore->students()->createMany($validation->students);
+
+            return $this->successMessage();
+        });
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function show(Request $request){
+        return new ScoreCollection($request['userGrade']->classScores()->paginate(config('constant.bigPaginate')));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function showSingle(ClassScore $classScore){
+        return new ScoreResource($classScore);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ClassScore $classScore)
-    {
-        //
+    public function update(ScoreValidation $validation, ClassScore $classScore){
+        //delete old items
+        $this->deleteClassScoreContents($classScore);
+        $this->deleteClassScoreStudents($classScore);
+
+        //update classScore main data
+        $classScore->update([
+            'classroom_id' => $validation->classroom_id,
+            'date' => $validation->date,
+            'course_id' => $validation->course_id,
+            'expected' => $validation->expected,
+            'totalScore' => $validation->totalScore,
+        ]);
+
+        //create content items
+        $classScore->contents()->attach($validation->contents);
+
+        //create student items
+        $classScore->students()->createMany($validation->students);
+
+        return new ScoreResource($classScore);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ClassScore $classScore)
-    {
-        //
+    public function delete(ClassScore $classScore){
+        $this->deleteClassScoreContents($classScore);
+        $this->deleteClassScoreStudents($classScore);
+        $classScore->delete();
+        return $this->successMessage();
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ClassScore $classScore)
+    private function deleteClassScoreContents(ClassScore $classScore)
     {
-        //
+        $classScore->contents()->detach();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ClassScore $classScore)
+    private function deleteClassScoreStudents(ClassScore $classScore)
     {
-        //
+        $classScore->students()->delete();
     }
 }

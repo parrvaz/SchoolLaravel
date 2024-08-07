@@ -13,4 +13,8 @@ class Content extends Model
     public function exams(){
         return $this->belongsToMany(Exam::class);
     }
+
+    public function classScores(){
+        return $this->belongsToMany(ClassScore::class);
+    }
 }

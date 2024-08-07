@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Exam;
+namespace App\Http\Resources\Score;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class StudentScoreCollection extends ResourceCollection
+class ContentCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -17,10 +17,8 @@ class StudentScoreCollection extends ResourceCollection
         return $this->collection->map(function ($item){
             return[
                 'id' =>$item->id,
-                'student_id' => $item->student_id,
-                'score' => $item->score,
-                'description' => $item->description,
-                'balance' => $item->balance,
+                'season' => $item->season,
+                'content' => $item->content,
             ];
         })->toArray();
     }

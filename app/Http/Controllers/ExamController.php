@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Exam\ExamValidation;
-use App\Http\Resources\Exam\ExamCollection;
-use App\Http\Resources\Exam\ExamResource;
+use App\Http\Requests\Score\ScoreValidation;
+use App\Http\Resources\Score\ScoreCollection;
+use App\Http\Resources\Score\ScoreResource;
 use App\Models\Exam;
 use App\Models\StudentExam;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class ExamController extends Controller
 {
-   public function store(Request $request, ExamValidation $validation){
+   public function store(Request $request, ScoreValidation $validation){
 
        return DB::transaction(function () use($request,$validation) {
            $exam = Exam::create([
@@ -33,14 +33,14 @@ class ExamController extends Controller
    }
 
    public function show(Request $request){
-       return new ExamCollection($request['userGrade']->exams()->paginate(config('constant.bigPaginate')));
+       return new ScoreCollection($request['userGrade']->exams()->paginate(config('constant.bigPaginate')));
    }
 
    public function showSingle(Exam $exam){
-       return new ExamResource($exam);
+       return new ScoreResource($exam);
    }
 
-   public function update(ExamValidation $validation,Exam $exam){
+   public function update(ScoreValidation $validation, Exam $exam){
        //delete old items
        $this->deleteExamContents($exam);
        $this->deleteExamStudents($exam);
@@ -60,7 +60,7 @@ class ExamController extends Controller
        //create student items
        $exam->students()->createMany($validation->students);
 
-       return new ExamResource($exam);
+       return new ScoreResource($exam);
    }
 
    public function delete(Exam $exam){

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\ClassScoreController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\StudentController;
@@ -70,6 +71,15 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show/{exam}', [ExamController::class, 'showSingle']);
             Route::post('/update/{exam}', [ExamController::class, 'update']);
             Route::post('/delete/{exam}', [ExamController::class, 'delete']);
+        });
+
+        //ClassScore Api
+        Route::prefix("classScores")->group(function () {
+            Route::post('/store', [ClassScoreController::class, 'store']);
+            Route::get('/show', [ClassScoreController::class, 'show']);
+            Route::get('/show/{classScore}', [ClassScoreController::class, 'showSingle']);
+            Route::post('/update/{classScore}', [ClassScoreController::class, 'update']);
+            Route::post('/delete/{classScore}', [ClassScoreController::class, 'delete']);
         });
     });
 

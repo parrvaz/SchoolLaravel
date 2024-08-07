@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Exam;
+namespace App\Http\Requests\Score;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ExamValidation extends FormRequest
+class ScoreValidation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('classScores', function (Blueprint $table) {
+        Schema::create('class_scores', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_grade_id')->constrained();
             $table->foreignId('classroom_id')->constrained();
@@ -22,17 +22,17 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('classScore_contents', function (Blueprint $table) {
+        Schema::create('class_score_content', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("classScore_id")->constrained();
+            $table->foreignId("class_score_id")->constrained();
             $table->foreignId("content_id")->constrained();
             $table->timestamps();
         });
 
-        Schema::create('student_classScore', function (Blueprint $table) {
+        Schema::create('student_class_score', function (Blueprint $table) {
             $table->id();
             $table->foreignId("student_id")->constrained();
-            $table->foreignId("classScore_id")->constrained();
+            $table->foreignId("class_score_id")->constrained();
             $table->integer("score")->default(0);
             $table->string("description")->nullable();
             $table->timestamps();

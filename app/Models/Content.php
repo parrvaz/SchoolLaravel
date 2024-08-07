@@ -17,4 +17,7 @@ class Content extends Model
     public function classScores(){
         return $this->belongsToMany(ClassScore::class);
     }
+    public function testCourses(){
+        return $this->belongsToMany(TestCourse::class);
+    }
 }

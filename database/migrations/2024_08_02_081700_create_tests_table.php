@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_grade_id')->constrained();
+            $table->foreignId('user_grade_id')->constrained()->onDelete("cascade");
             $table->foreignId('classroom_id')->constrained();
             $table->date("date");
             $table->string("title")->nullable();
@@ -22,24 +22,24 @@ return new class extends Migration
 
         Schema::create('test_courses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("test_id")->constrained();
-            $table->foreignId("course_id")->constrained();
+            $table->foreignId("test_id")->constrained()->onDelete("cascade");
+            $table->foreignId("course_id")->constrained()->onDelete("cascade");
             $table->integer("average")->default(0);
             $table->integer("expected")->default(0);
             $table->timestamps();
         });
 
-        Schema::create('test_course_contents', function (Blueprint $table) {
+        Schema::create('content_test_course', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("test_course_id")->constrained();
-            $table->foreignId("content_id")->constrained();
+            $table->foreignId("test_course_id")->constrained()->onDelete("cascade");
+            $table->foreignId("content_id")->constrained()->onDelete("cascade");
             $table->timestamps();
         });
 
         Schema::create('student_test_course', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("student_id")->constrained();
-            $table->foreignId("test_course_id")->constrained();
+            $table->foreignId("student_id")->constrained()->onDelete("cascade");
+            $table->foreignId("test_course_id")->constrained()->onDelete("cascade");
             $table->integer("score")->default(0);
             $table->integer("balance")->default(0);
             $table->string("description")->nullable();

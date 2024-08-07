@@ -41,33 +41,39 @@ class ExamController extends Controller
    }
 
    public function update(ScoreValidation $validation, Exam $exam){
-       //delete old items
-       $this->deleteExamContents($exam);
-       $this->deleteExamStudents($exam);
+       return DB::transaction(function () use($exam,$validation) {
 
-       //update exam main data
-       $exam->update([
-           'classroom_id' => $validation->classroom_id,
-           'date' => $validation->date,
-           'course_id' => $validation->course_id,
-           'expected' => $validation->expected,
-           'totalScore' => $validation->totalScore,
-       ]);
+           //delete old items
+           $this->deleteExamContents($exam);
+           $this->deleteExamStudents($exam);
 
-       //create content items
-       $exam->contents()->attach($validation->contents);
+           //update exam main data
+           $exam->update([
+               'classroom_id' => $validation->classroom_id,
+               'date' => $validation->date,
+               'course_id' => $validation->course_id,
+               'expected' => $validation->expected,
+               'totalScore' => $validation->totalScore,
+           ]);
 
-       //create student items
-       $exam->students()->createMany($validation->students);
+           //create content items
+           $exam->contents()->attach($validation->contents);
 
-       return new ScoreResource($exam);
+           //create student items
+           $exam->students()->createMany($validation->students);
+
+           return new ScoreResource($exam);
+       });
    }
 
    public function delete(Exam $exam){
-       $this->deleteExamContents($exam);
-       $this->deleteExamStudents($exam);
-       $exam->delete();
-       return $this->successMessage();
+       return DB::transaction(function () use($exam) {
+
+           $this->deleteExamContents($exam);
+           $this->deleteExamStudents($exam);
+           $exam->delete();
+           return $this->successMessage();
+       });
    }
 
     private function deleteExamContents(Exam $exam)

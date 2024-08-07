@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GradeController;
@@ -80,6 +81,15 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show/{classScore}', [ClassScoreController::class, 'showSingle']);
             Route::post('/update/{classScore}', [ClassScoreController::class, 'update']);
             Route::post('/delete/{classScore}', [ClassScoreController::class, 'delete']);
+        });
+
+        //Test Api
+        Route::prefix("tests")->group(function () {
+            Route::post('/store', [TestController::class, 'store']);
+            Route::get('/show', [TestController::class, 'show']);
+            Route::get('/show/{test}', [TestController::class, 'showSingle']);
+            Route::post('/update/{test}', [TestController::class, 'update']);
+            Route::post('/delete/{test}', [TestController::class, 'delete']);
         });
     });
 

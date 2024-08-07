@@ -41,33 +41,39 @@ class ClassScoreController extends Controller
     }
 
     public function update(ScoreValidation $validation, ClassScore $classScore){
-        //delete old items
-        $this->deleteClassScoreContents($classScore);
-        $this->deleteClassScoreStudents($classScore);
+        return DB::transaction(function () use($classScore,$validation) {
 
-        //update classScore main data
-        $classScore->update([
-            'classroom_id' => $validation->classroom_id,
-            'date' => $validation->date,
-            'course_id' => $validation->course_id,
-            'expected' => $validation->expected,
-            'totalScore' => $validation->totalScore,
-        ]);
+            //delete old items
+            $this->deleteClassScoreContents($classScore);
+            $this->deleteClassScoreStudents($classScore);
 
-        //create content items
-        $classScore->contents()->attach($validation->contents);
+            //update classScore main data
+            $classScore->update([
+                'classroom_id' => $validation->classroom_id,
+                'date' => $validation->date,
+                'course_id' => $validation->course_id,
+                'expected' => $validation->expected,
+                'totalScore' => $validation->totalScore,
+            ]);
 
-        //create student items
-        $classScore->students()->createMany($validation->students);
+            //create content items
+            $classScore->contents()->attach($validation->contents);
 
-        return new ScoreResource($classScore);
+            //create student items
+            $classScore->students()->createMany($validation->students);
+
+            return new ScoreResource($classScore);
+        });
     }
 
     public function delete(ClassScore $classScore){
-        $this->deleteClassScoreContents($classScore);
-        $this->deleteClassScoreStudents($classScore);
-        $classScore->delete();
-        return $this->successMessage();
+        return DB::transaction(function () use($classScore) {
+
+            $this->deleteClassScoreContents($classScore);
+            $this->deleteClassScoreStudents($classScore);
+            $classScore->delete();
+            return $this->successMessage();
+        });
     }
 
     private function deleteClassScoreContents(ClassScore $classScore)

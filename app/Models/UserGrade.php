@@ -29,4 +29,8 @@ class UserGrade extends Model
     public function tests(){
         return $this->hasMany(Test::class);
     }
+
+    public function plans(){
+        return $this->hasMany(Plan::class);
+    }
 }

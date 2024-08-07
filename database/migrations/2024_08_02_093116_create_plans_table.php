@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('weeklyPlan', function (Blueprint $table) {
+        Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_grade_id')->constrained();
+            $table->foreignId('user_grade_id')->constrained()->onDelete('cascade');
             $table->foreignId('classroom_id')->constrained();
             $table->date("date");
             $table->foreignId("course_id")->constrained();
-            $table->integer("hours");
+            $table->integer("minutes");
             $table->timestamps();
         });
 
-        Schema::create('student_weeklyPlan', function (Blueprint $table) {
+        Schema::create('student_plan', function (Blueprint $table) {
             $table->id();
             $table->foreignId("student_id")->constrained();
             $table->date("date");
             $table->foreignId("course_id")->constrained();
-            $table->integer("hours");
+            $table->integer("minutes");
             $table->timestamps();
         });
     }

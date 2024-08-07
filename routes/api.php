@@ -6,8 +6,10 @@ use App\Http\Controllers\ClassScoreController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentPlanController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\PlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GradeController;
@@ -93,6 +95,26 @@ Route::middleware('auth:api')->group(function () {
             //todo update and delete
 //            Route::post('/update/{test}', [TestController::class, 'update']);
 //            Route::post('/delete/{test}', [TestController::class, 'delete']);
+        });
+
+
+        //Plan Api
+        Route::prefix("plans")->group(function () {
+            Route::post('/store', [PlanController::class, 'store']);
+            Route::get('/show', [PlanController::class, 'show']);
+            Route::get('/show/{plan}', [PlanController::class, 'showSingle']);
+            Route::post('/update/{plan}', [PlanController::class, 'update']);
+            Route::post('/delete/{plan}', [PlanController::class, 'delete']);
+        });
+
+
+        //Student Api
+        Route::prefix("plans/students")->group(function () {
+            Route::post('/store', [StudentPlanController::class, 'store']);
+//            Route::get('/show', [StudentPlanController::class, 'show']);
+            Route::get('/show/{plan}', [StudentPlanController::class, 'showSingle']);
+            Route::post('/update/{plan}', [StudentPlanController::class, 'update']);
+            Route::post('/delete/{plan}', [StudentPlanController::class, 'delete']);
         });
     });
 

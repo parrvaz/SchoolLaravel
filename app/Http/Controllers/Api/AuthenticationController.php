@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRegisterValidation;
+use http\Exception\BadMethodCallException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use function PHPUnit\Framework\throwException;
+
 class AuthenticationController extends Controller
 {
     public function register(Request $request,UserRegisterValidation $registerValidation)
@@ -49,5 +53,9 @@ class AuthenticationController extends Controller
             'error' => 'Unauthorised'
         ], 401);
 
+    }
+
+    public function log(){
+        throwException();
     }
 }

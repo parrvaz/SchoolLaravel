@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UserLoginValidation;
 use App\Http\Requests\User\UserRegisterValidation;
 use http\Exception\BadMethodCallException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
 use function PHPUnit\Framework\throwException;
 
@@ -32,7 +34,7 @@ class AuthenticationController extends Controller
 
     }
 
-    public function login(Request $request)
+    public function login(Request $request,UserLoginValidation $validation)
     {
         $credentials = [
             'phone'    => $request->phone,
@@ -52,6 +54,14 @@ class AuthenticationController extends Controller
         return response()->json([
             'error' => 'Unauthorised'
         ], 401);
+
+    }
+
+
+    public function user(Request $request){
+        return response()->json([
+            'data' => auth()->user(),
+        ], 200);
 
     }
 

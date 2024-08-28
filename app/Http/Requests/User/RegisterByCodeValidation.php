@@ -25,7 +25,7 @@ class RegisterByCodeValidation extends FormRequest
     {
         return [
             'first_name' => 'required|string|max:255',
-            'mobile'=>'required|numeric|digits:11',
+            'phone'=>'required|numeric|digits:11|unique:users',
             'email' => 'required|string|email|max:255',
             'password' => ['required','string','min:6','regex:/^(?=.*[A-Z])(?=.*[!@#$&*_-])(?=.*[0-9])(?=.*[a-z]).{8,}$/','confirmed'],
             'code'=>'required|integer|digits:4',

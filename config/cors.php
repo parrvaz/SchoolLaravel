@@ -1,21 +1,34 @@
 <?php
 
-
 return [
 
-'paths' => ['api/*', 'sanctum/csrf-cookie'], // مسیرهایی که CORS برای آن‌ها اعمال می‌شود
+    /*
+    |--------------------------------------------------------------------------
+    | Cross-Origin Resource Sharing (CORS) Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure your settings for cross-origin resource sharing
+    | or "CORS". This determines what cross-origin operations may execute
+    | in web browsers. You are free to adjust these settings as needed.
+    |
+    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+    |
+    */
 
-'allowed_methods' => ['*'], // همه متدهای HTTP مجاز هستند
+    'paths' => ['api/*'],
 
-'allowed_origins' => ['*'], // همه دامنه‌ها مجاز هستند (برای امنیت بیشتر می‌توانید دامنه خاصی را مشخص کنید)
+    'allowed_methods' => ['*'],
 
-'allowed_origins_patterns' => [],
+    'allowed_origins' => ['*'],
 
-'allowed_headers' => ['*'], // همه هدرها مجاز هستند
+    'allowed_origins_patterns' => [],
 
-'exposed_headers' => [],
+    'allowed_headers' => ['*'],
 
-'max_age' => 0,
+    'exposed_headers' => [],
 
-'supports_credentials' => false, // اگر باید کوکی‌ها و اعتبارات ارسال شوند، این را true کنید
+    'max_age' => 0,
+
+    'supports_credentials' => true,
+
 ];

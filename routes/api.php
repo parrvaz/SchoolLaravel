@@ -15,15 +15,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\UserGradeController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+//Route::get('/user', function (Request $request) {
+//    return $request->user();
+//})->middleware('auth:sanctum');
 
 Route::post('register', [AuthenticationController::class, 'register'])->name('register');
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
 Route::post('log', [AuthenticationController::class, 'log'])->name('log');
 
 Route::middleware('auth:api')->group(function () {
+    Route::get('user', [AuthenticationController::class, 'user'])->name('user');
+
+
     //UserGrades Api
     Route::prefix("grades")->group(function () {
         Route::post('/store', [UserGradeController::class, 'store']);

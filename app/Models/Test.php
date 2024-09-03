@@ -14,4 +14,11 @@ class Test extends Model
         return $this->hasMany(TestCourse::class);
     }
 
+    public function classroom(){
+        return $this->belongsTo(Classroom::class);
+    }
+
+    public function getClassroomTitleAttribute(){
+        return $this->classroom->title;
+    }
 }

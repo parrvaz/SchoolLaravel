@@ -9,4 +9,8 @@ class Course extends Model
 {
     use HasFactory;
     protected $guarded=[];
+
+    public function contents(){
+        return $this->hasMany(Content::class);
+    }
 }

@@ -23,6 +23,7 @@ class ClassroomCollection extends ResourceCollection
                 'floor'=>$item->floor,
                 'user_grade_id'=>$item->user_grade_id,
                 'field_id'=>$item->field_id,
+                'field'=>$item->fieldTitle,
             ];
         })];
     }

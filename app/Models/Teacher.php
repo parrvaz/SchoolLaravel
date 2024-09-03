@@ -9,4 +9,8 @@ class Teacher extends Model
 {
     use HasFactory;
     protected $guarded=[];
+
+    public function getNameAttribute(){
+        return $this->firstName ." ". $this->lastName;
+    }
 }

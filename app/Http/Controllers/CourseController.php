@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Course\CourseValidation;
+use App\Http\Resources\Course\CourseCollection;
 use App\Models\ClassCourseTeacher;
 use App\Models\Course;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class CourseController extends Controller
    }
 
    public function show(Request $request){
-      return Course::where('grade_id',$request['userGrade']->grade_id)->paginate(config("constant.bidPaginate"));
+      return new CourseCollection(Course::where('grade_id',$request['userGrade']->grade_id)->paginate(config("constant.bidPaginate")));
    }
 
    public function showSingle(Course $course){

@@ -19,6 +19,7 @@ class TeacherCollection extends ResourceCollection
                 'id'=>$item->id,
                 'firstName'=>$item->firstName,
                 'lastName'=>$item->lastName,
+                'name'=>$item->name,
                 'nationalId'=>$item->nationalId,
                 'degree'=>$item->degree,
                 'personalId'=>$item->personalId,

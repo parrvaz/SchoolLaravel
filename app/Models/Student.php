@@ -15,6 +15,10 @@ class Student extends Model
     }
 
     public function getNameAttribute(){
-       return $this->lastName ." ". $this->firstName;
+       return $this->firstName ." ". $this->lastName;
+    }
+
+    public function getClassroomTitleAttribute(){
+        return $this->classroom->title;
     }
 }

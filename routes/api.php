@@ -101,6 +101,10 @@ Route::middleware('auth:api')->group(function () {
 //            Route::post('/delete/{test}', [TestController::class, 'delete']);
         });
 
+        Route::prefix("allExams")->group(function () {
+            Route::get('/show', [GradeController::class, 'allExamShow']);
+
+        });
 
         //Plan Api
         Route::prefix("plans")->group(function () {

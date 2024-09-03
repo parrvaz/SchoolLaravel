@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources\Score;
 
+use App\Models\Classroom;
+use App\Models\Course;
+use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -19,8 +22,10 @@ class ScoreCollection extends ResourceCollection
                 'id' =>$item->id,
                 'user_grade_id' => $item->id,
                 'classroom_id' => $item->classroom_id,
-                'date' => $item->date,
+                'classroom' => $item->classroomTitle?? Classroom::find($item->classroom_id)->title,
+                'date' => ServiceTrait::gToJ( $item->date),
                 'course_id' => $item->course_id,
+                'course' => $item->courseName ?? Course::find( $item->course_id)->name,
                 'expected' => $item->expected,
                 'totalScore' => $item->totalScore,
             ];

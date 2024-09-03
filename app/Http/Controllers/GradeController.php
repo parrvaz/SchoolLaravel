@@ -2,64 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Classroom\ClassroomCollection;
+use App\Http\Resources\Score\ScoreCollection;
+use App\Http\Resources\Student\StudentCollection;
 use App\Models\Grade;
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GradeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    public function allExamShow(Request $request){
+        $userGrade = $request['userGrade'];
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $exams = DB::table('exams')
+            ->where('user_grade_id',$userGrade->id);
+        $classScores = DB::table('class_scores')
+            ->where('user_grade_id',$userGrade->id)
+            ->union($exams);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        return new ScoreCollection( $classScores->paginate($request->per_page ?? 15) );
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Grade $grade)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Grade $grade)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Grade $grade)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Grade $grade)
-    {
-        //
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserLoginValidation;
 use App\Http\Requests\User\UserRegisterValidation;
+use App\Http\Resources\Auth\UserResource;
 use http\Exception\BadMethodCallException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,7 +61,7 @@ class AuthenticationController extends Controller
 
     public function user(Request $request){
         return response()->json([
-            'data' => auth()->user(),
+            'data' =>new UserResource( auth()->user()),
         ], 200);
 
     }

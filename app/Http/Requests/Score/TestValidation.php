@@ -19,6 +19,7 @@ class TestValidation extends FormRequest
             'date'=>'required|date',
             'classroom_id'=>'required|exists:classrooms,id',
             'title'=>'nullable|string|min:2|max:50',
+            'status'=>'nullable|boolean',
 
             'courses'=>'required|array|min:1',
             'courses.*.course_id'=>'required|exists:courses,id',

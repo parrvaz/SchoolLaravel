@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('classroom_id')->constrained();
             $table->date("date");
             $table->string("title")->nullable();
+            $table->boolean("status")->default(0);
             $table->timestamps();
         });
 

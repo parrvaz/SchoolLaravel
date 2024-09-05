@@ -21,6 +21,7 @@ class ScoreValidation extends FormRequest
             'classroom_id'=>'required|exists:classrooms,id',
             'expected'=>'nullable|numeric|min:0|max:100',
             'totalScore'=>'required|numeric|min:1|max:100',
+            'status'=>'nullable|boolean',
 
             'contents'=>'required|array|min:1',
             'contents.*'=>'required|exists:contents,id',

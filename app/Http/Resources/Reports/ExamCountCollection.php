@@ -15,12 +15,12 @@ class ExamCountCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return ['data'=>$this->collection->map(function ($item){
+        return $this->collection->map(function ($item){
             return[
                 'id'=> $item->id,
                 'title'=> $item->title,
-                'exam_count'=> $item->exam_count,
+                'count'=> $item->count,
             ];
-        })];
+        })->toArray();
     }
 }

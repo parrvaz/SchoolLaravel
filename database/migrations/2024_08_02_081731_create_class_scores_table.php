@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId("course_id")->constrained();
             $table->integer("expected")->default(0);
             $table->integer("totalScore")->default(0);
+            $table->boolean("status")->default(0);
             $table->timestamps();
         });
 

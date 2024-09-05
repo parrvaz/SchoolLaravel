@@ -26,7 +26,11 @@ class ExamController extends Controller
 
            $exam->contents()->attach($validation->contents);
 
+
+
+           if ($validation["students"])
            $exam->students()->createMany($validation->students);
+
 
            return $this->successMessage();
        });

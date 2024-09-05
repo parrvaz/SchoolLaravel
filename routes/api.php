@@ -5,6 +5,7 @@ use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ClassScoreController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\FieldController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentPlanController;
 use App\Http\Controllers\TeacherController;
@@ -36,6 +37,11 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::middleware("findUserGrade")->group(function () {
+        //Field Api
+        Route::prefix("fields")->group(function () {
+            Route::get('/show', [FieldController::class, 'show']);
+        });
+
         //Classroom Api
         Route::prefix("classrooms")->group(function () {
             Route::post('/store', [ClassroomController::class, 'store']);
@@ -103,6 +109,7 @@ Route::middleware('auth:api')->group(function () {
 
         Route::prefix("allExams")->group(function () {
             Route::get('/show', [GradeController::class, 'allExamShow']);
+            Route::get('/create', [GradeController::class, 'examsCreate']);
 
         });
 

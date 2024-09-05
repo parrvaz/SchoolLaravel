@@ -25,7 +25,7 @@ class ScoreValidation extends FormRequest
             'contents'=>'required|array|min:1',
             'contents.*'=>'required|exists:contents,id',
 
-            'students'=>'required|array|min:1',
+            'students'=>'nullable|array|min:1',
             'students.*.student_id'=>'required|exists:students,id',
             'students.*.score'=>'required|numeric|min:0|max:100',
             'students.*.description'=>'nullable|string|min:2|max:50',

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Classroom\ClassroomCollection;
+use App\Http\Resources\Grade\ExamCreateCollection;
+use App\Http\Resources\Grade\ExamCreateResource;
+use App\Http\Resources\Score\AllExamCollection;
 use App\Http\Resources\Score\ScoreCollection;
 use App\Http\Resources\Student\StudentCollection;
 use App\Models\Grade;
@@ -16,12 +19,36 @@ class GradeController extends Controller
         $userGrade = $request['userGrade'];
 
         $exams = DB::table('exams')
-            ->where('user_grade_id',$userGrade->id);
+            ->where('exams.user_grade_id',$userGrade->id)
+            ->join('courses', 'exams.course_id', '=', 'courses.id')
+            ->join('classrooms', 'exams.classroom_id', '=', 'classrooms.id')
+            ->select("classrooms.title as classroom","courses.name as title","date",
+            DB::raw("'امتحان کتبی' as type"),   DB::raw("'exams' as tbl"),"exams.id"
+        );
+
         $classScores = DB::table('class_scores')
-            ->where('user_grade_id',$userGrade->id)
-            ->union($exams);
+            ->where('class_scores.user_grade_id',$userGrade->id)
+            ->join('courses', 'class_scores.course_id', '=', 'courses.id')
+            ->join('classrooms', 'class_scores.classroom_id', '=', 'classrooms.id')
+            ->select("classrooms.title as classroom","courses.name as title","date",
+                DB::raw("'امتحان شفاهی' as type"),   DB::raw("'class_scores' as tbl"),"class_scores.id"
+            );
 
-        return new ScoreCollection( $classScores->paginate($request->per_page ?? 15) );
 
+        $tests = DB::table('tests')
+            ->where('tests.user_grade_id',$userGrade->id)
+            ->join('classrooms', 'tests.classroom_id', '=', 'classrooms.id')
+            ->select("classrooms.title as classroom","tests.title","date",
+                DB::raw("'آزمون تستی' as type"),   DB::raw("'tests' as tbl"),"tests.id"
+            );
+
+
+        return new AllExamCollection($exams->unionAll($classScores)->unionAll($tests)->orderBy("date","DESC")->paginate($request->per_page ?? 15));
+
+    }
+
+
+    public function examsCreate(Request $request){
+        return new ExamCreateResource($request['userGrade']);
     }
 }

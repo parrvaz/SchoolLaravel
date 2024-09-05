@@ -9,6 +9,6 @@ class StudentExam extends Model
 {
     use HasFactory;
     protected $guarded=[];
-    protected $table="student_classScore";
+    protected $table="student_exam";
 
 }

@@ -33,4 +33,9 @@ class UserGrade extends Model
     public function plans(){
         return $this->hasMany(Plan::class);
     }
+
+    public function students()
+    {
+        return $this->hasManyThrough(Student::class, Classroom::class);
+    }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\ClassScoreController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\FieldController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentPlanController;
 use App\Http\Controllers\TeacherController;
@@ -130,6 +131,12 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show/{plan}', [StudentPlanController::class, 'showSingle']);
             Route::post('/update/{plan}', [StudentPlanController::class, 'update']);
             Route::post('/delete/{plan}', [StudentPlanController::class, 'delete']);
+        });
+
+
+        Route::prefix("reports")->group(function () {
+            Route::get('/exams/count', [ReportController::class, 'allExamCount']);
+
         });
     });
 

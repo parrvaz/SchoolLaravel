@@ -32,6 +32,16 @@ trait FilterTrait
         return $query;
     }
 
+    public function globalFilterRelationWhereIn($query, $fieldName,$fieldValue, $relation = 'students')
+    {
+        if ($fieldValue)
+            $query = $query->whereHas($relation, function ($q) use ($fieldValue,$fieldName) {
+                $q->whereIn($fieldName, $fieldValue);
+            });
+
+        return $query;
+    }
+
     public function globalHaving($query,$fieldName,$sign){
         if ($sign)
             return $query->having($fieldName, $sign, 0);

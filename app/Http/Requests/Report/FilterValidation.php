@@ -17,10 +17,14 @@ class FilterValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'course_id'=>'nullable|exists:courses,id',
-            'classroom_id'=>'nullable|exists:classrooms,id',
-            'teacher_id'=>'nullable|exists:teachers,id',
-            'student_id'=>'nullable|exists:students,id',
+            'course'=>'nullable|array',
+            'course.*'=>'exists:courses,id',
+            'classroom_id'=>'nullable|array',
+            'classroom.*'=>'nullable|exists:classrooms,id',
+            'teacher_id'=>'nullable|array',
+            'teacher.*'=>'nullable|exists:teachers,id',
+            'student_id'=>'nullable|array',
+            'student.*'=>'nullable|exists:students,id',
         ];
     }
 }

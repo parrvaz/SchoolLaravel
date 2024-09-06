@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Grade\ExamCreateResource;
-use App\Http\Resources\Reports\AllCountCollection;
 use App\Http\Resources\Reports\AllCountResource;
 use App\Http\Resources\Reports\ExamCountCollection;
+use App\Http\Resources\Reports\ListItemsResource;
 use App\Models\ClassScore;
 use App\Models\Exam;
 use App\Traits\ServiceTrait;
@@ -15,7 +15,13 @@ use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
+
+    public function listItems(Request $request){
+        return new ListItemsResource($request["userGrade"]);
+    }
     public function allExamCount(Request $request,FilterValidation $validation){
+
+
 //        \App\Models\ClassScore::factory()->count(6)->create();
         $userGrade = $request['userGrade'];
         $exams= $this->examCount($userGrade,$validation);
@@ -32,9 +38,8 @@ class ReportController extends Controller
 
     public function examProgress(Request $request,FilterValidation $validation){
         $userGrade = $request['userGrade'];
-        $exams=  $this->examJoined($userGrade,$validation);
-        $exams = $exams->join("student_exam","exams.id","student_exam.exam_id");
-        $exams = $this->globalFilter($exams,$validation["student_id"],"student_id");
+        $exams=  $this->examJoined($userGrade,$validation,true);
+
         $exams =  $exams->orderBy("date")
             ->groupBy("exams.date")
             ->select(
@@ -67,9 +72,7 @@ class ReportController extends Controller
 
     public function classScoreProgress(Request $request,FilterValidation $validation){
         $userGrade = $request['userGrade'];
-        $classScore=  $this->classScoreJion($userGrade,$validation);
-        $classScore = $classScore->join("student_class_score","class_scores.id","student_class_score.class_score_id");
-        $classScore = $this->globalFilter($classScore,$validation["student_id"],"student_id");
+        $classScore=  $this->classScoreJion($userGrade,$validation,true);
         $classScore =  $classScore->orderBy("date")
             ->groupBy("class_scores.date")
             ->select(
@@ -100,6 +103,8 @@ class ReportController extends Controller
         return new AllCountResource($result);
     }
 
+
+    /** private */
     private function examCount($userGrade,$validation){
         $exams=  $this->examJoined($userGrade,$validation);
         $exams =  $exams
@@ -128,30 +133,42 @@ class ReportController extends Controller
         return $class_scores;
     }
 
-    private function examJoined($userGrade,$validation){
+    private function examJoined($userGrade,$validation,$joinStd=false){
         $exams =  Exam::query()
             ->where('exams.user_grade_id',$userGrade->id)
             ->where('status',true)
             ->join('courses', 'exams.course_id', '=', 'courses.id')
             ->join('classrooms', 'exams.classroom_id', '=', 'classrooms.id');
 
-        $exams= $this->globalFilter($exams,$validation["course_id"],"course_id");
-        $exams= $this->globalFilter($exams,$validation["classroom_id"],"classroom_id");
-        $exams= $this->globalFilterRelation($exams,"student_exam.student_id",$validation["student_id"],"students");
+        if($joinStd){
+            $exams = $exams->join("student_exam","exams.id","student_exam.exam_id");
+            $exams = $this->globalFilterWhereIn($exams,$validation["student"],"student_exam.student_id");
+        }else{
+            $exams= $this->globalFilterRelationWhereIn($exams,"student_exam.student_id",$validation["student"],"students");
+        }
+
+        $exams= $this->globalFilterWhereIn($exams,$validation["course"],"course_id");
+        $exams= $this->globalFilterWhereIn($exams,$validation["classroom"],"classroom_id");
 
         return $exams;
     }
 
-    private function classScoreJion($userGrade,$validation){
+    private function classScoreJion($userGrade,$validation,$joinStd=false){
         $class_scores =  ClassScore::query()
             ->where('class_scores.user_grade_id',$userGrade->id)
             ->where('status',true)
             ->join('courses', 'class_scores.course_id', '=', 'courses.id')
             ->join('classrooms', 'class_scores.classroom_id', '=', 'classrooms.id')
           ;
-        $class_scores= $this->globalFilter($class_scores,$validation["course_id"],"course_id");
-        $class_scores= $this->globalFilter($class_scores,$validation["classroom_id"],"classroom_id");
-        $class_scores= $this->globalFilterRelation($class_scores,"student_class_score.student_id",$validation["student_id"],"students");
+        if ($joinStd){
+            $class_scores = $class_scores->join("student_class_score","class_scores.id","student_class_score.class_score_id");
+            $class_scores = $this->globalFilterWhereIn($class_scores,$validation["student"],"student_class_score.student_id");
+
+        }else{
+            $class_scores= $this->globalFilterRelationWhereIn($class_scores,"student_class_score.student_id",$validation["student"],"students");
+        }
+        $class_scores= $this->globalFilterWhereIn($class_scores,$validation["course"],"course_id");
+        $class_scores= $this->globalFilterWhereIn($class_scores,$validation["classroom"],"classroom_id");
 
         return $class_scores;
     }

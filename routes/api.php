@@ -136,6 +136,8 @@ Route::middleware('auth:api')->group(function () {
 
         Route::prefix("reports")->group(function () {
             Route::get('/exams/count', [ReportController::class, 'allExamCount']);
+            Route::get('/exams/progress', [ReportController::class, 'examProgress']);
+            Route::get('/classScores/progress', [ReportController::class, 'classScoreProgress']);
 
         });
     });

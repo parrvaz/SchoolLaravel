@@ -17,10 +17,10 @@ class AllCountResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'exam' =>new ExamCountCollection($this["exam"]),
-            'classScore' =>new ExamCountCollection($this["classScore"]),
-            'tickValues' =>$this["tickValues"],
-            'tickFormat' =>$this["tickFormat"],
+            'exam' =>new ExamCountCollection($this["exam"]) ?? null,
+            'classScore' =>new ExamCountCollection($this["classScore"]?? []) ,
+            'tickValues' =>$this["tickValues"] ?? null,
+            'tickFormat' =>$this["tickFormat"] ?? null,
 
         ];
     }

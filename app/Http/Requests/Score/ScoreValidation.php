@@ -23,10 +23,10 @@ class ScoreValidation extends FormRequest
             'totalScore'=>'required|numeric|min:1|max:100',
             'status'=>'nullable|boolean',
 
-            'contents'=>'required|array|min:1',
+            'contents'=>'nullable|array',
             'contents.*'=>'required|exists:contents,id',
 
-            'students'=>'nullable|array|min:1',
+            'students'=>'nullable|array',
             'students.*.student_id'=>'required|exists:students,id',
             'students.*.score'=>'required|numeric|min:0|max:100',
             'students.*.description'=>'nullable|string|min:2|max:50',

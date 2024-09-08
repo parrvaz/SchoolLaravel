@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Traits\FilterTrait;
 use App\Traits\MessageTrait;
 use App\Traits\ServiceTrait;
+use Spatie\Permission\Traits\HasRoles;
 
 abstract class Controller
 {

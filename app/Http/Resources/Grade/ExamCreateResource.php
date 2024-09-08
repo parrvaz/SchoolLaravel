@@ -23,7 +23,7 @@ class ExamCreateResource extends JsonResource
         return [
             'classrooms' => new ClassroomWithStudentsCollection($this->classrooms),
             'courses' => new CourseCollection(Course::all()),
-//            'students' => new StudentCollection($this->students),
+            'students' => new StudentCollection($this->students),
         ];
     }
 }

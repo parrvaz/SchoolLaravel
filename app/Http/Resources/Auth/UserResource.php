@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'email' => $this->email,
             'is_admin' => $this->id == 7 ?true :false ,
+            'role'=>$this->getRoleNames()->first()
         ];
     }
 }

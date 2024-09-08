@@ -19,11 +19,9 @@ class FilterValidation extends FormRequest
         return [
             'course'=>'nullable|array',
             'course.*'=>'exists:courses,id',
-            'classroom_id'=>'nullable|array',
+            'classroom'=>'nullable|array',
             'classroom.*'=>'nullable|exists:classrooms,id',
-            'teacher_id'=>'nullable|array',
-            'teacher.*'=>'nullable|exists:teachers,id',
-            'student_id'=>'nullable|array',
+            'student'=>'nullable|array',
             'student.*'=>'nullable|exists:students,id',
         ];
     }

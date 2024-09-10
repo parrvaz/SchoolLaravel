@@ -29,6 +29,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('user', [AuthenticationController::class, 'user'])->name('user');
 
 
+
     //UserGrades Api
     Route::prefix("grades")->group(function () {
         Route::post('/store', [UserGradeController::class, 'store']);
@@ -38,6 +39,8 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::middleware("findUserGrade")->group(function () {
+        Route::get('/dashboard', [GradeController::class, 'dashboard']);
+
         //Field Api
         Route::prefix("fields")->group(function () {
             Route::get('/show', [FieldController::class, 'show']);

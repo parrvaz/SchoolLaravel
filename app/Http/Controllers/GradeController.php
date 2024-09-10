@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Classroom\ClassroomCollection;
 use App\Http\Resources\Grade\ExamCreateCollection;
 use App\Http\Resources\Grade\ExamCreateResource;
+use App\Http\Resources\Reports\AllCountResource;
 use App\Http\Resources\Score\AllExamCollection;
 use App\Http\Resources\Score\ScoreCollection;
 use App\Http\Resources\Student\StudentCollection;
@@ -17,6 +19,18 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 class GradeController extends Controller
 {
+
+    public function dashboard(Request $request,FilterValidation $validation){
+        $userGrade=$request['userGrade'];
+
+        return response()->json( [
+            'data'=>[
+                'filterData' => new ExamCreateResource($userGrade),
+                'allCount' => new AllCountResource((new ReportController())->allExamCount($request,$validation)),
+                'examProgress' => new AllCountResource((new ReportController())->examProgress($request,$validation)),
+                'classScoreProgress' => new AllCountResource((new ReportController())->classScoreProgress($request,$validation)),],
+        ], 200);
+    }
 
     public function allExamShow(Request $request){
         $userGrade = $request['userGrade'];

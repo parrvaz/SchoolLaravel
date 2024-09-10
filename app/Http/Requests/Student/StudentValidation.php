@@ -23,7 +23,7 @@ class StudentValidation extends FormRequest
             'onlyChild'=>'nullable|boolean',
             'address'=>'nullable|string|min:2|max:100',
             'classroom_id' => 'required|exists:classrooms,id',
-            'phone'=>'nullable|digits:11',
+            'phone'=>'required|digits:11',
             'socialMediaID'=>'nullable|string|min:1|max:50',
             'numberOfGlasses'=>'nullable|digits|max:10',
             'leftHand'=>'nullable|boolean',

@@ -6,7 +6,9 @@ use App\Http\Requests\Student\StudentValidation;
 use App\Http\Resources\Student\StudentCollection;
 use App\Http\Resources\Student\StudentResource;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -15,6 +17,8 @@ class StudentController extends Controller
      */
     public function store(Request $request,StudentValidation $validation)
     {
+        return DB::transaction(function () use($request,$validation) {
+
         $student = Student::create([
             'firstName'=>$validation->firstName,
             'lastName'=>$validation->lastName,
@@ -31,7 +35,20 @@ class StudentController extends Controller
             'specialDisease'=>$validation->specialDisease,
         ]);
 
+        //create user
+        $user = User::create([
+            "name"=> $student->firstName." ".$student->lastName,
+            "phone"=>$student->phone,
+            "password"=> bcrypt($student->nationalId),
+        ]);
+
+        //assign role
+        $user->assignRole('student');
+        $user->modelHasRole()->update(["idInRole"=>$student->id ]);
+
         return new StudentResource($student);
+        });
+
     }
 
 

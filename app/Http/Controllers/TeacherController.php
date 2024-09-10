@@ -9,8 +9,10 @@ use App\Http\Resources\Student\StudentResource;
 use App\Http\Resources\Teacher\TeacherCollection;
 use App\Http\Resources\Teacher\TeacherResource;
 use App\Models\Teacher;
+use App\Models\User;
 use Database\Factories\TeacherFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TeacherController extends Controller
 {
@@ -19,6 +21,8 @@ class TeacherController extends Controller
      */
     public function store(Request $request,TeacherValidation $validation)
     {
+        return DB::transaction(function () use($request,$validation) {
+
         $teacher = Teacher::create([
             'firstName'=>$validation->firstName,
             'lastName'=>$validation->lastName,
@@ -26,9 +30,23 @@ class TeacherController extends Controller
             'degree'=>$validation->degree,
             'personalId'=>$validation->personalId,
             'user_grade_id'=>$request->userGrade->id,
+            'phone'=>$validation->phone,
+
+        ]);
+        //create user
+        $user = User::create([
+            "name"=> $teacher->firstName." ".$teacher->lastName,
+            "phone"=>$teacher->phone,
+            "password"=> bcrypt($teacher->nationalId),
         ]);
 
+        //assign role
+        $user->assignRole('teacher');
+        $user->modelHasRole()->update(["idInRole"=>$teacher->id ]);
+
         return new TeacherResource($teacher);
+        });
+
     }
 
 

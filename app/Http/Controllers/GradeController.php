@@ -25,7 +25,7 @@ class GradeController extends Controller
             ->where('exams.user_grade_id',$userGrade->id)
             ->join('courses', 'exams.course_id', '=', 'courses.id')
             ->join('classrooms', 'exams.classroom_id', '=', 'classrooms.id')
-            ->select("classrooms.title as classroom","courses.name as title","date",
+            ->select("classrooms.title as classroom","courses.name as title","date","status",
             DB::raw("'امتحان کتبی' as type"),   DB::raw("'exams' as tbl"),"exams.id"
         );
 
@@ -33,7 +33,7 @@ class GradeController extends Controller
             ->where('class_scores.user_grade_id',$userGrade->id)
             ->join('courses', 'class_scores.course_id', '=', 'courses.id')
             ->join('classrooms', 'class_scores.classroom_id', '=', 'classrooms.id')
-            ->select("classrooms.title as classroom","courses.name as title","date",
+            ->select("classrooms.title as classroom","courses.name as title","date","status",
                 DB::raw("'امتحان شفاهی' as type"),   DB::raw("'class_scores' as tbl"),"class_scores.id"
             );
 
@@ -41,7 +41,7 @@ class GradeController extends Controller
         $tests = DB::table('tests')
             ->where('tests.user_grade_id',$userGrade->id)
             ->join('classrooms', 'tests.classroom_id', '=', 'classrooms.id')
-            ->select("classrooms.title as classroom","tests.title","date",
+            ->select("classrooms.title as classroom","tests.title","date","status",
                 DB::raw("'آزمون تستی' as type"),   DB::raw("'tests' as tbl"),"tests.id"
             );
 

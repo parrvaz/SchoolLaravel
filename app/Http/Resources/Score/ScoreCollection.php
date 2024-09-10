@@ -28,6 +28,7 @@ class ScoreCollection extends ResourceCollection
                 'course' => $item->courseName ?? Course::find( $item->course_id)->name,
                 'expected' => $item->expected,
                 'totalScore' => $item->totalScore,
+                'status' => $item->status,
 
             ];
         })];

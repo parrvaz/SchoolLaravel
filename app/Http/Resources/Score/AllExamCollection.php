@@ -25,6 +25,7 @@ class AllExamCollection extends ResourceCollection
                 'type' => $item->type,
                 'tbl' => $item->tbl,
                 'date' => ServiceTrait::gToJ( $item->date),
+                'status' => $item->status ? "تکمیل شده" : "ناقص",
             ];
         })];
     }

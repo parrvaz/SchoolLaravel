@@ -22,6 +22,7 @@ class ExamController extends Controller
                'course_id' => $validation->course_id,
                'expected' => $validation->expected,
                'totalScore' => $validation->totalScore,
+               'status' => $validation->status ?? false,
            ]);
 
            $exam->contents()->attach($validation->contents);

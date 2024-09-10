@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Reports;
 
+use App\Http\Resources\Auth\UserResource;
 use App\Http\Resources\Score\ContentCollection;
 use App\Http\Resources\Score\StudentScoreCollection;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class AllCountResource extends JsonResource
         return [
             'exam' =>new ExamCountCollection($this["exam"]) ?? null,
             'classScore' =>new ExamCountCollection($this["classScore"]?? []) ,
+            'user' =>new UserResource(auth()->user()) ,
             'tickValues' =>$this["tickValues"] ?? null,
             'tickFormat' =>$this["tickFormat"] ?? null,
 

@@ -18,7 +18,7 @@ class CourseController extends Controller
    public function store(Request $request, CourseValidation $validation){
        //delete all
        ClassCourseTeacher::whereHas('classroom', function($query) use($request) {
-           return $query->where('user_grade_id', $request['userGrade']->id);})->delete();
+           return $query->where('user_grade_id', $request->userGrade->id);})->delete();
 
        //create new
         ClassCourseTeacher::insert($validation->validated()['list']);
@@ -27,7 +27,7 @@ class CourseController extends Controller
    }
 
    public function show(Request $request){
-      return new CourseCollection(Course::where('grade_id',$request['userGrade']->grade_id)->paginate(config("constant.bidPaginate")));
+      return new CourseCollection(Course::where('grade_id',$request->userGrade->grade_id)->paginate(config("constant.bidPaginate")));
    }
 
    public function showSingle(Course $course){
@@ -36,11 +36,11 @@ class CourseController extends Controller
 
    public function showClassroom(Request $request){
        return ClassCourseTeacher::whereHas('classroom', function($query) use($request) {
-           return $query->where('user_grade_id', $request['userGrade']->id);})->get();
+           return $query->where('user_grade_id', $request->userGrade->id);})->get();
    }
 
    public function assignCreate(Request $request){
-       return new AssignCreateResource($request['userGrade']);
+       return new AssignCreateResource($request->userGrade);
 
    }
 }

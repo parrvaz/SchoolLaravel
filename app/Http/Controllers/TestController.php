@@ -18,7 +18,7 @@ class TestController extends Controller
     public function store(Request $request, TestValidation $validation){
         return DB::transaction(function () use($request,$validation) {
             $test = Test::create([
-                'user_grade_id' => $request['userGrade']->id,
+                'user_grade_id' => $request->userGrade->id,
                 'classroom_id' => $validation->classroom_id,
                 'title' => $validation->title,
                 'date' => $validation->date,
@@ -69,7 +69,7 @@ class TestController extends Controller
     }
 
     public function show(Request $request){
-        return new TestCollection($request['userGrade']->tests()->paginate(config('constant.bigPaginate')));
+        return new TestCollection($request->userGrade->tests()->paginate(config('constant.bigPaginate')));
     }
 
     public function showSingle(Test $test){

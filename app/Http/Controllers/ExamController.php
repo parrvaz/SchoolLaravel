@@ -16,7 +16,7 @@ class ExamController extends Controller
 
        return DB::transaction(function () use($request,$validation) {
            $exam = Exam::create([
-               'user_grade_id' => $request['userGrade']->id,
+               'user_grade_id' => $request->userGrade->id,
                'classroom_id' => $validation->classroom_id,
                'date' => $validation->date,
                'course_id' => $validation->course_id,
@@ -38,7 +38,7 @@ class ExamController extends Controller
    }
 
    public function show(Request $request){
-       return new ScoreCollection($request['userGrade']->exams()->paginate(config('constant.bigPaginate')));
+       return new ScoreCollection($request->userGrade->exams()->paginate(config('constant.bigPaginate')));
    }
 
    public function showSingle(Exam $exam){

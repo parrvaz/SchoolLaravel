@@ -2,12 +2,17 @@
 
 namespace App\Traits;
 
+use App\Models\UserGrade;
 use Illuminate\Support\Facades\Lang;
 use Morilog\Jalali\CalendarUtils;
 use Morilog\Jalali\Jalalian;
 
 trait ServiceTrait
 {
+    public  function findUserGrade($code){
+       return UserGrade::whereCode($code)->first();
+    }
+
     public static function gToJ($date){
         try {
             return Jalalian::forge($date)->format("Y/m/d");

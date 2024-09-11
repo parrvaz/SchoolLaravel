@@ -55,7 +55,7 @@ class TeacherController extends Controller
      */
     public function show(Request $request)
     {
-        return new TeacherCollection($request['userGrade']->teachers()->orderBy("lastName")->paginate($request->perPage??config("constant.bigPaginate")));
+        return new TeacherCollection($request->userGrade->teachers()->orderBy("lastName")->paginate($request->perPage??config("constant.bigPaginate")));
     }
 
     public function showSingle(Teacher $teacher)

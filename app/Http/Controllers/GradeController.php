@@ -21,7 +21,7 @@ class GradeController extends Controller
 {
 
     public function dashboard(Request $request,FilterValidation $validation){
-        $userGrade=$request['userGrade'];
+        $userGrade=$request->userGrade;
 
         return response()->json( [
             'data'=>[
@@ -33,7 +33,7 @@ class GradeController extends Controller
     }
 
     public function allExamShow(Request $request){
-        $userGrade = $request['userGrade'];
+        $userGrade = $request->userGrade;
 
         $exams = DB::table('exams')
             ->where('exams.user_grade_id',$userGrade->id)
@@ -66,6 +66,6 @@ class GradeController extends Controller
 
 
     public function examsCreate(Request $request){
-        return new ExamCreateResource($request['userGrade']);
+        return new ExamCreateResource($request->userGrade);
     }
 }

@@ -11,6 +11,6 @@ use Illuminate\Http\Request;
 class ContentController extends Controller
 {
 //    public function show(Request $request){
-//        return new ContentCollection(Content::where('grade_id',$request['userGrade']->grade_id)->paginate(config("constant.bidPaginate")));
+//        return new ContentCollection(Content::where('grade_id',$request->userGrade->grade_id)->paginate(config("constant.bidPaginate")));
 //    }
 }

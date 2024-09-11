@@ -38,7 +38,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/delete/{user_grade}', [UserGradeController::class, 'delete']);
     });
 
-    Route::middleware("findUserGrade")->group(function () {
+    Route::prefix('{userGrade}')->middleware("findUserGrade")->group(function () {
         Route::get('/dashboard', [GradeController::class, 'dashboard']);
 
         //Field Api

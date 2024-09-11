@@ -19,9 +19,9 @@ class FindUserGradeMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         try{
-            $code = $request->header()['grade'][0];
+            $code = $request->userGrade;
             $userGrade =UserGrade::whereCode($code)->first();
-            $request['userGrade']=$userGrade;
+            $request->userGrade=$userGrade;
             return $next($request);
         }catch (\Exception $exception){
             return $this->error();

@@ -26,7 +26,7 @@ class StudentPlanController extends Controller
 //    public function show(Request $request){
 //        return new StudentPlanCollection(
 //            Student::whereHas('classroom', function($query) use($request) {
-//                return $query->where('user_grade_id', $request['userGrade']->id);
+//                return $query->where('user_grade_id', $request->userGrade->id);
 //        })->paginate(config('constant.bigPaginate')));
 //    }
 

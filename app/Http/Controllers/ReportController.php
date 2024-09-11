@@ -23,7 +23,7 @@ class ReportController extends Controller
 
 
 //        \App\Models\ClassScore::factory()->count(6)->create();
-        $userGrade = $request['userGrade'];
+        $userGrade = $request->userGrade;
         $exams= $this->examCount($userGrade,$validation);
         $classScore= $this->classScoreCount($userGrade,$validation);
         $result = collect([
@@ -38,7 +38,7 @@ class ReportController extends Controller
     }
 
     public function examProgress(Request $request,FilterValidation $validation){
-        $userGrade = $request['userGrade'];
+        $userGrade = $request->userGrade;
         $exams=  $this->examJoined($userGrade,$validation,true);
 
         $exams =  $exams->orderBy("date")
@@ -73,7 +73,7 @@ class ReportController extends Controller
     }
 
     public function classScoreProgress(Request $request,FilterValidation $validation){
-        $userGrade = $request['userGrade'];
+        $userGrade = $request->userGrade;
         $classScore=  $this->classScoreJion($userGrade,$validation,true);
         $classScore =  $classScore->orderBy("date")
             ->groupBy("class_scores.date")

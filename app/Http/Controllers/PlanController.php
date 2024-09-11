@@ -14,7 +14,7 @@ class PlanController extends Controller
     public function store(Request $request, PlanValidation $validation){
 
             $plan = Plan::create([
-                'user_grade_id' => $request['userGrade']->id,
+                'user_grade_id' => $request->userGrade->id,
                 'classroom_id' => $validation->classroom_id,
                 'date' => $validation->date,
                 'course_id' => $validation->course_id,
@@ -25,7 +25,7 @@ class PlanController extends Controller
     }
 
     public function show(Request $request){
-        return new PlanCollection($request['userGrade']->plans()->paginate(config('constant.bigPaginate')));
+        return new PlanCollection($request->userGrade->plans()->paginate(config('constant.bigPaginate')));
     }
 
     public function showSingle(Plan $plan){

@@ -58,7 +58,7 @@ class StudentController extends Controller
     public function show(Request $request)
     {
         return new StudentCollection( Student::whereHas('classroom', function($query) use($request) {
-            return $query->where('user_grade_id', $request['userGrade']->id);
+            return $query->where('user_grade_id', $request->userGrade->id);
         })->orderBy("classroom_id")->orderBy("lastName")->paginate($request->perPage?? config('constant.bigPaginate')));
     }
 

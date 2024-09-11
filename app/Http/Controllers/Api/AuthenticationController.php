@@ -47,7 +47,7 @@ class AuthenticationController extends Controller
             $token = Auth::user()->createToken('passportToken')->accessToken;
 
             return response()->json([
-                'user' => Auth::user(),
+                'user' => new UserResource (Auth::user()),
                 'token' => $token
             ], 200);
         }

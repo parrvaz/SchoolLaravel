@@ -79,6 +79,7 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show', [CourseController::class, 'show']);
             Route::get('/show/{course}', [CourseController::class, 'showSingle']);
             Route::get('/classroom/show', [CourseController::class, 'showClassroom']);
+            Route::get('/assign/create', [CourseController::class, 'assignCreate']);
         });
 
         //Exam Api

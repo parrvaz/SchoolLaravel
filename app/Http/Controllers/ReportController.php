@@ -27,6 +27,7 @@ class ReportController extends Controller
         $exams= $this->examCount($userGrade,$validation);
         $classScore= $this->classScoreCount($userGrade,$validation);
         $result = collect([
+            'userGrade'=>$userGrade,
             'exam' => $exams,
             'classScore' => $classScore,
             "tickValues"=> $exams->pluck("id")->merge($classScore->pluck("id"))->unique() ->values(),
@@ -60,6 +61,7 @@ class ReportController extends Controller
         });
 
         $result = collect([
+            'userGrade'=>$userGrade,
             'exam' => $exams,
             "tickValues"=> $exams->pluck("id"),
             "tickFormat"=> $exams->pluck("date")->map(function ($item){
@@ -93,6 +95,7 @@ class ReportController extends Controller
         });
 
         $result = collect([
+            'userGrade'=>$userGrade,
             'exam' => $classScore,
             "tickValues"=> $classScore->pluck("id"),
             "tickFormat"=> $classScore->pluck("date")->map(function ($item){

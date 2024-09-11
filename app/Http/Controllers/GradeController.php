@@ -66,8 +66,6 @@ class GradeController extends Controller
 
 
     public function examsCreate(Request $request){
-        $user = User::find(7);
-        $user->assignRole('admin');
         return new ExamCreateResource($request['userGrade']);
     }
 }

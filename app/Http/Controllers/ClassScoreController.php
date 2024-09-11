@@ -22,6 +22,7 @@ class ClassScoreController extends Controller
                 'course_id' => $validation->course_id,
                 'expected' => $validation->expected,
                 'totalScore' => $validation->totalScore,
+                'status' => $validation->status ?? false,
             ]);
 
             $classScore->contents()->attach($validation->contents);

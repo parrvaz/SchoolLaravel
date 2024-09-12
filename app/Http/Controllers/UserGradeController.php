@@ -38,4 +38,5 @@ class UserGradeController extends Controller
         $userGrade->delete();
         return $this->successMessage();
     }
+    
 }

@@ -36,6 +36,9 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/update/{user_grade}', [UserGradeController::class, 'update']);
         Route::get('/show', [UserGradeController::class, 'show']);
         Route::post('/delete/{user_grade}', [UserGradeController::class, 'delete']);
+
+        Route::get('/items', [UserGradeController::class, 'items']);
+
     });
 
     Route::prefix('{userGrade}')->middleware("findUserGrade")->group(function () {
@@ -53,6 +56,8 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show', [ClassroomController::class, 'show']);
             Route::get('/show/{classroom}', [ClassroomController::class, 'showSingle']);
             Route::post('/delete/{classroom}', [ClassroomController::class, 'delete']);
+
+            Route::get('/list', [ClassroomController::class, 'list']);
         });
 
         //Students Api

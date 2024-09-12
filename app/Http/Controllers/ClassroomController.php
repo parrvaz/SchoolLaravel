@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Classroom\ClassroomValidation;
 use App\Http\Resources\Classroom\ClassroomCollection;
 use App\Http\Resources\Classroom\ClassroomResource;
+use App\Http\Resources\Grade\ExamCreateCollection;
+use App\Http\Resources\Grade\ExamCreateResource;
 use App\Models\Classroom;
 use App\Models\UserGrade;
 use Illuminate\Http\Request;
@@ -63,5 +65,9 @@ class ClassroomController extends Controller
     {
         $classroom->delete();
         return $this->successMessage();
+    }
+
+    public function list(Request $request){
+        return new ExamCreateResource($request->userGrade);
     }
 }

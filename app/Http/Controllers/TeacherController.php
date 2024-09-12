@@ -58,7 +58,7 @@ class TeacherController extends Controller
         return new TeacherCollection($request->userGrade->teachers()->orderBy("lastName")->paginate($request->perPage??config("constant.bigPaginate")));
     }
 
-    public function showSingle(Teacher $teacher)
+    public function showSingle($userGrade,Teacher $teacher)
     {
         return new TeacherResource($teacher);
     }
@@ -66,7 +66,7 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TeacherValidation $validation, Teacher $teacher)
+    public function update(TeacherValidation $validation,$userGrade, Teacher $teacher)
     {
         $teacher->update([
             'firstName'=>$validation->firstName,
@@ -82,7 +82,7 @@ class TeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(Teacher $teacher)
+    public function delete($userGrade,Teacher $teacher)
     {
         $teacher->delete();
         return $this->successMessage();

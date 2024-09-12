@@ -30,7 +30,7 @@ class CourseController extends Controller
       return new CourseCollection(Course::where('grade_id',$request->userGrade->grade_id)->paginate(config("constant.bidPaginate")));
    }
 
-   public function showSingle(Course $course){
+   public function showSingle($userGrade,Course $course){
     return $course;
    }
 

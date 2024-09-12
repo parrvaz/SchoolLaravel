@@ -28,11 +28,11 @@ class PlanController extends Controller
         return new PlanCollection($request->userGrade->plans()->paginate(config('constant.bigPaginate')));
     }
 
-    public function showSingle(Plan $plan){
+    public function showSingle($userGrade,Plan $plan){
         return new PlanResource($plan);
     }
 
-    public function update(PlanValidation $validation, Plan $plan){
+    public function update(PlanValidation $validation,$userGrade, Plan $plan){
             $plan->update([
                 'classroom_id' => $validation->classroom_id,
                 'date' => $validation->date,
@@ -42,7 +42,7 @@ class PlanController extends Controller
             return new PlanResource($plan);
     }
 
-    public function delete(Plan $plan){
+    public function delete($userGrade,Plan $plan){
         $plan->delete();
         return $this->successMessage();
     }

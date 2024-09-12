@@ -38,7 +38,7 @@ class ClassroomController extends Controller
         return new ClassroomCollection($request->userGrade->classrooms()->paginate( $request->perPage??config("constant.paginate")));
     }
 
-    public function showSingle(Classroom $classroom)
+    public function showSingle($userGrade,Classroom $classroom)
     {
         return new ClassroomResource($classroom);
     }
@@ -46,7 +46,7 @@ class ClassroomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ClassroomValidation $validation, Classroom $classroom)
+    public function update(ClassroomValidation $validation,$userGrade, Classroom $classroom)
     {
         $classroom->update([
             'title'=>$validation->title,
@@ -61,7 +61,7 @@ class ClassroomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(Classroom $classroom)
+    public function delete($userGrade,Classroom $classroom)
     {
         $classroom->delete();
         return $this->successMessage();

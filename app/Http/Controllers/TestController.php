@@ -47,7 +47,7 @@ class TestController extends Controller
         });
     }
 
-    public function storeStudents(Test $test,StudentTestValidation $validation){
+    public function storeStudents($userGrade,Test $test,StudentTestValidation $validation){
         return DB::transaction(function () use($test,$validation) {
             //todo:check test course ids
             $data = [];
@@ -72,13 +72,13 @@ class TestController extends Controller
         return new TestCollection($request->userGrade->tests()->paginate(config('constant.bigPaginate')));
     }
 
-    public function showSingle(Test $test){
+    public function showSingle($userGrade,Test $test){
         return new TestResource($test);
     }
 
 
 
-    public function update(ScoreValidation $validation, Test $test){
+    public function update(ScoreValidation $validation,$userGrade, Test $test){
         return DB::transaction(function () use($test,$validation) {
 
             //delete old items
@@ -104,7 +104,7 @@ class TestController extends Controller
         });
     }
 
-    public function delete(Test $test){
+    public function delete($userGrade,Test $test){
         return DB::transaction(function () use($test) {
             foreach ($test->courses() as $course){
                 $this->deleteTestContents($test);

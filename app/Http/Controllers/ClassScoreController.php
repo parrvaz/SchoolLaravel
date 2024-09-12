@@ -37,11 +37,11 @@ class ClassScoreController extends Controller
         return new ScoreCollection($request->userGrade->classScores()->paginate(config('constant.bigPaginate')));
     }
 
-    public function showSingle(ClassScore $classScore){
+    public function showSingle($userGrade,ClassScore $classScore){
         return new ScoreResource($classScore);
     }
 
-    public function update(ScoreValidation $validation, ClassScore $classScore){
+    public function update(ScoreValidation $validation,$userGrade, ClassScore $classScore){
         return DB::transaction(function () use($classScore,$validation) {
 
             //delete old items
@@ -67,7 +67,7 @@ class ClassScoreController extends Controller
         });
     }
 
-    public function delete(ClassScore $classScore){
+    public function delete($userGrade,ClassScore $classScore){
         return DB::transaction(function () use($classScore) {
 
             $this->deleteClassScoreContents($classScore);

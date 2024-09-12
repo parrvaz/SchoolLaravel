@@ -41,11 +41,11 @@ class ExamController extends Controller
        return new ScoreCollection($request->userGrade->exams()->paginate(config('constant.bigPaginate')));
    }
 
-   public function showSingle(Exam $exam){
+   public function showSingle($userGrade,Exam $exam){
        return new ScoreResource($exam);
    }
 
-   public function update(ScoreValidation $validation, Exam $exam){
+   public function update(ScoreValidation $validation,$userGrade, Exam $exam){
        return DB::transaction(function () use($exam,$validation) {
 
            //delete old items
@@ -71,7 +71,7 @@ class ExamController extends Controller
        });
    }
 
-   public function delete(Exam $exam){
+   public function delete($userGrade,Exam $exam){
        return DB::transaction(function () use($exam) {
 
            $this->deleteExamContents($exam);

@@ -7,6 +7,7 @@ use App\Http\Resources\Student\StudentCollection;
 use App\Http\Resources\Student\StudentResource;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\UserGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -25,12 +26,12 @@ class StudentController extends Controller
             'nationalId'=>$validation->nationalId,
             'classroom_id'=>$validation->classroom_id,
             'birthday'=>$validation->birthday,
-            'onlyChild'=>$validation->onlyChild,
+            'onlyChild'=>$validation->isOnlyChild,
             'address'=>$validation->address,
             'phone'=>$validation->phone,
             'socialMediaID'=>$validation->socialMediaID,
             'numberOfGlasses'=>$validation->numberOfGlasses,
-            'leftHand'=>$validation->leftHand,
+            'leftHand'=>$validation->isLeftHand,
             'religion'=>$validation->religion,
             'specialDisease'=>$validation->specialDisease,
         ]);
@@ -62,7 +63,7 @@ class StudentController extends Controller
         })->orderBy("classroom_id")->orderBy("lastName")->paginate($request->perPage?? config('constant.bigPaginate')));
     }
 
-    public function showSingle(Student $student)
+    public function showSingle( $userGrade,Student $student)
     {
         return new StudentResource($student);
     }
@@ -70,7 +71,7 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StudentValidation $validation, Student $student)
+    public function update(StudentValidation $validation,$userGrade, Student $student)
     {
         $student->update([
             'firstName'=>$validation->firstName,
@@ -94,7 +95,7 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(Student $student)
+    public function delete($userGrade,Student $student)
     {
             $student->delete();
             return $this->successMessage();

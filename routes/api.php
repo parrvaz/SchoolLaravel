@@ -6,6 +6,7 @@ use App\Http\Controllers\ClassScoreController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\FieldController;
+use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentPlanController;
@@ -37,7 +38,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/show', [UserGradeController::class, 'show']);
         Route::post('/delete/{user_grade}', [UserGradeController::class, 'delete']);
 
-        Route::get('/items', [UserGradeController::class, 'items']);
+        Route::get('/items', [MenuItemController::class, 'show']);
 
     });
 

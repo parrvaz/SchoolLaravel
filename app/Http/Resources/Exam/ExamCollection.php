@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Score;
+namespace App\Http\Resources\Exam;
 
 use App\Models\Classroom;
 use App\Models\Course;
@@ -8,7 +8,7 @@ use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ScoreCollection extends ResourceCollection
+class ExamCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -29,7 +29,8 @@ class ScoreCollection extends ResourceCollection
                 'expected' => $item->expected,
                 'totalScore' => $item->totalScore,
                 'status' => $item->status,
-
+                'type' =>$this->type ,
+                'isGeneral' =>$this->isGeneral,
             ];
         })];
     }

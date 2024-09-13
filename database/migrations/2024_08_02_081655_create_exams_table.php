@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer("expected")->default(0);
             $table->integer("totalScore")->default(0);
             $table->boolean("status")->default(0);
+            $table->boolean("isGeneral")->default(0);
+            $table->tinyInteger("type")->default(1);//1:katbi 2:shafahi 3:testi
             $table->timestamps();
         });
 
@@ -35,7 +37,6 @@ return new class extends Migration
             $table->foreignId("student_id")->constrained()->onDelete("cascade");
             $table->foreignId("exam_id")->constrained()->onDelete("cascade");
             $table->integer("score")->default(0);
-            $table->string("description")->nullable();
             $table->timestamps();
         });
     }

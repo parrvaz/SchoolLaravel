@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Score;
+namespace App\Http\Resources\Exam;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ScoreResource extends JsonResource
+class ExamResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,6 +22,9 @@ class ScoreResource extends JsonResource
             'course_id' => $this->course_id,
             'expected' => $this->expected,
             'totalScore' => $this->totalScore,
+            'status' =>$this->status,
+            'type' =>$this->type ,
+            'isGeneral' =>$this->isGeneral,
             'contents'=>new ContentCollection($this->contents),
             'students'=>new StudentScoreCollection($this->students)
         ];

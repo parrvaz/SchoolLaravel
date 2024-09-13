@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Score\ScoreValidation;
-use App\Http\Resources\Score\ScoreCollection;
-use App\Http\Resources\Score\ScoreResource;
+use App\Http\Requests\Exam\ExamStoreValidation;
+use App\Http\Resources\Exam\ExamCollection;
+use App\Http\Resources\Exam\ExamResource;
 use App\Models\Exam;
-use App\Models\StudentExam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ExamController extends Controller
 {
-   public function store(Request $request, ScoreValidation $validation){
+   public function store(Request $request, ExamStoreValidation $validation){
 
        return DB::transaction(function () use($request,$validation) {
            $exam = Exam::create([
@@ -23,6 +22,8 @@ class ExamController extends Controller
                'expected' => $validation->expected,
                'totalScore' => $validation->totalScore,
                'status' => $validation->status ?? false,
+               'type' => $validation->type ?? 1,
+               'isGeneral' => $validation->isGeneral ?? false,
            ]);
 
            $exam->contents()->attach($validation->contents);
@@ -33,19 +34,19 @@ class ExamController extends Controller
            $exam->students()->createMany($validation->students);
 
 
-           return $this->successMessage();
+           return new ExamResource($exam);
        });
    }
 
    public function show(Request $request){
-       return new ScoreCollection($request->userGrade->exams()->paginate(config('constant.bigPaginate')));
+       return new ExamCollection($request->userGrade->exams()->paginate(config('constant.bigPaginate')));
    }
 
    public function showSingle($userGrade,Exam $exam){
-       return new ScoreResource($exam);
+       return new ExamResource($exam);
    }
 
-   public function update(ScoreValidation $validation,$userGrade, Exam $exam){
+   public function update(ExamStoreValidation $validation, $userGrade, Exam $exam){
        return DB::transaction(function () use($exam,$validation) {
 
            //delete old items
@@ -57,8 +58,11 @@ class ExamController extends Controller
                'classroom_id' => $validation->classroom_id,
                'date' => $validation->date,
                'course_id' => $validation->course_id,
-               'expected' => $validation->expected,
+               'expected' => $validation->expected ?? 0,
                'totalScore' => $validation->totalScore,
+               'status' => $validation->status ?? false,
+               'type' => $validation->type ?? 1,
+               'isGeneral' => $validation->isGeneral ?? false,
            ]);
 
            //create content items
@@ -67,7 +71,7 @@ class ExamController extends Controller
            //create student items
            $exam->students()->createMany($validation->students);
 
-           return new ScoreResource($exam);
+           return new ExamResource($exam);
        });
    }
 

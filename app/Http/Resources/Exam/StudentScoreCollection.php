@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Score;
+namespace App\Http\Resources\Exam;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -18,9 +18,8 @@ class StudentScoreCollection extends ResourceCollection
             return[
                 'id' =>$item->id,
                 'student_id' => $item->student_id,
+                'name'=> $item->student->name,
                 'score' => $item->score,
-                'description' => $item->description,
-                'balance' => $item->balance,
             ];
         })->toArray();
     }

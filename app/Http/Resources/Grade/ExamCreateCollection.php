@@ -3,11 +3,9 @@
 namespace App\Http\Resources\Grade;
 
 use App\Http\Resources\Classroom\ClassroomCollection;
-use App\Http\Resources\Score\CourseCollection;
-use App\Models\Classroom;
+use App\Http\Resources\Exam\CourseCollection;
 use App\Models\Course;
 use App\Models\Student;
-use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

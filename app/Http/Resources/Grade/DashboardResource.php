@@ -5,8 +5,8 @@ namespace App\Http\Resources\Grade;
 use App\Http\Resources\Auth\UserResource;
 use App\Http\Resources\Reports\AllCountResource;
 use App\Http\Resources\Reports\ExamCountCollection;
-use App\Http\Resources\Score\ContentCollection;
-use App\Http\Resources\Score\StudentScoreCollection;
+use App\Http\Resources\Exam\ContentCollection;
+use App\Http\Resources\Exam\StudentScoreCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

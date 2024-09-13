@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Score;
+namespace App\Http\Requests\Exam;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ScoreValidation extends FormRequest
+class ExamStoreValidation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,8 @@ class ScoreValidation extends FormRequest
             'expected'=>'nullable|numeric|min:0|max:100',
             'totalScore'=>'required|numeric|min:1|max:100',
             'status'=>'nullable|boolean',
+            'type'=>'nullable|numeric',
+            'isGeneral'=>'nullable|boolean',
 
             'contents'=>'nullable|array',
             'contents.*'=>'required|exists:contents,id',
@@ -29,7 +31,6 @@ class ScoreValidation extends FormRequest
             'students'=>'nullable|array',
             'students.*.student_id'=>'required|exists:students,id',
             'students.*.score'=>'required|numeric|min:0|max:100',
-            'students.*.description'=>'nullable|string|min:2|max:50',
         ];
     }
 }

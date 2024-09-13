@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Score;
+namespace App\Http\Resources\Exam;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -22,7 +22,7 @@ class CourseCollection extends ResourceCollection
                 'expected' => $item->expected,
                 'average' => $item->average,
                 'contents'=>new ContentCollection($item->contents),
-                'students'=>new StudentTestScoreCollection($item->students),
+                'students'=>new StudentScoreCollection($item->students),
 //                'students'=>new StudentScoreCollection($item->students),
 
             ];

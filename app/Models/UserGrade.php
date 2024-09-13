@@ -18,6 +18,10 @@ class UserGrade extends Model
         return $this->hasMany(Teacher::class);
     }
 
+    public function assistants(){
+        return $this->hasMany(Assistant::class);
+    }
+
     public function exams(){
         return $this->hasMany(Exam::class);
     }

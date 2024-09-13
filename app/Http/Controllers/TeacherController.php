@@ -8,6 +8,7 @@ use App\Http\Resources\Student\StudentCollection;
 use App\Http\Resources\Student\StudentResource;
 use App\Http\Resources\Teacher\TeacherCollection;
 use App\Http\Resources\Teacher\TeacherResource;
+use App\Models\ModelHasRole;
 use App\Models\Teacher;
 use App\Models\User;
 use Database\Factories\TeacherFactory;
@@ -84,6 +85,8 @@ class TeacherController extends Controller
      */
     public function delete($userGrade,Teacher $teacher)
     {
+        User::where("phone",$teacher->phone)->delete();
+        ModelHasRole::where("idInRole",$teacher->id)->delete();
         $teacher->delete();
         return $this->successMessage();
     }

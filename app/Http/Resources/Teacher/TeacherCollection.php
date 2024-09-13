@@ -23,6 +23,7 @@ class TeacherCollection extends ResourceCollection
                 'nationalId'=>$item->nationalId,
                 'degree'=>$item->degree,
                 'personalId'=>$item->personalId,
+                'phone'=>$item->phone,
                 'user_grade_id'=>$item->user_grade_id,
             ];
         })];

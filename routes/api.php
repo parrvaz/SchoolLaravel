@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticationController;
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ClassScoreController;
 use App\Http\Controllers\CourseController;
@@ -79,6 +80,15 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/delete/{teacher}', [TeacherController::class, 'delete']);
         });
 
+        //Assistants Api
+        Route::prefix("assistants")->group(function () {
+            Route::post('/store', [AssistantController::class, 'store']);
+            Route::post('/update/{assistant}', [AssistantController::class, 'update']);
+            Route::get('/show', [AssistantController::class, 'show']);
+            Route::get('/show/{assistant}', [AssistantController::class, 'showSingle']);
+            Route::post('/delete/{assistant}', [AssistantController::class, 'delete']);
+        });
+
         //Course Api
         Route::prefix("courses")->group(function () {
             Route::post('/store', [CourseController::class, 'store']);
@@ -97,26 +107,6 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/delete/{exam}', [ExamController::class, 'delete']);
         });
 
-        //ClassScore Api
-        Route::prefix("classScores")->group(function () {
-            Route::post('/store', [ClassScoreController::class, 'store']);
-            Route::get('/show', [ClassScoreController::class, 'show']);
-            Route::get('/show/{classScore}', [ClassScoreController::class, 'showSingle']);
-            Route::post('/update/{classScore}', [ClassScoreController::class, 'update']);
-            Route::post('/delete/{classScore}', [ClassScoreController::class, 'delete']);
-        });
-
-        //Test Api
-        Route::prefix("tests")->group(function () {
-            Route::post('/store', [TestController::class, 'store']);
-            Route::post('/{test}/store', [TestController::class, 'storeStudents']);
-            Route::get('/show', [TestController::class, 'show']);
-            Route::get('/show/{test}', [TestController::class, 'showSingle']);
-
-            //todo update and delete
-//            Route::post('/update/{test}', [TestController::class, 'update']);
-//            Route::post('/delete/{test}', [TestController::class, 'delete']);
-        });
 
         Route::prefix("allExams")->group(function () {
             Route::get('/show', [GradeController::class, 'allExamShow']);

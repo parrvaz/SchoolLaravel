@@ -21,6 +21,7 @@ class TeacherResource extends JsonResource
             'nationalId'=>$this->nationalId,
             'degree'=>$this->degree,
             'personalId'=>$this->personalId,
+            'phone'=>$this->phone,
             'user_grade_id'=>$this->user_grade_id,
 
         ];

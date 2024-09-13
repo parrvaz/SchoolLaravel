@@ -23,6 +23,10 @@ class FilterValidation extends FormRequest
             'classroom.*'=>'nullable|exists:classrooms,id',
             'student'=>'nullable|array',
             'student.*'=>'nullable|exists:students,id',
+
+
+            'date'=>'nullable|date',
+
         ];
     }
 }

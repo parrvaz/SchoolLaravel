@@ -21,7 +21,7 @@ class BellController extends Controller
     }
 
     public function update(BellStoreValidation $validation,$userGrade,Bell $bell){
-        $bell = $bell->update([
+       $bell->update([
             "order"=>$validation->order,
             "startTime"=>$validation->startTime,
             "endTime"=>$validation->endTime

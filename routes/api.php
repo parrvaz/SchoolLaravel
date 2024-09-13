@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsentController;
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\BellController;
@@ -116,7 +117,14 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/delete/{bell}', [BellController::class, 'delete']);
         });
 
-
+        //Absent Api
+        Route::prefix("absents")->group(function () {
+            Route::post('/store', [AbsentController::class, 'store']);
+            Route::get('/show', [AbsentController::class, 'show']);
+            Route::get('/show/{absent}', [AbsentController::class, 'showSingle']);
+            Route::post('/update/{absent}', [AbsentController::class, 'update']);
+            Route::post('/delete/{absent}', [AbsentController::class, 'delete']);
+        });
 
 
 

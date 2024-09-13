@@ -24,6 +24,8 @@ class StudentResource extends JsonResource
             'isOnlyChild'=>$this->onlyChild,
             'address'=>$this->address,
             'phone'=>$this->phone,
+            'fatherPhone'=>$this->fatherPhone,
+            'motherPhone'=>$this->motherPhone,
             'socialMediaID'=>$this->socialMediaID,
             'numberOfGlasses'=>$this->numberOfGlasses,
             'isLeftHand'=>$this->leftHand,

@@ -20,7 +20,9 @@ return new class extends Migration
             $table->date("birthday")->nullable();
             $table->boolean("onlyChild")->nullable();
             $table->string("address")->nullable();
-            $table->string("phone")->nullable();
+            $table->string("phone");
+            $table->string("fatherPhone");
+            $table->string("motherPhone")->nullable();
             $table->string("socialMediaID")->nullable();
             $table->smallInteger("numberOfGlasses")->nullable();
             $table->boolean("leftHand")->nullable();

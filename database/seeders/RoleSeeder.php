@@ -33,6 +33,9 @@ class RoleSeeder extends Seeder
             ['name' => "parent",
                 'guard_name' => "api",
             ],
+            ['name' => "assistant",
+                'guard_name' => "api",
+            ],
         ]);
     }
 }

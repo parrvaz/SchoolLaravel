@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Student\StudentValidation;
 use App\Http\Resources\Student\StudentCollection;
 use App\Http\Resources\Student\StudentResource;
+use App\Models\ModelHasRole;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\UserGrade;
@@ -40,6 +41,8 @@ class StudentController extends Controller
             'onlyChild'=>$validation->isOnlyChild,
             'address'=>$validation->address,
             'phone'=>$validation->phone,
+            'fatherPhone'=>$validation->fatherPhone,
+            'motherPhone'=>$validation->motherPhone,
             'socialMediaID'=>$validation->socialMediaID,
             'numberOfGlasses'=>$validation->numberOfGlasses,
             'leftHand'=>$validation->isLeftHand,
@@ -49,19 +52,30 @@ class StudentController extends Controller
         ]);
 
 
-
-            //create user
+        //create user
         $user = User::create([
             "name"=> $student->firstName." ".$student->lastName,
             "phone"=>$student->phone,
             "password"=> bcrypt($student->nationalId),
         ]);
-
         //assign role
         $user->assignRole('student');
         $user->modelHasRole()->update(["idInRole"=>$student->id ]);
 
-        return new StudentResource($student);
+
+        //create parent user
+            $user = User::create([
+                "name"=> "ولی ". $student->firstName." ".$student->lastName,
+                "phone"=>$student->fatherPhone,
+                "password"=> bcrypt($student->nationalId),
+            ]);
+            //assign role
+            $user->assignRole('parent');
+            $user->modelHasRole()->update(["idInRole"=>$student->id ]);
+
+
+
+            return new StudentResource($student);
         });
 
     }
@@ -111,7 +125,10 @@ class StudentController extends Controller
      */
     public function delete($userGrade,Student $student)
     {
-            $student->delete();
-            return $this->successMessage();
+        User::where("phone",$student->phone)->delete();
+        User::where("phone",$student->fatherPhone)->delete();
+        ModelHasRole::where("idInRole",$student->id)->delete();
+       $student->delete();
+       return $this->successMessage();
     }
 }

@@ -27,6 +27,8 @@ class StudentCollection extends ResourceCollection
                 'isOnlyChild'=>$item->onlyChild,
                 'address'=>$item->address,
                 'phone'=>$item->phone,
+                'fatherPhone'=>$item->fatherPhone,
+                'motherPhone'=>$item->motherPhone,
                 'socialMediaID'=>$item->socialMediaID,
                 'numberOfGlasses'=>$item->numberOfGlasses,
                 'isLeftHand'=>$item->leftHand,

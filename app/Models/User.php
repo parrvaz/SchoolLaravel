@@ -55,4 +55,8 @@ class User extends Authenticatable
     public function modelHasRole(){
         return $this->hasOne(ModelHasRole::class,"model_id","id");
     }
+
+    public function bells(){
+        return $this->hasMany(Bell::class);
+    }
 }

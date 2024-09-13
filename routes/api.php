@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\AssistantController;
+use App\Http\Controllers\BellController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ClassScoreController;
 use App\Http\Controllers\CourseController;
@@ -107,7 +108,21 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/delete/{exam}', [ExamController::class, 'delete']);
         });
 
+        //Bell Api
+        Route::prefix("bells")->group(function () {
+            Route::post('/store', [BellController::class, 'store']);
+            Route::get('/show', [BellController::class, 'show']);
+            Route::post('/update/{bell}', [BellController::class, 'update']);
+            Route::post('/delete/{bell}', [BellController::class, 'delete']);
+        });
 
+
+
+
+
+
+
+        ///
         Route::prefix("allExams")->group(function () {
             Route::get('/show', [GradeController::class, 'allExamShow']);
             Route::get('/create', [GradeController::class, 'examsCreate']);

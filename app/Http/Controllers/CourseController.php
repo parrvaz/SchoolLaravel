@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Course\CourseValidation;
 use App\Http\Resources\Course\AssignCreateResource;
 use App\Http\Resources\Course\CourseCollection;
+use App\Http\Resources\Course\CourseResource;
 use App\Http\Resources\Grade\ExamCreateResource;
 use App\Models\ClassCourseTeacher;
 use App\Models\Course;
@@ -31,7 +32,7 @@ class CourseController extends Controller
    }
 
    public function showSingle($userGrade,Course $course){
-    return $course;
+    return new CourseResource($course);
    }
 
    public function showClassroom(Request $request){

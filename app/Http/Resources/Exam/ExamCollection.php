@@ -29,8 +29,8 @@ class ExamCollection extends ResourceCollection
                 'expected' => $item->expected,
                 'totalScore' => $item->totalScore,
                 'status' => $item->status,
-                'type' =>$this->type ,
-                'isGeneral' =>$this->isGeneral,
+                'type' =>$item->type ,
+                'isGeneral' =>$item->isGeneral,
             ];
         })];
     }

@@ -29,6 +29,7 @@ class StudentValidation extends FormRequest
             'isLeftHand'=>'nullable|boolean',
             'religion'=>'nullable|string|min:2|max:50',
             'specialDisease'=>'nullable|string|min:2|max:50',
+            'picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
 
         ];
     }

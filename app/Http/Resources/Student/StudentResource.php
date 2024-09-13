@@ -29,6 +29,7 @@ class StudentResource extends JsonResource
             'isLeftHand'=>$this->leftHand,
             'religion'=>$this->religion,
             'specialDisease'=>$this->specialDisease,
+            'picture'=> $this->picture ? url('storage/' . $this->picture) : null,
         ];
     }
 }

@@ -26,7 +26,7 @@ return new class extends Migration
             $table->boolean("leftHand")->nullable();
             $table->string("religion")->nullable();
             $table->string("specialDisease")->nullable();
-
+            $table->string('picture')->nullable();
             $table->timestamps();
         });
     }

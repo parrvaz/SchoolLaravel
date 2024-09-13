@@ -20,7 +20,18 @@ class StudentController extends Controller
     {
         return DB::transaction(function () use($request,$validation) {
 
-        $student = Student::create([
+            // ذخیره تصویر در صورت آپلود
+            $photoPath = null;
+            if ($request->hasFile('picture')) {
+                $file = $request->file('picture');
+                $timestamp = now()->timestamp; // دریافت timestamp
+                $extension = $file->getClientOriginalExtension(); // گرفتن پسوند فایل
+                $filename = $timestamp . '.' . $extension; // ایجاد نام یونیک با timestamp
+
+                $photoPath = $file->storeAs('images/students',$filename, 'public');
+            }
+
+            $student = Student::create([
             'firstName'=>$validation->firstName,
             'lastName'=>$validation->lastName,
             'nationalId'=>$validation->nationalId,
@@ -34,9 +45,12 @@ class StudentController extends Controller
             'leftHand'=>$validation->isLeftHand,
             'religion'=>$validation->religion,
             'specialDisease'=>$validation->specialDisease,
+            'picture'=>$photoPath
         ]);
 
-        //create user
+
+
+            //create user
         $user = User::create([
             "name"=> $student->firstName." ".$student->lastName,
             "phone"=>$student->phone,

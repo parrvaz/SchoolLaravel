@@ -31,7 +31,7 @@ class UserGradeController extends Controller
     }
 
     public function show(){
-        return new UserGradeCollection(UserGrade::where('user_id',auth()->user()->id)->paginate(config('constant.paginate')));
+        return new UserGradeCollection(UserGrade::where('user_id',auth()->user()->id)->get());
     }
 
     public function delete(UserGrade $userGrade){

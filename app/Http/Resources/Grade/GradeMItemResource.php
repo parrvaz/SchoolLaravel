@@ -22,8 +22,7 @@ class GradeMItemResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'grades'=> $this->grades->count() > 0 ?  new UserGradeCollection($this->grades) : null,
-            'items'=>   new MenuItemCollection(MenuItem::where("parent_id",null)->get())
+//            'items'=>  $this->
 
         ];
     }

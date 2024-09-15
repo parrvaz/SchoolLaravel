@@ -17,10 +17,8 @@ class MenuItemCollection extends ResourceCollection
     {
         return ['data'=>$this->collection->map(function ($item){
             return[
-                'id'=>$item->id,
-                'label'=>$item->label,
-                'hasSub'=>$item->hasSub,
-                'sub'=> $item->hasSub ? new MenuItemCollection($item->subs) : null,
+                'title'=>$item->label,
+//                'sub'=> $item->hasSub ? new MenuItemCollection($item->subs) : null,
             ];
         })];
     }

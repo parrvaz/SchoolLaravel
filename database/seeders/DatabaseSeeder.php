@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
 //            GradeSeeder::class,
 //            RoleSeeder::class,
 //            CourseSeeder::class,
-            ContentSeeder::class,
-//            MenuItemSeeder::class,
+//            ContentSeeder::class,
+            MenuItemSeeder::class,
         ]);
     }
 }

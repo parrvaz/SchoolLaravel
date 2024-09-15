@@ -17,68 +17,53 @@ class MenuItemSeeder extends Seeder
     {
         DB::table('menu_items')->insert([
             [
-                'label' => "داشبورد",
+                'label' => "dashboard",
                 'hasSub' => false,
             ],
             [
-                'label' => "لیست امتحانات",
+                'label' => "examList",
                 'hasSub' => false,
             ],
             [
-                'label' => "ثبت امتحان",
+                'label' => "examStore",
                 'hasSub' => false,
             ],
             [
-                'label' => "ثبت آزمون تستی",
+                'label' => "classroom",
                 'hasSub' => false,
             ],
             [
-                'label' => "لیست کلاس ها",
+                'label' =>  "student",
                 'hasSub' => false,
             ],
             [
-                'label' =>  "لیست دانش آموزان",
+                'label' =>  "teacher",
                 'hasSub' => false,
             ],
             [
-                'label' =>  "لیست معلمان",
+                'label' =>  "assistant",
                 'hasSub' => false,
             ],
             [
-                'label' => "درس ها",
+                'label' => "course",
                 'hasSub' => true,
             ],
             [
-                'label' =>"تخصیص درس",
+                'label' =>"courseAssign",
                 'hasSub' => false,
-                'parent_id'=>8
+//                'parent_id'=>8
             ],
             [
-                'label' =>  "لیست درس ها",
+                'label' =>  "courseList",
                 'hasSub' => false,
-                'parent_id'=>8
+//                'parent_id'=>8
             ],
 
             [
-                'label' => "گزارشات",
+                'label' => "reports",
                 'hasSub' => true,
             ],
-            [
-                'label' =>  "فراوانی امتحانات",
-                'hasSub' => false,
-                'parent_id'=>11
-            ],
-            [
-                'label' => "روند امتحانات کتبی",
-                'hasSub' => false,
-                'parent_id'=>11
 
-            ],
-            [
-                'label' => "روند امتحانات شفاهی",
-                'hasSub' => false,
-                'parent_id'=>11
-            ]
         ]);
     }
 }

@@ -20,6 +20,7 @@ class StudentResource extends JsonResource
             'lastName'=>$this->lastName,
             'nationalId'=>$this->nationalId,
             'classroom_id'=>$this->classroom_id,
+            'classroom'=>$this->classroomTitle,
             'birthday'=>$this->birthday,
             'isOnlyChild'=>$this->onlyChild,
             'address'=>$this->address,

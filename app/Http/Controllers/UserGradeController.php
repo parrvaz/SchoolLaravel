@@ -34,8 +34,8 @@ class UserGradeController extends Controller
     public function updateCode( Request $request,UserGradesValidation $validation){
 
         $request->userGrade->update([
-            'grade_id'=>$validation->grade_id,
-            'title'=>$validation->title,
+            'grade_id'=>$validation->grade_id ?? $request->userGrade->grade_id,
+            'title'=>$validation->title ?? $request->userGrade->title,
         ]);
 
         return new UserGradeResource($request->userGrade);

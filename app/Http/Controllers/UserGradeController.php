@@ -7,6 +7,7 @@ use App\Http\Resources\Grade\UserGradeCollection;
 use App\Http\Resources\Grade\UserGradeResource;
 use App\Models\UserGrade;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class UserGradeController extends Controller
 {
@@ -30,6 +31,16 @@ class UserGradeController extends Controller
         return new UserGradeResource($userGrade);
     }
 
+    public function updateCode( Request $request,UserGradesValidation $validation){
+
+        $request->userGrade->update([
+            'grade_id'=>$validation->grade_id,
+            'title'=>$validation->title,
+        ]);
+
+        return new UserGradeResource($request->userGrade);
+    }
+
     public function show(){
         return new UserGradeCollection(UserGrade::where('user_id',auth()->user()->id)->get());
     }
@@ -39,4 +50,8 @@ class UserGradeController extends Controller
         return $this->successMessage();
     }
 
+    public function deleteCode( Request $request){
+        $request->userGrade->delete();
+        return $this->successMessage();
+    }
 }

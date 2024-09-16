@@ -16,7 +16,7 @@ class UserGradesValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'grade_id' => 'required|exists:grades,id',
+            'grade_id' => 'nullable|exists:grades,id',
             'title'=>'required|string|min:2|max:50',
         ];
     }

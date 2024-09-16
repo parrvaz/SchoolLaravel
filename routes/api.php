@@ -32,20 +32,23 @@ Route::post('log', [AuthenticationController::class, 'log'])->name('log');
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [AuthenticationController::class, 'user'])->name('user');
 
-
-
     //UserGrades Api
     Route::prefix("grades")->group(function () {
         Route::post('/store', [UserGradeController::class, 'store']);
         Route::post('/update/{user_grade}', [UserGradeController::class, 'update']);
         Route::get('/show', [UserGradeController::class, 'show']);
         Route::post('/delete/{user_grade}', [UserGradeController::class, 'delete']);
-
         Route::get('/items', [MenuItemController::class, 'show']);
 
     });
 
     Route::prefix('{userGrade}')->middleware("findUserGrade")->group(function () {
+
+        Route::post('/update', [UserGradeController::class, 'updateCode']);
+        Route::post('/delete', [UserGradeController::class, 'deleteCode']);
+
+
+
         Route::get('/dashboard', [GradeController::class, 'dashboard']);
 
         //Field Api

@@ -15,6 +15,9 @@ class MenuItemSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('contents')->delete();
+        
+
         DB::table('menu_items')->insert([
             [
                 'label' => "dashboard",

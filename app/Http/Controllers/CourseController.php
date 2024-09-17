@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Course\CourseValidation;
 use App\Http\Resources\Course\AssignCreateResource;
+use App\Http\Resources\Course\CourseClassroomCollection;
 use App\Http\Resources\Course\CourseCollection;
 use App\Http\Resources\Course\CourseResource;
 use App\Http\Resources\Grade\ExamCreateResource;
@@ -36,8 +37,8 @@ class CourseController extends Controller
    }
 
    public function showClassroom(Request $request){
-       return ClassCourseTeacher::whereHas('classroom', function($query) use($request) {
-           return $query->where('user_grade_id', $request->userGrade->id);})->get();
+       return new CourseClassroomCollection( ClassCourseTeacher::whereHas('classroom', function($query) use($request) {
+           return $query->where('user_grade_id', $request->userGrade->id);})->get());
    }
 
    public function assignCreate(Request $request){

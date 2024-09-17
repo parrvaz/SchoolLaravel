@@ -20,7 +20,7 @@ class ExamStoreValidation extends FormRequest
             'course_id'=>'required|exists:courses,id',
             'classroom_id'=>'required|exists:classrooms,id',
             'expected'=>'nullable|numeric|min:0|max:100',
-            'totalScore'=>'required|numeric|min:1|max:100',
+            'totalScore'=>'nullable|numeric|min:0|max:100',
             'status'=>'nullable|boolean',
             'type'=>'nullable|in:1,2,3',//1:katbi 2:shafahi 3:testi
             'isGeneral'=>'nullable|boolean',
@@ -34,4 +34,3 @@ class ExamStoreValidation extends FormRequest
         ];
     }
 }
-

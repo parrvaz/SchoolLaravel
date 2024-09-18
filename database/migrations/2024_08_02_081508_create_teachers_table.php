@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('degree')->nullable();
             $table->string('personalId')->nullable();
             $table->foreignId('user_grade_id')->constrained();
+            $table->boolean('isAssistant')->default(false);
             $table->timestamps();
         });
 

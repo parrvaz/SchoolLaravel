@@ -23,6 +23,7 @@ class TeacherResource extends JsonResource
             'personalId'=>$this->personalId,
             'phone'=>$this->phone,
             'user_grade_id'=>$this->user_grade_id,
+            'isAssistant'=>$this->isAssistant,
 
         ];
     }

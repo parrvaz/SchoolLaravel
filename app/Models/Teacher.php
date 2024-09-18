@@ -13,4 +13,13 @@ class Teacher extends Model
     public function getNameAttribute(){
         return $this->firstName ." ". $this->lastName;
     }
+
+    public function modelHasRole(){
+        return $this->hasOne(ModelHasRole::class,"idInRole");
+    }
+
+
+    public function user(){
+        return $this->hasOneThrough(User::class, ModelHasRole::class,'idInRole','id','id','model_id');
+    }
 }

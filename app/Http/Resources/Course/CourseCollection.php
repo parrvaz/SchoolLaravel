@@ -22,7 +22,7 @@ class CourseCollection extends ResourceCollection
                 'factor'=> $item->factor,
                 'type'=> $item->type ? "تخصصی" : "عمومی",
                 'contentCount'=> $item->contents->groupBy("content")->count(),
-//                'contents'=> new ContentCollection($item->contents),
+                'contents'=> new ContentCollection($item->contents),
             ];
         })];
     }

@@ -25,6 +25,7 @@ class TeacherCollection extends ResourceCollection
                 'personalId'=>$item->personalId,
                 'phone'=>$item->phone,
                 'user_grade_id'=>$item->user_grade_id,
+                'isAssistant'=>$item->isAssistant,
             ];
         })];
     }

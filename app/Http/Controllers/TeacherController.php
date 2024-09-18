@@ -9,6 +9,7 @@ use App\Http\Resources\Student\StudentResource;
 use App\Http\Resources\Teacher\TeacherCollection;
 use App\Http\Resources\Teacher\TeacherResource;
 use App\Models\ModelHasRole;
+use App\Models\Role;
 use App\Models\Teacher;
 use App\Models\User;
 use Database\Factories\TeacherFactory;
@@ -32,8 +33,10 @@ class TeacherController extends Controller
             'personalId'=>$validation->personalId,
             'user_grade_id'=>$request->userGrade->id,
             'phone'=>$validation->phone,
-
+            'isAssistant'=>$validation->isAssistant,
         ]);
+
+
         //create user
         $user = User::create([
             "name"=> $teacher->firstName." ".$teacher->lastName,
@@ -42,7 +45,11 @@ class TeacherController extends Controller
         ]);
 
         //assign role
-        $user->assignRole('teacher');
+        if (!$validation->isAssistant){
+            $user->assignRole('teacher');
+        }else{
+            $user->assignRole('assistant');
+        }
         $user->modelHasRole()->update(["idInRole"=>$teacher->id ]);
 
         return new TeacherResource($teacher);
@@ -69,15 +76,35 @@ class TeacherController extends Controller
      */
     public function update(TeacherValidation $validation,$userGrade, Teacher $teacher)
     {
-        $teacher->update([
-            'firstName'=>$validation->firstName,
-            'lastName'=>$validation->lastName,
-            'nationalId'=>$validation->nationalId,
-            'degree'=>$validation->degree,
-            'personalId'=>$validation->personalId,
-        ]);
+        return DB::transaction(function () use($teacher,$validation) {
 
-        return new TeacherResource($teacher);
+            //change role if is changed
+            if ($validation->isAssistant != $teacher->isAssistant) {
+                $userId= $teacher->user->id;
+                if (!$validation->isAssistant)
+                    ModelHasRole::where("idInRole",$teacher->id)->where("model_id",$userId)->update([
+                        'role_id' => Role::whereName("teacher")->first()->id,
+
+                    ]);
+                else
+                    ModelHasRole::where("idInRole",$teacher->id)->where("model_id",$userId)->update([
+                        'role_id' => Role::whereName("assistant")->first()->id,
+                    ]);
+            }
+
+            //update other values
+            $teacher->update([
+                'firstName' => $validation->firstName,
+                'lastName' => $validation->lastName,
+                'nationalId' => $validation->nationalId,
+                'degree' => $validation->degree,
+                'personalId' => $validation->personalId,
+                'isAssistant' => $validation->isAssistant,
+            ]);
+
+
+            return new TeacherResource($teacher);
+        });
     }
 
     /**
@@ -85,9 +112,12 @@ class TeacherController extends Controller
      */
     public function delete($userGrade,Teacher $teacher)
     {
-        User::where("phone",$teacher->phone)->delete();
-        ModelHasRole::where("idInRole",$teacher->id)->delete();
-        $teacher->delete();
-        return $this->successMessage();
+        return DB::transaction(function () use($teacher) {
+
+            User::where("phone", $teacher->phone)->delete();
+            ModelHasRole::where("idInRole", $teacher->id)->delete();
+            $teacher->delete();
+            return $this->successMessage();
+        });
     }
 }

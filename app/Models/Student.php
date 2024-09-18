@@ -14,6 +14,14 @@ class Student extends Model
         return $this->belongsTo(Classroom::class);
     }
 
+    public function modelHasRole(){
+        return $this->hasOne(ModelHasRole::class,"idInRole");
+    }
+
+    public function user(){
+        return $this->hasOneThrough(User::class, ModelHasRole::class,'idInRole','id','id','model_id');
+    }
+
     public function getNameAttribute(){
        return $this->firstName ." ". $this->lastName;
     }
@@ -21,4 +29,6 @@ class Student extends Model
     public function getClassroomTitleAttribute(){
         return $this->classroom->title;
     }
+
+
 }

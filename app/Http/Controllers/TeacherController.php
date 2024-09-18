@@ -92,6 +92,15 @@ class TeacherController extends Controller
                     ]);
             }
 
+
+            //change phone if is changed
+            if ($validation->phone != $teacher->phone) {
+                $teacher->user->update([
+                    'phone'=>$validation->phone
+                ]);
+            }
+
+
             //update other values
             $teacher->update([
                 'firstName' => $validation->firstName,
@@ -100,6 +109,7 @@ class TeacherController extends Controller
                 'degree' => $validation->degree,
                 'personalId' => $validation->personalId,
                 'isAssistant' => $validation->isAssistant,
+                'phone' => $validation->phone,
             ]);
 
 

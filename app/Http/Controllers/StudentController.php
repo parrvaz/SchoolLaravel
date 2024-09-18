@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Student\StudentUpdateValidation;
 use App\Http\Requests\Student\StudentValidation;
 use App\Http\Resources\Student\StudentCollection;
 use App\Http\Resources\Student\StudentResource;
 use App\Models\ModelHasRole;
+use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
 use App\Models\UserGrade;
@@ -99,8 +101,24 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StudentValidation $validation,$userGrade, Student $student)
+    public function update(StudentUpdateValidation $validation,$userGrade, Student $student)
     {
+
+        //change phone if is changed
+        if ($validation->phone != $student->phone) {
+            $student->user->update([
+                'phone'=>$validation->phone
+            ]);
+        }
+
+        //change father phone if is changed
+        if ($validation->fatherPhone != $student->fatherPhone) {
+            $student->user->update([
+                'fatherPhone'=>$validation->fatherPhone
+            ]);
+        }
+
+
         $student->update([
             'firstName'=>$validation->firstName,
             'lastName'=>$validation->lastName,
@@ -110,6 +128,8 @@ class StudentController extends Controller
             'onlyChild'=>$validation->onlyChild,
             'address'=>$validation->address,
             'phone'=>$validation->phone,
+            'fatherPhone'=>$validation->fatherPhone,
+            'motherPhone'=>$validation->motherPhone,
             'socialMediaID'=>$validation->socialMediaID,
             'numberOfGlasses'=>$validation->numberOfGlasses,
             'leftHand'=>$validation->leftHand,

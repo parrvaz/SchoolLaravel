@@ -4,7 +4,7 @@ namespace App\Http\Requests\Teacher;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TeacherValidation extends FormRequest
+class TeacherUpdateValidation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,7 +21,7 @@ class TeacherValidation extends FormRequest
             'nationalId'=>'required|digits:10',
             'degree'=>'nullable|string|min:2|max:50',
             'personalId'=>'nullable|digits:10',
-            'phone'=>'required|digits:11|unique:teachers',
+            'phone'=>'required|digits:11|unique:teachers,phone,'.$this->teacher->id,
             'isAssistant'=>'required|boolean'
         ];
     }

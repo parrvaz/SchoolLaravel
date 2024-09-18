@@ -77,7 +77,8 @@ class StudentController extends Controller
 
 
 
-            return new StudentResource($student);
+            return $this->successMessage();
+
         });
 
     }

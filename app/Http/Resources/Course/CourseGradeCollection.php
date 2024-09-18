@@ -5,7 +5,7 @@ namespace App\Http\Resources\Course;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CourseCollection extends ResourceCollection
+class CourseGradeCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -18,8 +18,8 @@ class CourseCollection extends ResourceCollection
             return[
                 'id'=> $item->id,
                 'name'=> $item->name,
-                'contentCount'=> $item->contents->groupBy("content")->count(),
-                'contents'=> new ContentCollection($item->contents),
+                'user_grade_id'=> $item->user_grade_id,
+
             ];
         })];
     }

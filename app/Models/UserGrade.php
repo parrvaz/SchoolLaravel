@@ -46,4 +46,8 @@ class UserGrade extends Model
     {
         return $this->hasManyThrough(Student::class, Classroom::class);
     }
+
+    public function courseGrades(){
+        return $this->hasMany(CourseGrade::class);
+    }
 }

@@ -10,6 +10,8 @@ use App\Http\Resources\Course\CourseResource;
 use App\Http\Resources\Grade\ExamCreateResource;
 use App\Models\ClassCourseTeacher;
 use App\Models\Course;
+use App\Models\CourseGrade;
+use App\Models\UserGrade;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -17,6 +19,8 @@ class CourseController extends Controller
     /**
      * store class and teacher of courses
      */
+
+
    public function store(Request $request, CourseValidation $validation){
        //delete all
        ClassCourseTeacher::whereHas('classroom', function($query) use($request) {
@@ -29,7 +33,10 @@ class CourseController extends Controller
    }
 
    public function show(Request $request){
-      return new CourseCollection(Course::where('grade_id',$request->userGrade->grade_id)->paginate(config("constant.bidPaginate")));
+       $courses =  Course::where('grade_id',$request->userGrade->grade_id)->select("name","id");
+       $courseUser  =  CourseGrade::where('user_grade_id',$request->userGrade->id)->select("name","id");
+
+      return new CourseCollection($courses->union($courseUser)->get());
    }
 
    public function showSingle($userGrade,Course $course){

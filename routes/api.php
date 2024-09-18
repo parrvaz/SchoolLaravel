@@ -7,6 +7,7 @@ use App\Http\Controllers\BellController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ClassScoreController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseGradeController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\MenuItemController;
@@ -85,15 +86,6 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/delete/{teacher}', [TeacherController::class, 'delete']);
         });
 
-        //Assistants Api
-        Route::prefix("assistants")->group(function () {
-            Route::post('/store', [AssistantController::class, 'store']);
-            Route::post('/update/{assistant}', [AssistantController::class, 'update']);
-            Route::get('/show', [AssistantController::class, 'show']);
-            Route::get('/show/{assistant}', [AssistantController::class, 'showSingle']);
-            Route::post('/delete/{assistant}', [AssistantController::class, 'delete']);
-        });
-
         //Course Api
         Route::prefix("courses")->group(function () {
             Route::post('/store', [CourseController::class, 'store']);
@@ -101,6 +93,14 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show/{course}', [CourseController::class, 'showSingle']);
             Route::get('/classroom/show', [CourseController::class, 'showClassroom']);
             Route::get('/assign/create', [CourseController::class, 'assignCreate']);
+        });
+
+        Route::prefix("/school/courses")->group(function () {
+            Route::post('/store', [CourseGradeController::class, 'store']);
+            Route::post('/update/{courseGrade}', [CourseGradeController::class, 'update']);
+            Route::post('/delete/{courseGrade}', [CourseGradeController::class, 'delete']);
+            Route::get('/show', [CourseGradeController::class, 'show']);
+
         });
 
         //Exam Api

@@ -26,9 +26,9 @@ class ExamResource extends JsonResource
             'course' => $item->courseName ?? Course::find( $this->course_id)->name,
             'expected' => $this->expected,
             'totalScore' => $this->totalScore,
-            'isFinal' =>$this->status,
+            'isFinal' =>(bool) $this->status,
             'type' => new TypeExamResource( $this) ,
-            'isGeneral' =>$this->isGeneral,
+            'isGeneral' =>(bool) $this->isGeneral,
             'contents'=>new ContentCollection($this->contents),
             'students'=>new StudentScoreCollection($this->students)
         ];

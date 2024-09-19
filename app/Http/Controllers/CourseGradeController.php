@@ -12,13 +12,12 @@ class CourseGradeController extends Controller
     public function store(Request $request){
         $validated = $request->validate([
             'name' => 'required|min:2|max:255',
-            'grade_id' => 'required|exists:grades,id',
         ]);
 
         Course::create([
             "name"=>$validated['name'],
             "title"=>$validated['name'],
-            "grade_id"=>$validated['grade_id'],
+            "grade_id"=> $request->userGrade->grade_id ,
             "user_grade_id"=> $request->userGrade->id,
         ]);
 
@@ -30,13 +29,11 @@ class CourseGradeController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|min:2|max:255',
-            'grade_id' => 'required|exists:grades,id',
         ]);
 
             $course->update([
             "name"=>$validated['name'],
             "title"=>$validated['name'],
-            "grade_id"=>$validated['grade_id'],
         ]);
 
         return $this->successMessage();

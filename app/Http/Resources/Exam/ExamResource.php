@@ -27,7 +27,7 @@ class ExamResource extends JsonResource
             'expected' => $this->expected,
             'totalScore' => $this->totalScore,
             'isFinal' =>$this->status,
-            'type' =>$this->type ,
+            'type' => new TypeExamResource( $this) ,
             'isGeneral' =>$this->isGeneral,
             'contents'=>new ContentCollection($this->contents),
             'students'=>new StudentScoreCollection($this->students)

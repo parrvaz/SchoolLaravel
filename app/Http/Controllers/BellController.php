@@ -10,13 +10,18 @@ use Illuminate\Http\Request;
 class BellController extends Controller
 {
     public function store(Request $request,BellStoreValidation $validation){
-        $bell = Bell::create([
-            "user_id"=>auth()->user()->id,
-            "order"=>$validation->order,
-            "startTime"=>$validation->startTime,
-            "endTime"=>$validation->endTime
-        ]);
 
+        $items=[];
+        foreach ($validation->list as $item){
+            $items[] = [
+                'user_id' =>auth()->user()->id,
+                'order' => $item['order'],
+                'startTime' =>$item['startTime'],
+                'endTime' => $item['endTime'],
+            ];
+        }
+
+        $bell = Bell::insert($items);
         return $bell;
     }
 

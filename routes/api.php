@@ -100,6 +100,7 @@ Route::middleware('auth:api')->group(function () {
 
         });
 
+        //New Course
         Route::prefix("/school/courses")->group(function () {
             Route::post('/store', [CourseGradeController::class, 'store']);
             Route::get('/show', [CourseGradeController::class, 'show']);

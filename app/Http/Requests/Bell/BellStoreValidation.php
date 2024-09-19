@@ -16,9 +16,11 @@ class BellStoreValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'order'=>'required|numeric|min:1|max:10',
-            'startTime'=>'required|date_format:h:i',
-            'endTime'=>'nullable|date_format:h:i',
+            'list'=> 'required|array',
+            'list.*.order'=>'required|numeric|min:1|max:10',
+            'list.*.startTime'=>'required|date_format:h:i',
+            'list.*.endTime'=>'nullable|date_format:h:i',
+
         ];
     }
 }

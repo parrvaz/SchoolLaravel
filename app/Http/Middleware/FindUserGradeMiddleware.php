@@ -21,6 +21,8 @@ class FindUserGradeMiddleware
         try{
             $code = $request->userGrade;
             $userGrade =UserGrade::whereCode($code)->first();
+            if ($userGrade==null)
+                return $this->error();
             $request->userGrade=$userGrade;
             return $next($request);
         }catch (\Exception $exception){

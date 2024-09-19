@@ -8,7 +8,7 @@ trait MessageTrait
 {
     public function successMessage(){
         return response()->json([
-            'message' => Lang::get('responses.response.success'),
+            'message' => Lang::get('responses.success'),
             'status' => 'success',
         ], 200);
     }

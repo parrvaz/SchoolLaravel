@@ -28,9 +28,9 @@ class ExamCollection extends ResourceCollection
                 'course' => $item->courseName ?? Course::find( $item->course_id)->name,
                 'expected' => $item->expected,
                 'totalScore' => $item->totalScore,
-                'isFinal' => $item->status,
+                'isFinal' => (bool)$item->status,
                 'type' =>$item->type ,
-                'isGeneral' =>$item->isGeneral,
+                'isGeneral' => (bool)$item->isGeneral,
             ];
         })];
     }

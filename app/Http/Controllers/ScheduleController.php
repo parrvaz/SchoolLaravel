@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Bell\BellStoreValidation;
 use App\Http\Requests\Bell\ScheduleStoreValidation;
+use App\Http\Requests\Exam\ExamStoreValidation;
 use App\Models\Absent;
+use App\Models\Exam;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 
@@ -23,10 +25,12 @@ class ScheduleController extends Controller
             ];
         }
 
-
         $schedule = Schedule::insert($items);
 
         return $this->successMessage();
+    }
 
+    public function update(ScheduleStoreValidation $validation, $userGrade, Schedule $schedule){
+        return $schedule;
     }
 }

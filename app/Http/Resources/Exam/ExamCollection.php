@@ -31,6 +31,8 @@ class ExamCollection extends ResourceCollection
                 'isFinal' => (bool)$item->status,
                 'type' => new TypeExamResource( $item) ,
                 'isGeneral' => (bool)$item->isGeneral,
+                'contents'=>new ContentCollection($item->contents),
+
             ];
         })];
     }

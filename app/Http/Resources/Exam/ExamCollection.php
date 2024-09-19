@@ -29,7 +29,7 @@ class ExamCollection extends ResourceCollection
                 'expected' => $item->expected,
                 'totalScore' => $item->totalScore,
                 'isFinal' => (bool)$item->status,
-                'type' =>$item->type ,
+                'type' => new TypeExamResource( $item) ,
                 'isGeneral' => (bool)$item->isGeneral,
             ];
         })];

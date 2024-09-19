@@ -34,7 +34,7 @@ class ExamController extends Controller
            $exam->students()->createMany($validation->students);
 
 
-           return new ExamResource($exam);
+           return $this->successMessage();
        });
    }
 
@@ -71,7 +71,7 @@ class ExamController extends Controller
            //create student items
            $exam->students()->createMany($validation->students);
 
-           return new ExamResource($exam);
+           return $this->successMessage();
        });
    }
 

@@ -22,7 +22,7 @@ class ExamResource extends JsonResource
             'course_id' => $this->course_id,
             'expected' => $this->expected,
             'totalScore' => $this->totalScore,
-            'status' =>$this->status,
+            'isFinal' =>$this->status,
             'type' =>$this->type ,
             'isGeneral' =>$this->isGeneral,
             'contents'=>new ContentCollection($this->contents),

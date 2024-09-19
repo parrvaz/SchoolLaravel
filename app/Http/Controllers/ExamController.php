@@ -21,7 +21,7 @@ class ExamController extends Controller
                'course_id' => $validation->course_id,
                'expected' => $validation->expected ?? 0,
                'totalScore' => $validation->totalScore ?? 0,
-               'status' => $validation->status ?? false,
+               'status' => $validation->isFinal ?? false,
                'type' => $validation->type ?? 1,
                'isGeneral' => $validation->isGeneral ?? false,
            ]);

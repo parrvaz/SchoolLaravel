@@ -11,4 +11,8 @@ class StudentExam extends Model
     protected $guarded=[];
     protected $table="student_exam";
 
+    public function student(){
+        return $this->belongsTo(Student::class);
+    }
+
 }

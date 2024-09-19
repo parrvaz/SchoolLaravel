@@ -33,11 +33,12 @@ class CourseController extends Controller
    }
 
    public function show(Request $request){
-       return new CourseCollection(Course::where('grade_id',$request->userGrade->grade_id)->get());
-//       $courses =  Course::where('grade_id',$request->userGrade->grade_id)->select("name","id");
-//       $courseUser  =  CourseGrade::where('user_grade_id',$request->userGrade->id)->select("name","id");
-//
-//      return new CourseCollection($courses->union($courseUser)->get());
+       return new CourseCollection(
+           Course::where('grade_id',$request->userGrade->grade_id)
+           ->where('user_grade_id',$request->userGrade->id)
+               ->orWhere('user_grade_id',null)
+           ->get());
+
    }
 
    public function showSingle($userGrade,Course $course){

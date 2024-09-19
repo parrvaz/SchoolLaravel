@@ -12,6 +12,7 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentPlanController;
 use App\Http\Controllers\TeacherController;
@@ -93,12 +94,14 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show/{course}', [CourseController::class, 'showSingle']);
             Route::get('/classroom/show', [CourseController::class, 'showClassroom']);
             Route::get('/assign/create', [CourseController::class, 'assignCreate']);
+
+            Route::post('/delete/{course}', [CourseGradeController::class, 'delete']);
+            Route::post('/update/{course}', [CourseGradeController::class, 'update']);
+
         });
 
         Route::prefix("/school/courses")->group(function () {
             Route::post('/store', [CourseGradeController::class, 'store']);
-            Route::post('/update/{courseGrade}', [CourseGradeController::class, 'update']);
-            Route::post('/delete/{courseGrade}', [CourseGradeController::class, 'delete']);
             Route::get('/show', [CourseGradeController::class, 'show']);
 
         });
@@ -119,6 +122,15 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/update/{bell}', [BellController::class, 'update']);
             Route::post('/delete/{bell}', [BellController::class, 'delete']);
         });
+
+        //Schedule
+        Route::prefix("schedules")->group(function () {
+            Route::post('/store', [ScheduleController::class, 'store']);
+            Route::get('/show', [ScheduleController::class, 'show']);
+            Route::post('/update/{schedule}', [ScheduleController::class, 'update']);
+            Route::post('/delete/{schedule}', [ScheduleController::class, 'delete']);
+        });
+
 
         //Absent Api
         Route::prefix("absents")->group(function () {

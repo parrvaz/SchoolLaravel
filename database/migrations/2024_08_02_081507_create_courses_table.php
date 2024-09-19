@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string("title"); //shortName
             $table->foreignId("grade_id")->constrained();
             $table->foreignId("user_grade_id")->nullable()->constrained()->cascadeOnDelete();
-            $table->integer("factor")->default(1);
-            $table->integer("type")->default(0);
         });
     }
 

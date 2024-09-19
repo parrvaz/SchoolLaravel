@@ -15,7 +15,7 @@ trait MessageTrait
 
     public function error(){
         return response()->json([
-            'message' => Lang::get('responses.error'),
+            'message' => Lang::get('responses.response.error'),
             'status' => 'error',
         ], 422);
     }

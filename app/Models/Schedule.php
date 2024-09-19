@@ -9,4 +9,17 @@ class Schedule extends Model
 {
     use HasFactory;
     protected $guarded=[];
+
+    public function classroom(){
+        return $this->belongsTo(Classroom::class);
+    }
+
+    public function bell(){
+        return $this->belongsTo(Bell::class);
+    }
+
+    public function course(){
+        return $this->belongsTo(Course::class);
+    }
+
 }

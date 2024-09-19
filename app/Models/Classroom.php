@@ -22,6 +22,10 @@ class Classroom extends Model
         return $this->belongsTo(Field::class);
     }
 
+    public function schedules(){
+        return $this->hasMany(Schedule::class);
+    }
+
     public function getFieldTitleAttribute(){
         return $this->field->title;
     }

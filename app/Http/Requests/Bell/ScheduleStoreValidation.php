@@ -16,12 +16,13 @@ class ScheduleStoreValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'classroom_id'=>'required|exists:classrooms,id',
+            'schedule'=> 'required|array|min:1',
 
-            'list'=> 'required|array',
-            'list.*.course_id'=>'required|exists:courses,id',
-            'list.*.bell_id'=>'required|exists:bells,id',
-            'list.*.day'=>'required|in:0,1,2,3,4,5,6',
+            'schedule.*'=> 'required|array',
+
+//            'schedule.*.course_id'=>'required|exists:courses,id',
+//            'schedule.*.bell_id'=>'required|exists:bells,id',
+//            'schedule.*.day'=>'required|in:0,1,2,3,4,5,6',
 
         ];
     }

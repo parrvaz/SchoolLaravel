@@ -127,7 +127,7 @@ Route::middleware('auth:api')->group(function () {
 
         //Schedule
         Route::prefix("schedules")->group(function () {
-            Route::post('/store', [ScheduleController::class, 'store']);
+            Route::post('/store/{classroom}', [ScheduleController::class, 'store']);
             Route::get('/show', [ScheduleController::class, 'show']);
             Route::get('/show/{classroom}', [ScheduleController::class, 'showSingle']);
             Route::post('/update/{classroom}', [ScheduleController::class, 'update']);

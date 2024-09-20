@@ -16,44 +16,39 @@ use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
-    public function store(Request $request,ScheduleStoreValidation $validation){
+    public function store(ScheduleStoreValidation $validation,$userGrade,Classroom $classroom){
+        if ($classroom == null)
+            return $this->error();
 
-        $items = [];
-        foreach ($validation->list as $item){
-            $items[] = [
-                'course_id' => $item['course_id'],
-                'bell_id' => $item['bell_id'],
-                'classroom_id' => $validation->classroom_id,
-                'day' => $item['day'],
-
-            ];
-        }
-
-        $schedule = Schedule::insert($items);
-
-        return $this->successMessage();
-    }
-
-    public function update(ScheduleStoreValidation $validation, $userGrade, Classroom $classroom){
         return DB::transaction(function () use($classroom,$validation) {
-            Schedule::where("classroom_id", $classroom->id)->delete();
+
+            $classroom->schedules()->delete();
+
+            $bells = $classroom->userGrade->user->bells->pluck("id","order");
 
             $items = [];
-            foreach ($validation->list as $item){
-                $items[] = [
-                    'course_id' => $item['course_id'],
-                    'bell_id' => $item['bell_id'],
-                    'classroom_id' => $validation->classroom_id,
-                    'day' => $item['day'],
-
-                ];
+            foreach ($validation->schedule as $item) {
+                $key = array_keys($item)[0];
+                $bell_id= $bells[$key];
+                foreach ($item[$key] as  $subItem){
+                    $day = array_keys($subItem)[0];
+                    $course_id = $subItem[$day];
+                        $items[] = [
+                            'course_id' => $course_id,
+                            'bell_id' => $bell_id,
+                            'classroom_id' => $classroom->id,
+                            'day' => $day,
+                        ];
+                }
             }
 
             $schedule = Schedule::insert($items);
-            return $this->successMessage();
 
+            return $this->successMessage();
         });
     }
+
+
 
     public function show(Request $request){
         $classroomIds = $request->userGrade->classrooms->pluck("id");

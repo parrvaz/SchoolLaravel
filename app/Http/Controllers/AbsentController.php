@@ -49,7 +49,7 @@ class AbsentController extends Controller
     }
 
     public function show(Request $request,FilterValidation $validation){
-        return new AbsentCollection($request->userGrade->user->bells);
+        return new AbsentCollection($request->userGrade->absents);
     }
 
     public function delete($userGrade,Absent $absent){

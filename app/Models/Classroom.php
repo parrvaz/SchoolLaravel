@@ -26,6 +26,10 @@ class Classroom extends Model
         return $this->hasMany(Schedule::class);
     }
 
+    public function Absents(){
+        return $this->hasMany(Absent::class);
+    }
+
     public function getFieldTitleAttribute(){
         return $this->field->title;
     }

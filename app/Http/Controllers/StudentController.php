@@ -91,7 +91,7 @@ class StudentController extends Controller
     {
         return new StudentCollection( Student::whereHas('classroom', function($query) use($request) {
             return $query->where('user_grade_id', $request->userGrade->id);
-        })->orderBy("classroom_id")->orderBy("lastName")->paginate($request->perPage?? config('constant.bigPaginate')));
+        })->orderBy("classroom_id")->orderBy("lastName")->get());
     }
 
     public function showSingle( $userGrade,Student $student)

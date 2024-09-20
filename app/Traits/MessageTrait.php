@@ -26,4 +26,18 @@ trait MessageTrait
             'status' => 'error',
         ], 422);
     }
+
+    public function errorHasAbsent(){
+        return response()->json([
+            'message' => Lang::get('responses.error.hasAbsent'),
+            'status' => 'error',
+        ], 422);
+    }
+
+    public function errorHasSchedule(){
+        return response()->json([
+            'message' => Lang::get('responses.error.hasSchedule'),
+            'status' => 'error',
+        ], 422);
+    }
 }

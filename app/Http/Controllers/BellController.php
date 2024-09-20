@@ -6,12 +6,15 @@ use App\Http\Requests\Bell\BellStoreValidation;
 use App\Http\Resources\Bell\BellCollection;
 use App\Models\Bell;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BellController extends Controller
 {
     public function store(Request $request,BellStoreValidation $validation){
 
 
+        if (auth()->user()->bells()->count() > 0)
+            return $this->errorStoreBefor();
 
         $items=[];
         foreach ($validation->list as $item){
@@ -24,17 +27,35 @@ class BellController extends Controller
         }
 
         $bell = Bell::insert($items);
-        return $bell;
+        return $this->successMessage();
     }
 
-    public function update(BellStoreValidation $validation,$userGrade,Bell $bell){
-       $bell->update([
-            "order"=>$validation->order,
-            "startTime"=>$validation->startTime,
-            "endTime"=>$validation->endTime
-        ]);
+    public function update(BellStoreValidation $validation,$userGrade){
 
-        return $bell;
+        return DB::transaction(function () use($validation) {
+
+            $items = [];
+            foreach ($validation->list as $item) {
+
+                if ( $item['id'] ?? 0) {
+                    Bell::find( $item['id'])->update([
+                        'order' => $item['order'],
+                        'startTime' => $item['startTime'],
+                        'endTime' => $item['endTime'],
+                    ]);
+                } else {
+                    Bell::create([
+                        'user_id' => auth()->user()->id,
+                        'order' => $item['order'],
+                        'startTime' => $item['startTime'],
+                        'endTime' => $item['endTime'],
+                    ]);
+                }
+            }
+
+            return $this->successMessage();
+        });
+
     }
 
     public function show(Request $request){
@@ -42,6 +63,13 @@ class BellController extends Controller
     }
 
     public function delete($userGrade,Bell $bell){
+
+        if ($bell->absents()->count() > 0)
+            return $this->errorHasAbsent();
+
+        if ($bell->schedules()->count() > 0)
+            return $this->errorHasSchedule();
+
         $bell->delete();
         return $this->successMessage();
     }

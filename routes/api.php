@@ -120,7 +120,7 @@ Route::middleware('auth:api')->group(function () {
         Route::prefix("bells")->group(function () {
             Route::post('/store', [BellController::class, 'store']);
             Route::get('/show', [BellController::class, 'show']);
-            Route::post('/update/{bell}', [BellController::class, 'update']);
+            Route::post('/update', [BellController::class, 'update']);
             Route::post('/delete/{bell}', [BellController::class, 'delete']);
         });
 

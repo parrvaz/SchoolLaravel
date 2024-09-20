@@ -9,4 +9,12 @@ class Bell extends Model
 {
     use HasFactory;
     protected $guarded=[];
+
+    public function schedules(){
+        return $this->hasMany(Schedule::class);
+    }
+
+    public function absents(){
+        return $this->hasMany(Absent::class);
+    }
 }

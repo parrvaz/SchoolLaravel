@@ -16,7 +16,8 @@ class MessageBoxValidation extends FormRequest
     public function rules(): array
     {
         return [
-
+            "message"=>"string",
+            "user_id"=>"required|exists:users,id"
         ];
     }
 }

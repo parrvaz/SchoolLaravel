@@ -11,6 +11,8 @@ class BellController extends Controller
 {
     public function store(Request $request,BellStoreValidation $validation){
 
+
+
         $items=[];
         foreach ($validation->list as $item){
             $items[] = [

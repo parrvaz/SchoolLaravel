@@ -52,14 +52,66 @@ class ScheduleController extends Controller
 
 
 
+
     public function show(Request $request){
         $classroomIds = $request->userGrade->classrooms->pluck("id");
-        return new ScheduleCollection(Schedule::whereIn("classroom_id",$classroomIds  )->get() );
+        $items = Schedule::whereIn("classroom_id",$classroomIds  )->get();
+
+
+        return new ScheduleCollection($items );
     }
 
 
     public function showSingle( $userGrade,Classroom $classroom){
-        return new ScheduleCollection( $classroom->schedules);
+
+        $schedules = $classroom->schedules;
+
+        // ایجاد آرایه برای ذخیره‌ی داده‌های جدید
+        $formattedSchedule = [];
+
+        // نگاشت عدد روز به نام روز هفته
+        $daysOfWeek = [
+            1 => 'sat', // شنبه
+            2 => 'sun', // یکشنبه
+            3 => 'mon', // دوشنبه
+            4 => 'tue', // سه‌شنبه
+            5 => 'wed', // چهارشنبه
+            6 => 'thu', // پنج‌شنبه
+            7 => 'fri'  // جمعه (اختیاری)
+        ];
+
+        // حلقه برای پردازش هر آیتم
+        foreach ($schedules as $schedule) {
+            $bell_id = $schedule->bell_id; // شناسه زنگ
+            $order = $schedule->bell->order;
+
+            $day = $schedule->day; // شناسه روز
+            $course_id = $schedule->course_id; // شناسه درس
+            $course_name = $schedule->course->name; // نام درس
+
+            // اگر bell_id قبلاً در آرایه نیست، آن را ایجاد می‌کنیم
+            if (!isset($formattedSchedule[$order])) {
+                // ایجاد آرایه جدید برای زنگ
+                $formattedSchedule[$order] = [
+                    'sat' => '',
+                    'sun' => '',
+                    'mon' => '',
+                    'tue' => '',
+                    'wed' => '',
+                    'thu' => '',
+                    'fri' => ''
+                ];
+            }
+
+            // ذخیره‌سازی course_id برای هر bell_id و day
+            $formattedSchedule[$order][$day] = $course_id;
+
+            // ذخیره‌سازی نام درس برای هر روز هفته (برای نمایش در فرانت)
+            $formattedSchedule[$order][$daysOfWeek[$day]] = $course_name;
+        }
+
+        // بازگرداندن نتیجه به فرمت مورد نظر
+        return response()->json(['schedule' => $formattedSchedule]);
     }
 
     public function delete($userGrade,Classroom $classroom){

@@ -18,6 +18,9 @@ class ScheduleController extends Controller
 {
     public function store(Request $request,ScheduleStoreValidation $validation){
 
+        if (Classroom::find($validation->classroom_id)->schedules->count() > 0)
+            return $this->error();
+
         $items = [];
         foreach ($validation->list as $item){
             $items[] = [

@@ -35,7 +35,7 @@ class ClassroomController extends Controller
      */
     public function show(Request $request)
     {
-        return new ClassroomCollection($request->userGrade->classrooms()->paginate( $request->perPage??config("constant.paginate")));
+        return new ClassroomCollection($request->userGrade->classrooms()->paginate( $request->perPage??config("constant.bigPaginate")));
     }
 
     public function showSingle($userGrade,Classroom $classroom)

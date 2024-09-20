@@ -27,18 +27,20 @@ class ScheduleController extends Controller
             $bells = $classroom->userGrade->user->bells->pluck("id","order");
 
             $items = [];
-            foreach ($validation->schedule as $item) {
-                $key = array_keys($item)[0];
+            foreach ($validation->schedule as $key=> $item) {
                 $bell_id= $bells[$key];
-                foreach ($item[$key] as  $subItem){
-                    $day = array_keys($subItem)[0];
-                    $course_id = $subItem[$day];
+                foreach ($item as  $subKey=> $subItem){
+                    if ( is_int($subKey) ){
+                        $day = $subKey;
+                        $course_id = $subItem;
                         $items[] = [
                             'course_id' => $course_id,
                             'bell_id' => $bell_id,
                             'classroom_id' => $classroom->id,
                             'day' => $day,
                         ];
+                    }
+
                 }
             }
 

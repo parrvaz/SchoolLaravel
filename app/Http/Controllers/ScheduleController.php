@@ -30,7 +30,7 @@ class ScheduleController extends Controller
             foreach ($validation->schedule as $key=> $item) {
                 $bell_id= $bells[$key];
                 foreach ($item as  $subKey=> $subItem){
-                    if ( is_int($subKey) ){
+                    if ( is_int($subKey) && $subItem!=null){
                         $day = $subKey;
                         $course_id = $subItem;
                         $items[] = [

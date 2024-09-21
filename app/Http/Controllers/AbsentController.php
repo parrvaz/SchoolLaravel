@@ -50,10 +50,8 @@ class AbsentController extends Controller
     }
 
     public function show(Request $request,FilterValidation $validation){
-
         $allAbsents =  Absent::where("date",$validation->date)->get();
         $allAbsents = $allAbsents->groupBy('classroom_id');
-
 
         $data=[];
         foreach ($allAbsents as $classroom_id => $absents) {
@@ -95,9 +93,14 @@ class AbsentController extends Controller
             ];
         }
 
-        return response()->json(['absents' => $data]);
+        return response()->json(['data' => $data]);
     }
 
+    public function teachersMiss(Request $request,FilterValidation $validation){
+        $bells = $request->userGrade->user->bells->pluck("id");
+
+        return Absent::where("date",$validation->date)->whereIn("bell_id",$bells)->get();
+    }
     public function delete($userGrade,Absent $absent){
         return DB::transaction(function () use($absent) {
 

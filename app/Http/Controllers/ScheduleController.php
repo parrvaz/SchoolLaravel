@@ -64,11 +64,7 @@ class ScheduleController extends Controller
                 'schedule' => $this->createSchedule($classroom->schedules),
             ];
         }
-
-
-
         return response()->json(['data' => $data]);
-
     }
 
 

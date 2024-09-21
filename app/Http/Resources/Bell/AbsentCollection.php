@@ -17,13 +17,8 @@ class AbsentCollection extends ResourceCollection
     {
         return ['data'=>$this->collection->map(function ($item){
             return[
-                "id"=>$item->id,
-                'user_id'=> $item->user_id,
-                'user_name'=> $item->user->name,
-                'date'=> $item->order,
-                'bell_id'=> $item->startTime,
-                'classroom_id'=> $item->endTime,
-                "students"=> new StudentShortCollection($item->students)
+                "classroom_id"=>$item
+
             ];
         })];
     }

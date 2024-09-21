@@ -19,4 +19,14 @@ class Absent extends Model
         return $this->belongsToMany(Student::class);
     }
 
+    public function classroom(){
+        return $this->belongsTo(Classroom::class);
+    }
+
+    public function bell(){
+        return $this->belongsTo(Bell::class);
+    }
+
+
+
 }

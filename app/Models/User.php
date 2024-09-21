@@ -59,4 +59,8 @@ class User extends Authenticatable
     public function bells(){
         return $this->hasMany(Bell::class);
     }
+
+    public function teacher(){
+        return $this->hasOneThrough(Teacher::class, ModelHasRole::class,'model_id','id','id','idInRole');
+    }
 }

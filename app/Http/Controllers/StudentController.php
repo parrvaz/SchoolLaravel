@@ -96,6 +96,7 @@ class StudentController extends Controller
 
     public function showSingle( $userGrade,Student $student)
     {
+
         return new StudentResource($student);
     }
 

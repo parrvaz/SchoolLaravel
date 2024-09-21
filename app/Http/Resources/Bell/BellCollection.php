@@ -14,6 +14,7 @@ class BellCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
+
         return ['data'=>$this->collection->map(function ($item){
             return[
                 'id'=> $item->id,
@@ -21,6 +22,7 @@ class BellCollection extends ResourceCollection
                 'startTime'=> \Carbon\Carbon::createFromFormat('H:i:s',$item->startTime)->format('H:i'),
                 'endTime'=> \Carbon\Carbon::createFromFormat('H:i:s',$item->endTime)->format('H:i'),
             ];
-        })];
+        }),
+        ];
     }
 }

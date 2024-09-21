@@ -58,14 +58,23 @@ class ScheduleController extends Controller
         $items = Schedule::whereIn("classroom_id",$classroomIds  )->get();
 
 
+
         return new ScheduleCollection($items );
     }
 
 
     public function showSingle( $userGrade,Classroom $classroom){
-
         $schedules = $classroom->schedules;
+        $formattedSchedule = $this->createSchedule($schedules);
+        // بازگرداندن نتیجه به فرمت مورد نظر
+        return response()->json(['schedule' => $formattedSchedule]);
+    }
 
+    public function delete($userGrade,Classroom $classroom){
+        $classroom->schedules()->delete();
+        return $this->successMessage();
+    }
+    private function createSchedule ($schedules){
         // ایجاد آرایه برای ذخیره‌ی داده‌های جدید
         $formattedSchedule = [];
 
@@ -82,7 +91,6 @@ class ScheduleController extends Controller
 
         // حلقه برای پردازش هر آیتم
         foreach ($schedules as $schedule) {
-            $bell_id = $schedule->bell_id; // شناسه زنگ
             $order = $schedule->bell->order;
 
             $day = $schedule->day; // شناسه روز
@@ -110,12 +118,6 @@ class ScheduleController extends Controller
             $formattedSchedule[$order][$daysOfWeek[$day]] = $course_name;
         }
 
-        // بازگرداندن نتیجه به فرمت مورد نظر
-        return response()->json(['schedule' => $formattedSchedule]);
-    }
-
-    public function delete($userGrade,Classroom $classroom){
-        $classroom->schedules()->delete();
-        return $this->successMessage();
+        return $formattedSchedule;
     }
 }

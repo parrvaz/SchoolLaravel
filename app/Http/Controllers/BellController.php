@@ -71,6 +71,7 @@ class BellController extends Controller
             return $this->errorHasSchedule();
 
         $bell->delete();
-        return new BellCollection($request->userGrade->user->bells);
+        return (new BellCollection($request->userGrade->user->bells))
+            ->additional(['messages' => "با موفقیت حذف شد"]);
     }
 }

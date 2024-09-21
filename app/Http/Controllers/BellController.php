@@ -30,9 +30,9 @@ class BellController extends Controller
         return $this->successMessage();
     }
 
-    public function update(BellStoreValidation $validation,$userGrade){
+    public function update(Request $request, BellStoreValidation $validation,$userGrade){
 
-        return DB::transaction(function () use($validation) {
+        return DB::transaction(function () use($validation,$request) {
 
             $items = [];
             foreach ($validation->list as $item) {
@@ -53,7 +53,8 @@ class BellController extends Controller
                 }
             }
 
-            return $this->successMessage();
+            return (new BellCollection($request->userGrade->user->bells))
+                ->additional(['message' => "با موفقیت تغییر کرد"]);
         });
 
     }
@@ -72,6 +73,6 @@ class BellController extends Controller
 
         $bell->delete();
         return (new BellCollection($request->userGrade->user->bells))
-            ->additional(['messages' => "با موفقیت حذف شد"]);
+            ->additional(['message' => "با موفقیت حذف شد"]);
     }
 }

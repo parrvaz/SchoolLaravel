@@ -62,7 +62,7 @@ class BellController extends Controller
         return new BellCollection($request->userGrade->user->bells);
     }
 
-    public function delete($userGrade,Bell $bell){
+    public function delete(Request $request,$userGrade,Bell $bell){
 
         if ($bell->absents()->count() > 0)
             return $this->errorHasAbsent();
@@ -71,6 +71,6 @@ class BellController extends Controller
             return $this->errorHasSchedule();
 
         $bell->delete();
-        return $this->successMessage();
+        return new BellCollection($request->userGrade->user->bells);
     }
 }

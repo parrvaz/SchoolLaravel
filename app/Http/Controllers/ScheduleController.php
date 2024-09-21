@@ -54,12 +54,21 @@ class ScheduleController extends Controller
 
 
     public function show(Request $request){
-        $classroomIds = $request->userGrade->classrooms->pluck("id");
-        $items = Schedule::whereIn("classroom_id",$classroomIds  )->get();
+        $classrooms = $request->userGrade->classrooms;
+
+        $data = [];
+        foreach ($classrooms as $classroom){
+            $data[]=[
+                'classroom_id' => $classroom->id,
+                'classroom' => $classroom->title,
+                'schedule' => $this->createSchedule($classroom->schedules),
+            ];
+        }
 
 
 
-        return new ScheduleCollection($items );
+        return response()->json(['data' => $data]);
+
     }
 
 

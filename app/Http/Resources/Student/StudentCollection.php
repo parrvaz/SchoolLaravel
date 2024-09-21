@@ -34,6 +34,8 @@ class StudentCollection extends ResourceCollection
                 'isLeftHand'=> (bool)$item->leftHand,
                 'religion'=>$item->religion,
                 'specialDisease'=>$item->specialDisease,
+                "user_id"=> $item->user->id ?? null,
+                "parent_id"=> $item->parentUser->id ?? null
             ];
         })];
     }

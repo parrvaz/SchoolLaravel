@@ -24,6 +24,7 @@ class TeacherResource extends JsonResource
             'phone'=>$this->phone,
             'user_grade_id'=>$this->user_grade_id,
             'isAssistant'=> (bool) $this->isAssistant,
+            "user_id"=> $this->user->id
 
         ];
     }

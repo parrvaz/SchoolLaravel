@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Messag\MessageValidation;
+use App\Http\Resources\Messages\InboxCollection;
+use App\Http\Resources\Messages\MessageCollection;
 use App\Models\Message;
 use App\Models\MessageRecipient;
 use Illuminate\Http\Request;
@@ -40,22 +42,18 @@ class MessageController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json($inbox);
+        return new InboxCollection($inbox);
     }
 
     public function markAsRead($userGrade ,MessageRecipient $messageRecipient)
     {
-        $recipient = MessageRecipient::where('message_id', $message_id)
-            ->where('user_id', auth()->user()->id)
-            ->first();
-
-        if ($recipient) {
-            $recipient->is_read = true;
-            $recipient->save();
-            return response()->json(['message' => 'پیام به عنوان خوانده شده علامت‌گذاری شد']);
+        if ($messageRecipient) {
+            $messageRecipient->update([
+                "isRead"=>true
+            ]);
+            return $this->successMessage();
         }
-
-        return response()->json(['error' => 'پیام یافت نشد'], 404);
+        return $this->error();
     }
 
     public function sentMessages()
@@ -64,6 +62,6 @@ class MessageController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json($sentMessages);
+        return new MessageCollection($sentMessages);
     }
 }

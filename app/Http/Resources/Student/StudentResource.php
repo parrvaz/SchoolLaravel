@@ -33,6 +33,8 @@ class StudentResource extends JsonResource
             'religion'=>$this->religion,
             'specialDisease'=>$this->specialDisease,
             'picture'=> $this->picture ? url('storage/' . $this->picture) : null,
+            "user_id"=> $this->user->id
+
         ];
     }
 }

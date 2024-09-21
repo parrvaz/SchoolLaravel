@@ -11,7 +11,7 @@ use App\Http\Controllers\CourseGradeController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\MenuItemController;
-use App\Http\Controllers\MessageBoxController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
@@ -144,15 +144,13 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/delete/{absent}', [AbsentController::class, 'delete']);
         });
 
-        //MessageBox
+        //Message
         Route::prefix("messages")->group(function () {
-            Route::post('/send', [MessageBoxController::class, 'send']);
+            Route::post('/send', [MessageController::class, 'send']);
+            Route::post('/markAsRead/{messageRecipient}', [MessageController::class, 'markAsRead']);
+            Route::get('/inbox', [MessageController::class, 'inbox']);
+            Route::get('/sentMessages', [MessageController::class, 'sentMessages']);
 
-
-            Route::get('/show', [MessageBoxController::class, 'show']);
-            Route::get('/show/{absent}', [MessageBoxController::class, 'showSingle']);
-            Route::post('/update/{absent}', [MessageBoxController::class, 'update']);
-            Route::post('/delete/{absent}', [MessageBoxController::class, 'delete']);
         });
 
 

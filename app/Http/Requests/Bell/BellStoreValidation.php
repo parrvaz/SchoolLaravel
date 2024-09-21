@@ -18,8 +18,8 @@ class BellStoreValidation extends FormRequest
         return [
             'list'=> 'required|array',
             'list.*.order'=>'required|numeric|min:1|max:10',
-            'list.*.startTime'=>'required|date_format:H:i:s',
-            'list.*.endTime'=>'nullable|date_format:H:i:s',
+            'list.*.startTime'=>'required|date_format:H:i',
+            'list.*.endTime'=>'nullable|date_format:H:i',
 
         ];
     }

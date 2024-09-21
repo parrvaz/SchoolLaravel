@@ -18,8 +18,8 @@ class BellCollection extends ResourceCollection
             return[
                 'id'=> $item->id,
                 'order'=> $item->order,
-                'startTime'=> $item->startTime,
-                'endTime'=> $item->endTime,
+                'startTime'=> \Carbon\Carbon::createFromFormat('H:i:s',$item->startTime)->format('H:i'),
+                'endTime'=> \Carbon\Carbon::createFromFormat('H:i:s',$item->endTime)->format('H:i'),
             ];
         })];
     }

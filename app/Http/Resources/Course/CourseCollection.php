@@ -18,6 +18,7 @@ class CourseCollection extends ResourceCollection
             return[
                 'id'=> $item->id,
                 'name'=> $item->name,
+                "isUser"=> $item->user_grade_id!=null,
                 'contentCount'=> $item->contents->groupBy("content")->count(),
                 'contents'=> new ContentCollection($item->contents),
             ];

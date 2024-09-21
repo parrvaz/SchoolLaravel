@@ -38,7 +38,6 @@ class CourseController extends Controller
            ->where('user_grade_id',$request->userGrade->id)
                ->orWhere('user_grade_id',null)
            ->get());
-
    }
 
    public function showSingle($userGrade,Course $course){

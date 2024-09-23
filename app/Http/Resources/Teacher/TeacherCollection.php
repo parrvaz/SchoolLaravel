@@ -26,7 +26,7 @@ class TeacherCollection extends ResourceCollection
                 'phone'=>$item->phone,
                 'user_grade_id'=>$item->user_grade_id,
                 'isAssistant'=> (bool) $item->isAssistant,
-                "user_id"=> $item->user->id
+                "user_id"=> $item->user->id ?? null
 
             ];
         })];

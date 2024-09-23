@@ -2,10 +2,8 @@
 
 use App\Http\Controllers\AbsentController;
 use App\Http\Controllers\Api\AuthenticationController;
-use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\BellController;
 use App\Http\Controllers\ClassroomController;
-use App\Http\Controllers\ClassScoreController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseGradeController;
 use App\Http\Controllers\ExamController;
@@ -17,7 +15,6 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentPlanController;
 use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\PlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,8 +46,6 @@ Route::middleware('auth:api')->group(function () {
 
         Route::post('/update', [UserGradeController::class, 'updateCode']);
         Route::post('/delete', [UserGradeController::class, 'deleteCode']);
-
-
 
         Route::get('/dashboard', [GradeController::class, 'dashboard']);
 

@@ -21,7 +21,7 @@ class TeacherValidation extends FormRequest
             'nationalId'=>'required|digits:10',
             'degree'=>'nullable|string|min:2|max:50',
             'personalId'=>'nullable|digits:10',
-            'phone'=>'required|digits:11|unique:teachers',
+            'phone'=>'required|digits:11|unique:teachers|unique:users',
             'isAssistant'=>'required|boolean'
         ];
     }

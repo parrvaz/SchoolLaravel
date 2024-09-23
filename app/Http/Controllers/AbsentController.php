@@ -80,9 +80,7 @@ class AbsentController extends Controller
                     }
 
                     // افزودن وضعیت غیاب برای زنگ خاص
-                    $students[$student->id]['bells'][$absent->bell_id] = [
-                        "bell_id" => $absent->bell_id,
-                        "order" => $absent->bell->order,
+                    $students[$student->id]['bells'][$absent->bell->order] = [
                         "status" => "absent",
                         "report" => $absent->user->name
                     ];
@@ -92,26 +90,19 @@ class AbsentController extends Controller
             // اضافه کردن وضعیت هر زنگ به دانش‌آموزان
             foreach ($students as $student_id => &$student) {
                 foreach ($allBells as $bell) {
-                    if (!isset($student['bells'][$bell->id])) {
+                    if (!isset($student['bells'][$bell->order])) {
                         // اگر زنگی برای دانش‌آموز ثبت نشده بود، آن را اضافه کنید
                         $attendanceRecorded = Absent::where('date', $validation->date)
                             ->where('bell_id', $bell->id)
                             ->where('classroom_id', $classroom_id)
                             ->exists();
 
-                        $student['bells'][$bell->id] = [
-                            "bell_id" => $bell->id,
-                            "order" => $bell->order,
+                        $student['bells'][$bell->order] = [
                             "status" => $attendanceRecorded ? "present" : "notRegistered",
-                            "report" => null // اگر غایب نبود یا وضعیت ثبت نشده بود، گزارشی وجود ندارد
+                            "reporter" => null // اگر غایب نبود یا وضعیت ثبت نشده بود، گزارشی وجود ندارد
                         ];
                     }
                 }
-
-                // مرتب‌سازی زنگ‌ها بر اساس order
-                usort($student['bells'], function ($a, $b) {
-                    return $a['order'] - $b['order'];
-                });
             }
 
             $data[] = [

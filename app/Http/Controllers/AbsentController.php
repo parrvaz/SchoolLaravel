@@ -82,7 +82,7 @@ class AbsentController extends Controller
                     // افزودن وضعیت غیاب برای زنگ خاص
                     $students[$student->id]['bells'][$absent->bell->order] = [
                         "status" => "absent",
-                        "report" => $absent->user->name
+                        "reporter" => $absent->user->name
                     ];
                 }
             }

@@ -29,7 +29,7 @@ class AbsentController extends Controller
 
             $absent->students()->attach($validation->students);
 
-            return new AbsentResource($absent);
+            return $this->successMessage();
         });
     }
 
@@ -59,19 +59,17 @@ class AbsentController extends Controller
 
         foreach ($allAbsents as $classroom_id => $absents) {
             $studentsData = [];
-            $students = [];
+//            $students = [];
+
+
 
             // دریافت لیست تمام دانش‌آموزان غایب از کلاس
             foreach ($absents as $absent) {
-                foreach ($absent->students as $student) {
-                    // اطمینان حاصل کنیم که دانش‌آموز به کلاس درست تعلق دارد
-                    if ($student->classroom_id != $classroom_id) {
-                        continue; // اگر دانش‌آموز به این کلاس تعلق ندارد، آن را رد می‌کنیم
-                    }
+                foreach ($absent->students as &$student) {
 
                     // بررسی اینکه آیا دانش‌آموز قبلاً در آرایه وجود دارد
-                    if (!isset($students[$student->id])) {
-                        $students[$student->id] = [
+                    if (!isset($studentsData[$student->id])) {
+                        $studentsData[$student->id] = [
                             "student_id" => $student->id,
                             "student" => $student->name,
                             "fatherPhone" => $student->fatherPhone,
@@ -79,38 +77,49 @@ class AbsentController extends Controller
                         ];
                     }
 
+                    // استفاده از 'order' به عنوان کلید در 'bells'
+                    $order = $absent->bell->order;
+
                     // افزودن وضعیت غیاب برای زنگ خاص
-                    $students[$student->id]['bells'][$absent->bell->order] = [
+                    $studentsData[$student->id]['bells'][$order] = [
                         "status" => "absent",
                         "reporter" => $absent->user->name
                     ];
                 }
+
             }
 
+
             // اضافه کردن وضعیت هر زنگ به دانش‌آموزان
-            foreach ($students as $student_id => &$student) {
+            foreach ($studentsData as $student_id => &$student) {
                 foreach ($allBells as $bell) {
-                    if (!isset($student['bells'][$bell->order])) {
+                    $order = $bell->order;
+
+                    if (!isset($student['bells'][$order])) {
                         // اگر زنگی برای دانش‌آموز ثبت نشده بود، آن را اضافه کنید
                         $attendanceRecorded = Absent::where('date', $validation->date)
                             ->where('bell_id', $bell->id)
                             ->where('classroom_id', $classroom_id)
                             ->exists();
 
-                        $student['bells'][$bell->order] = [
+                        $student['bells'][$order] = [
                             "status" => $attendanceRecorded ? "present" : "notRegistered",
-                            "reporter" => null // اگر غایب نبود یا وضعیت ثبت نشده بود، گزارشی وجود ندارد
+                            "reporter" => null
                         ];
                     }
                 }
+
+                // مرتب‌سازی کلیدهای 'bells' بر اساس 'order'
+                ksort($student['bells']);
             }
+
 
             $data[] = [
                 "classroom_id" => $classroom_id,
                 "classroom" => Classroom::find($classroom_id)->title,
-                "count"=> count(array_values($students)),
-                "students" => array_values($students)
+                "students" => array_values($studentsData)
             ];
+
         }
 
         return response()->json(['data' => $data]);

@@ -20,6 +20,13 @@ trait MessageTrait
         ], 422);
     }
 
+    public function errorFatherPhone(){
+        return response()->json([
+            'message' => Lang::get('responses.error.fatherPhone'),
+            'status' => 'error',
+        ], 422);
+    }
+
     public function errorStoreBefor(){
         return response()->json([
             'message' => Lang::get('responses.error.storeBefore'),

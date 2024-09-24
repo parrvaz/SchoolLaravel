@@ -21,6 +21,9 @@ class StudentController extends Controller
      */
     public function store(Request $request,StudentValidation $validation)
     {
+        if ($validation->phone == $validation->fatherPhone)
+            return $this->errorFatherPhone();
+
         return DB::transaction(function () use($request,$validation) {
 
             // ذخیره تصویر در صورت آپلود

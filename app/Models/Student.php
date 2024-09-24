@@ -22,6 +22,10 @@ class Student extends Model
         return $this->hasOneThrough(User::class, ModelHasRole::class,'idInRole','id','id','model_id');
     }
 
+    public function absents()
+    {
+        return $this->belongsToMany(Absent::class, 'absent_student', 'student_id', 'absent_id');
+    }
     public function parentUser(){
 //        return User::where("phone",$this->fatherPhone);
         return $this->hasOne(User::class, 'phone','fatherPhone');

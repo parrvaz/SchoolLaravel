@@ -50,7 +50,7 @@ class AbsentController extends Controller
     }
 
     public function show(Request $request,FilterValidation $validation){
-        $allAbsents = Absent::where("date", $validation->date)->get();
+        $allAbsents = Absent::whereIn("classroom_id",$request->userGrade->classrooms->pluck("id"))->where("date", $validation->date)->get();
         $allAbsents = $allAbsents->groupBy('classroom_id');
 
         $allBells = Bell::orderBy('order')->get();

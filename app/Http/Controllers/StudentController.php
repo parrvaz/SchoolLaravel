@@ -6,6 +6,7 @@ use App\Http\Requests\Student\StudentUpdateValidation;
 use App\Http\Requests\Student\StudentValidation;
 use App\Http\Resources\Student\StudentCollection;
 use App\Http\Resources\Student\StudentResource;
+use App\Imports\StudentsImport;
 use App\Models\ModelHasRole;
 use App\Models\Role;
 use App\Models\Student;
@@ -13,6 +14,7 @@ use App\Models\User;
 use App\Models\UserGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -86,6 +88,19 @@ class StudentController extends Controller
 
     }
 
+
+    public function import(Request $request)
+    {
+        // اعتبارسنجی فایل اکسل
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        // فراخوانی Import برای خواندن و ثبت داده‌ها
+        Excel::import(new StudentsImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'دانش‌آموزان با موفقیت ثبت شدند.');
+    }
 
     /**
      * Display the specified resource.

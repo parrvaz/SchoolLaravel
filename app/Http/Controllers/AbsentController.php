@@ -50,6 +50,8 @@ class AbsentController extends Controller
     }
 
     public function show(Request $request,FilterValidation $validation){
+        $date = $validation->date;
+
         $allAbsents = Absent::whereIn("classroom_id",$request->userGrade->classrooms->pluck("id"))->where("date", $validation->date)->get();
         $allAbsents = $allAbsents->groupBy('classroom_id');
 

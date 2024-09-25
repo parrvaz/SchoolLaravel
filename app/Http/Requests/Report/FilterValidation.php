@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Report;
 
-use App\Rules\FilterListRule;
+use App\Rules\JalaliDateValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FilterValidation extends FormRequest
@@ -25,7 +25,7 @@ class FilterValidation extends FormRequest
             'student.*'=>'nullable|exists:students,id',
 
 
-            'date'=>'nullable|date',
+            'date'=>['nullable', new JalaliDateValidation()],
 
         ];
     }

@@ -22,20 +22,8 @@ class UserGrade extends Model
         return $this->hasMany(Teacher::class);
     }
 
-    public function assistants(){
-        return $this->hasMany(Assistant::class);
-    }
-
     public function exams(){
         return $this->hasMany(Exam::class);
-    }
-
-    public function classScores(){
-        return $this->hasMany(ClassScore::class);
-    }
-
-    public function tests(){
-        return $this->hasMany(Test::class);
     }
 
     public function plans(){

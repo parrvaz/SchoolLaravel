@@ -5,7 +5,7 @@ namespace App\Http\Resources\Plan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class PlanCollection extends ResourceCollection
+class CoursePlanCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -17,8 +17,11 @@ class PlanCollection extends ResourceCollection
         return $this->collection->map(function ($item){
             return[
                 'id' =>$item->id,
-                'classroom_id' => $item->classroom_id,
-                'title' => $item->title,
+                'title' => $item->course->name,
+                'course_id' => $item->course_id,
+                'day' =>  config("constant.day.$item->day") ,
+                'start' => \Carbon\Carbon::createFromFormat('H:i:s', $item->start)->format('H:i'),
+                'end' => \Carbon\Carbon::createFromFormat('H:i:s', $item->end)->format('H:i'),
             ];
         })->toArray();
     }

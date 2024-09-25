@@ -18,11 +18,9 @@ class PlanResource extends JsonResource
     {
         return [
             'id' =>$this->id,
-            'user_grade_id' => $this->id,
             'classroom_id' => $this->classroom_id,
-            'date' => $this->date,
-            'course_id' => $this->course_id,
-            'minutes' => $this->minutes,
+            'title' => $this->title,
+            'plan'=> new CoursePlanCollection($this->coursePlans)
         ];
     }
 }

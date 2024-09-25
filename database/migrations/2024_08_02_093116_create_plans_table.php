@@ -14,19 +14,18 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_grade_id')->constrained()->onDelete('cascade');
-            $table->foreignId('classroom_id')->constrained();
-            $table->date("date");
-            $table->foreignId("course_id")->constrained();
-            $table->integer("minutes");
+            $table->foreignId('classroom_id')->nullable()->constrained();
+            $table->string("title");
             $table->timestamps();
         });
 
-        Schema::create('student_plan', function (Blueprint $table) {
+        Schema::create('course_plan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("student_id")->constrained();
-            $table->date("date");
-            $table->foreignId("course_id")->constrained();
-            $table->integer("minutes");
+            $table->foreignId('plan_id')->constrained()->onDelete('cascade');
+            $table->foreignId('course_id')->constrained();
+            $table->tinyInteger('day');
+            $table->time('start');
+            $table->time('end');
             $table->timestamps();
         });
     }
@@ -36,7 +35,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('student_plan');
+        Schema::dropIfExists('course_plan');
         Schema::dropIfExists('plans');
     }
 };

@@ -149,6 +149,18 @@ Route::middleware('auth:api')->group(function () {
         });
 
 
+        //Plan Api
+        Route::prefix("plans")->group(function () {
+            Route::post('/store', [PlanController::class, 'store']);
+            Route::get('/show', [PlanController::class, 'show']);
+            Route::get('/show/{plan}', [PlanController::class, 'showSingle']);
+            Route::post('/update/{plan}', [PlanController::class, 'update']);
+            Route::post('/delete/{plan}', [PlanController::class, 'delete']);
+        });
+
+
+
+
 
 
 
@@ -160,14 +172,7 @@ Route::middleware('auth:api')->group(function () {
 
         });
 
-        //Plan Api
-        Route::prefix("plans")->group(function () {
-            Route::post('/store', [PlanController::class, 'store']);
-            Route::get('/show', [PlanController::class, 'show']);
-            Route::get('/show/{plan}', [PlanController::class, 'showSingle']);
-            Route::post('/update/{plan}', [PlanController::class, 'update']);
-            Route::post('/delete/{plan}', [PlanController::class, 'delete']);
-        });
+
 
 
         //Student Api

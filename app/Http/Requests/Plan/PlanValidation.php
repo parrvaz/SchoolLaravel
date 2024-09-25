@@ -16,10 +16,15 @@ class PlanValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'classroom_id'=>'required|exists:classrooms,id',
-            'date' => 'required|date',
-            'course_id'=>'required|exists:courses,id',
-            'minutes'=>'required|numeric|min:0|max:5000',
+            'title'=>'required|string|min:2|max:100',
+            'plan'=>'required|array|min:1',
+            "plan.*.course_id"=>'required|exists:courses,id',
+            "plan.*.day"=>'required|string',
+            "plan.*.start"=>'required',
+//            "plan.*.start"=>'required|date_format:H:i',
+//            "plan.*.end"=>'required|date_format:H:i',
+            "plan.*.end"=>'required',
+
         ];
     }
 }

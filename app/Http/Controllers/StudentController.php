@@ -97,7 +97,7 @@ class StudentController extends Controller
         ]);
 
         // فراخوانی Import برای خواندن و ثبت داده‌ها
-        Excel::import(new StudentsImport, $request->file('file'));
+        Excel::import(new StudentsImport($request), $request->file('file'));
 
         return redirect()->back()->with('success', 'دانش‌آموزان با موفقیت ثبت شدند.');
     }

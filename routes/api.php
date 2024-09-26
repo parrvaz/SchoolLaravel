@@ -68,6 +68,7 @@ Route::middleware('auth:api')->group(function () {
         //Students Api
         Route::prefix("students")->group(function () {
             Route::post('/store', [StudentController::class, 'store']);
+            Route::post('/import', [StudentController::class, 'import']);
             Route::post('/update/{student}', [StudentController::class, 'update']);
             Route::get('/show', [StudentController::class, 'show']);
             Route::get('/show/{student}', [StudentController::class, 'showSingle']);
@@ -152,13 +153,11 @@ Route::middleware('auth:api')->group(function () {
         //Plan Api
         Route::prefix("plans")->group(function () {
             Route::post('/store', [PlanController::class, 'store']);
+            Route::post('/assign', [PlanController::class, 'assign']);
             Route::get('/show', [PlanController::class, 'show']);
             Route::get('/show/{plan}', [PlanController::class, 'showSingle']);
             Route::post('/update/{plan}', [PlanController::class, 'update']);
             Route::post('/delete/{plan}', [PlanController::class, 'delete']);
-
-            Route::post('/assign', [PlanController::class, 'assign']);
-
         });
 
 

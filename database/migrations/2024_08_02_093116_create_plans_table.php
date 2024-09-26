@@ -28,6 +28,12 @@ return new class extends Migration
             $table->time('end');
             $table->timestamps();
         });
+
+        Schema::create('plan_student', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('plan_id')->constrained()->onDelete('cascade');
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+        });
     }
 
     /**
@@ -35,6 +41,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('plan_student');
         Schema::dropIfExists('course_plan');
         Schema::dropIfExists('plans');
     }

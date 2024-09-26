@@ -31,6 +31,10 @@ class Student extends Model
         return $this->hasOne(User::class, 'phone','fatherPhone');
     }
 
+    public function plan(){
+        return $this->belongsToMany(Plan::class);
+    }
+
     public function getNameAttribute(){
        return $this->firstName ." ". $this->lastName;
     }

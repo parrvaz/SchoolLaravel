@@ -156,6 +156,9 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/show/{plan}', [PlanController::class, 'showSingle']);
             Route::post('/update/{plan}', [PlanController::class, 'update']);
             Route::post('/delete/{plan}', [PlanController::class, 'delete']);
+
+            Route::post('/assign', [PlanController::class, 'assign']);
+
         });
 
 

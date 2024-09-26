@@ -17,4 +17,8 @@ class Plan extends Model
     public function students(){
         return $this->belongsToMany(Student::class);
     }
+
+    public function classroom(){
+        return $this->belongsTo(Classroom::class);
+    }
 }

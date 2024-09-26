@@ -70,7 +70,6 @@ class PlanController extends Controller
 
     }
 
-
     public function show(Request $request){
         return new PlanCollection($request->userGrade->plans()->get());
     }

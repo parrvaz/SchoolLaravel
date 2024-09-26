@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Student;
 
+use App\Rules\JalaliDateValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StudentValidation extends FormRequest
@@ -23,7 +24,7 @@ class StudentValidation extends FormRequest
             'phone'=>'required|digits:11|unique:students|unique:users',
             'fatherPhone'=>'required|digits:11|unique:students,fatherPhone|unique:users,phone',
             'motherPhone'=>'nullable|digits:11',
-            'birthday'=>'nullable|date',
+            'birthday'=>['required', new JalaliDateValidation()],
             'address'=>'nullable|string|min:2|max:100',
 
             'isOnlyChild'=>'nullable|boolean',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Bell;
 
+use App\Rules\JalaliDateValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AbsentStoreValidation extends FormRequest
@@ -16,7 +17,7 @@ class AbsentStoreValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'date'=>'required|date',
+            'date'=>['required', new JalaliDateValidation()],
             'bell_id'=>'required|exists:bells,id',
             'classroom_id'=>'required|exists:classrooms,id',
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Student\StudentValidation;
+use App\Http\Requests\Teacher\TeacherUpdateValidation;
 use App\Http\Requests\Teacher\TeacherValidation;
 use App\Http\Resources\Student\StudentCollection;
 use App\Http\Resources\Student\StudentResource;
@@ -74,7 +75,7 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TeacherValidation $validation,$userGrade, Teacher $teacher)
+    public function update(TeacherUpdateValidation $validation,$userGrade, Teacher $teacher)
     {
         return DB::transaction(function () use($teacher,$validation) {
 

@@ -17,7 +17,7 @@ class ExamController extends Controller
            $exam = Exam::create([
                'user_grade_id' => $request->userGrade->id,
                'classroom_id' => $validation->classroom_id,
-               'date' => $validation->date,
+               'date' =>self::jToG($validation->date),
                'course_id' => $validation->course_id,
                'expected' => $validation->expected ?? 0,
                'totalScore' => $validation->totalScore ?? 0,
@@ -39,7 +39,7 @@ class ExamController extends Controller
    }
 
    public function show(Request $request){
-       return new ExamCollection($request->userGrade->exams()->paginate(config('constant.bigPaginate')));
+       return new ExamCollection($request->userGrade->exams()->get());
    }
 
    public function showSingle($userGrade,Exam $exam){
@@ -56,7 +56,7 @@ class ExamController extends Controller
            //update exam main data
            $exam->update([
                'classroom_id' => $validation->classroom_id,
-               'date' => $validation->date,
+               'date' =>self::jToG($validation->date),
                'course_id' => $validation->course_id,
                'expected' => $validation->expected ?? 0,
                'totalScore' => $validation->totalScore ?? 0,

@@ -11,6 +11,7 @@ use App\Http\Resources\Bell\BellCollection;
 use App\Models\Absent;
 use App\Models\Bell;
 use App\Models\Classroom;
+use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +23,7 @@ class AbsentController extends Controller
 
             $absent = Absent::create([
                 "user_id" => auth()->user()->id,
-                "date" => $validation->date,
+                "date" => self::jToG($validation->date) ,
                 "bell_id" => $validation->bell_id,
                 "classroom_id" => $validation->classroom_id
             ]);
@@ -39,7 +40,7 @@ class AbsentController extends Controller
             $absent->students()->detach();
 
             $absent->update([
-                "date" => $validation->date,
+                "date" => self::jToG($validation->date),
                 "bell_id" => $validation->bell_id,
                 "classroom_id" => $validation->classroom_id
             ]);
@@ -50,9 +51,9 @@ class AbsentController extends Controller
     }
 
     public function show(Request $request,FilterValidation $validation){
-        $date = $validation->date;
+        $date = self::jToG($validation->date);
 
-        $allAbsents = Absent::whereIn("classroom_id",$request->userGrade->classrooms->pluck("id"))->where("date", $validation->date)->get();
+        $allAbsents = Absent::whereIn("classroom_id",$request->userGrade->classrooms->pluck("id"))->where("date", $date)->get();
         $allAbsents = $allAbsents->groupBy('classroom_id');
 
         $allBells = Bell::orderBy('order')->get();

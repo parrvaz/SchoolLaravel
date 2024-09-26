@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Plan;
 
+use App\Http\Resources\Student\StudentShortCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -20,7 +21,7 @@ class PlanCollection extends ResourceCollection
                 'classroom_id' => $item->classroom_id,
                 'classroom' => $item->classroom->title ?? null,
                 'title' => $item->title,
-                'students'=>new AssignPlanCollection($item->students)
+                'students'=>new StudentShortCollection($item->students)
 
             ];
         })->toArray();

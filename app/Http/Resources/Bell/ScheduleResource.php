@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Bell;
 
-use App\Http\Resources\Student\StudentShortCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

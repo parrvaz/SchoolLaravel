@@ -62,7 +62,7 @@ class PlanController extends Controller
                     $planModel->students()->detach();
                 }
 
-                $planModel->students()->attach(Arr::pluck($plan["students"], "value"));
+                $planModel->students()->attach(Arr::pluck($plan["students"], "id"));
             }
 
             return $this->successMessage();

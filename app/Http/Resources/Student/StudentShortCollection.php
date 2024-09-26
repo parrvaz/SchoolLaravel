@@ -14,7 +14,7 @@ class StudentShortCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return ['data'=>$this->collection->map(function ($item){
+        return $this->collection->map(function ($item){
             return[
                 'id'=>$item->id,
                 'firstName'=>$item->firstName,
@@ -28,6 +28,6 @@ class StudentShortCollection extends ResourceCollection
                 'motherPhone'=>$item->motherPhone,
 
             ];
-        })];
+        })->toArray();
     }
 }

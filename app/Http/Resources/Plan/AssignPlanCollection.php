@@ -16,8 +16,8 @@ class AssignPlanCollection extends ResourceCollection
     {
         return $this->collection->map(function ($item){
             return[
-                'value' =>$item->id,
-                'label' => $item->name,
+                'id' =>$item->id,
+                'name' => $item->name,
            ];
         })->toArray();
     }

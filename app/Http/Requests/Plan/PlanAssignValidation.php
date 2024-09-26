@@ -16,12 +16,12 @@ class PlanAssignValidation extends FormRequest
     public function rules(): array
     {
         return [
-            "data"=>'required|array|min:1',
+            "data"=>'nullable|array|min:0',
             "data.*.classroom_id"=>'nullable|exists:classrooms,id',
             "data.*.isDuplicate"=>'nullable|boolean',
             "data.*.title"=>'required|string|min:2|max:100',
             "data.*.students"=>'nullable|array|min:0',
-            "data.*.students.*.value"=>'required|exists:students,id',
+            "data.*.students.*.id"=>'required|exists:students,id',
 //            "data.*.students.*.label"=>'required|string|min:2|max:100',
 
 

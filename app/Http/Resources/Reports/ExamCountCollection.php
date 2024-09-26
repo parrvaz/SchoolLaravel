@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ExamCountCollection extends ResourceCollection
 {
+    use ServiceTrait;
     /**
      * Transform the resource collection into an array.
      *
@@ -21,7 +22,7 @@ class ExamCountCollection extends ResourceCollection
                 'id'=> $item->id ?? null,
                 'title'=> $item->title?? null,
                 'count'=> $item->count?? null,
-                'date'=> ServiceTrait::gToJ( $item->date)?? null,
+                'date'=> self::gToJ( $item->date)?? null,
                 'score'=> $item->score?? null,
                 'totalScore'=> $item->totalScore?? null,
                 'expected'=> $item->expected?? null,

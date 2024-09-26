@@ -2,11 +2,13 @@
 
 namespace App\Http\Resources\Student;
 
+use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StudentResource extends JsonResource
 {
+    use ServiceTrait;
     /**
      * Transform the resource into an array.
      *
@@ -21,7 +23,7 @@ class StudentResource extends JsonResource
             'nationalId'=>$this->nationalId,
             'classroom_id'=>$this->classroom_id,
             'classroom'=>$this->classroomTitle,
-            'birthday'=>$this->birthday,
+            'birthday'=>self::gToJ($this->birthday),
             'isOnlyChild'=> (bool)$this->onlyChild,
             'address'=>$this->address,
             'phone'=>$this->phone,

@@ -2,11 +2,13 @@
 
 namespace App\Http\Resources\Student;
 
+use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class StudentCollection extends ResourceCollection
 {
+    use ServiceTrait;
     /**
      * Transform the resource collection into an array.
      *
@@ -23,7 +25,7 @@ class StudentCollection extends ResourceCollection
                 'nationalId'=>$item->nationalId,
                 'classroom_id'=>$item->classroom_id,
                 'classroom'=>$item->classroomTitle,
-                'birthday'=>$item->birthday,
+                'birthday'=> self::gToJ($item->birthday) ,
                 'isOnlyChild'=> (bool)$item->onlyChild,
                 'address'=>$item->address,
                 'phone'=>$item->phone,

@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Bell\AbsentStoreValidation;
 use App\Http\Requests\Bell\BellStoreValidation;
 use App\Http\Requests\Report\FilterValidation;
-use App\Http\Resources\Bell\AbsentCollection;
-use App\Http\Resources\Bell\AbsentResource;
 use App\Http\Resources\Bell\BellCollection;
 use App\Models\Absent;
 use App\Models\Bell;
@@ -46,7 +44,7 @@ class AbsentController extends Controller
             ]);
             $absent->students()->attach($validation->students);
 
-            return new AbsentResource($absent);
+            return $this->successMessage();
         });
     }
 

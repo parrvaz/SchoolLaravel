@@ -10,6 +10,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ExamCollection extends ResourceCollection
 {
+    use ServiceTrait;
     /**
      * Transform the resource collection into an array.
      *
@@ -23,7 +24,7 @@ class ExamCollection extends ResourceCollection
                 'user_grade_id' => $item->id,
                 'classroom_id' => $item->classroom_id,
                 'classroom' => $item->classroomTitle?? Classroom::find($item->classroom_id)->title,
-                'date' => ServiceTrait::gToJ( $item->date),
+                'date' => self::gToJ( $item->date),
                 'course_id' => $item->course_id,
                 'course' => $item->courseName ?? Course::find( $item->course_id)->name,
                 'expected' => $item->expected,

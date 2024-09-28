@@ -43,7 +43,7 @@ trait MessageTrait
 
     public function errorHasAbsent(){
         return response()->json([
-            'message' => Lang::get('responses.error.haveNotPlan'),
+            'message' => Lang::get('responses.error.hasAbsent'),
             'status' => 'error',
         ], 422);
     }

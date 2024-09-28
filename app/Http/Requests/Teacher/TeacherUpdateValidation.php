@@ -20,7 +20,7 @@ class TeacherUpdateValidation extends FormRequest
             'lastName'=>'required|string|min:2|max:50',
             'nationalId'=>'required|digits:10',
             'degree'=>'nullable|string|min:2|max:50',
-            'personalId'=>'nullable|digits:10',
+            'personalId'=>'nullable|string',
             'phone'=>'required|digits:11|unique:teachers,phone,'.$this->teacher->id,
             'isAssistant'=>'required|boolean'
         ];

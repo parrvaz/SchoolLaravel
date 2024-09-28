@@ -68,4 +68,8 @@ class User extends Authenticatable
     public function student(){
         return $this->hasOneThrough(Student::class, ModelHasRole::class,'model_id','id','id','idInRole');
     }
+
+    public function absents(){
+        return $this->hasMany(Absent::class);
+    }
 }

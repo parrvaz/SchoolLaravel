@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Messages;
 
+use App\Http\Resources\Auth\UserCollection;
 use App\Http\Resources\Course\ContentCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -20,6 +21,7 @@ class MessageCollection extends ResourceCollection
                 'id'=> $item->id,
                 'subject'=> $item->subject,
                 'body'=> $item->body,
+                "recipients"=> new UserCollection($item->recipients)
             ];
         })];
     }

@@ -16,7 +16,7 @@ class MessageRecipient extends Model
     }
 
     // گیرنده پیام به یک کاربر خاص مرتبط است
-    public function recipient()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

@@ -21,6 +21,9 @@ class Teacher extends Model
         return $this->hasOneThrough(User::class, ModelHasRole::class,'idInRole','id','id','model_id');
     }
 
+    public function classCourses(){
+        return $this->hasMany(ClassCourseTeacher::class);
+    }
 
     public function getNameAttribute(){
         return $this->firstName ." ". $this->lastName;

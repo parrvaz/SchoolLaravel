@@ -124,9 +124,13 @@ class TeacherController extends Controller
     public function delete($userGrade,Teacher $teacher)
     {
         return DB::transaction(function () use($teacher) {
+            if ($teacher->user->absents->count() > 0 ){
+                return $this->errorHasAbsent();
+            }
 
             User::where("phone", $teacher->phone)->delete();
             ModelHasRole::where("idInRole", $teacher->id)->delete();
+            $teacher->classCourses()->delete();
             $teacher->delete();
             return $this->successMessage();
         });

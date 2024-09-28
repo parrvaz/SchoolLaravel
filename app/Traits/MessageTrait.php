@@ -34,9 +34,16 @@ trait MessageTrait
         ], 422);
     }
 
+    public function errorNoTHavePlan(){
+        return response()->json([
+            'message' => Lang::get('responses.error.haveNotPlan'),
+            'status' => 'error',
+        ], 422);
+    }
+
     public function errorHasAbsent(){
         return response()->json([
-            'message' => Lang::get('responses.error.hasAbsent'),
+            'message' => Lang::get('responses.error.haveNotPlan'),
             'status' => 'error',
         ], 422);
     }

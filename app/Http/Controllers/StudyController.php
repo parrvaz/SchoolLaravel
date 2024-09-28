@@ -22,6 +22,22 @@ class StudyController extends Controller
         $student = auth()->user()->student;
         $allItems =[];
 
+        //present Fix
+        $plan= $student->plan->first();
+        if ($plan==null)
+            return $this->errorNoTHavePlan();
+        $planCourses = $plan->coursePlans;
+        foreach ($planCourses as $planItem ){
+            $allItems[]=[
+                'id' =>$planItem->id,
+                'title' => $planItem->course->name,
+                'course_id' => $planItem->course_id,
+                "date"=>$this->makeDateString($planItem,$this->findDate($planItem)->format("Y/m/d")) ,
+                "isFix"=>true,
+            ];
+        }
+
+
         //past Fix
         $threeWeeksAgo = Carbon::now()->subWeeks(3);
         $studyPlans = StudyPlan::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();
@@ -35,18 +51,7 @@ class StudyController extends Controller
             ];
         }
 
-        //present Fix
-        $plan= $student->plan->first();
-        $planCourses = $plan->coursePlans;
-        foreach ($planCourses as $planItem ){
-            $allItems[]=[
-                'id' =>$planItem->id,
-                'title' => $planItem->course->name,
-                'course_id' => $planItem->course_id,
-                "date"=>$this->makeDateString($planItem,$this->findDate($planItem)->format("Y/m/d")) ,
-                "isFix"=>true,
-            ];
-        }
+
 
         //studies
         $study = Study::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();

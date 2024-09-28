@@ -63,4 +63,9 @@ class User extends Authenticatable
     public function teacher(){
         return $this->hasOneThrough(Teacher::class, ModelHasRole::class,'model_id','id','id','idInRole');
     }
+
+
+    public function student(){
+        return $this->hasOneThrough(Student::class, ModelHasRole::class,'model_id','id','id','idInRole');
+    }
 }

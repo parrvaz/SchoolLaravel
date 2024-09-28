@@ -4,8 +4,9 @@ namespace App\Http\Resources\Plan;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Morilog\Jalali\Jalalian;
 
-class StudentPlanCollection extends ResourceCollection
+class StudyCourseCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -16,12 +17,14 @@ class StudentPlanCollection extends ResourceCollection
     {
         return $this->collection->map(function ($item){
             return[
-                'id' =>$item->id,
-                'student_id' => $item->student_id,
-                'date' => $item->date,
-                'course_id' => $item->course_id,
-                'minutes' => $item->minutes,
+                'id' =>$item['id'],
+                'title' => $item['title'],
+                'course_id' =>$item['course_id'],
+                "date"=> $item['date'],
+                "isFix"=>$item['isFix'],
             ];
         })->toArray();
     }
+
+
 }

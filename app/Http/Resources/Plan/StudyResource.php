@@ -7,7 +7,7 @@ use App\Http\Resources\Exam\StudentScoreCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class StudentPlanResource extends JsonResource
+class StudyResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,10 +18,8 @@ class StudentPlanResource extends JsonResource
     {
         return [
             'id' =>$this->id,
-            'student_id' => $this->student_id,
-            'date' => $this->date,
-            'course_id' => $this->course_id,
-            'minutes' => $this->minutes,
+            'title' => $this->title,
+            'plan'=> new StudyCourseCollection($this->allItems)
         ];
     }
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentPlanController;
+use App\Http\Controllers\StudyController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\PlanController;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ Route::post('log', [AuthenticationController::class, 'log'])->name('log');
 
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [AuthenticationController::class, 'user'])->name('user');
+    Route::post('/studyPlanStore', [StudyController::class, 'studyPlanStore']);
 
     //UserGrades Api
     Route::prefix("grades")->group(function () {
@@ -160,7 +162,16 @@ Route::middleware('auth:api')->group(function () {
             Route::post('/delete/{plan}', [PlanController::class, 'delete']);
         });
 
+        //Study Api
+        Route::prefix("studies")->group(function () {
+            Route::get('/show', [StudyController::class, 'show']);
 
+
+            Route::post('/store', [StudentPlanController::class, 'store']);
+            Route::get('/show/{plan}', [StudentPlanController::class, 'showSingle']);
+            Route::post('/update/{plan}', [StudentPlanController::class, 'update']);
+            Route::post('/delete/{plan}', [StudentPlanController::class, 'delete']);
+        });
 
 
 
@@ -177,14 +188,7 @@ Route::middleware('auth:api')->group(function () {
 
 
 
-        //Student Api
-        Route::prefix("plans/students")->group(function () {
-            Route::post('/store', [StudentPlanController::class, 'store']);
-//            Route::get('/show', [StudentPlanController::class, 'show']);
-            Route::get('/show/{plan}', [StudentPlanController::class, 'showSingle']);
-            Route::post('/update/{plan}', [StudentPlanController::class, 'update']);
-            Route::post('/delete/{plan}', [StudentPlanController::class, 'delete']);
-        });
+
 
 
         Route::prefix("reports")->group(function () {

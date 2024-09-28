@@ -123,6 +123,7 @@ class ContentSeeder extends Seeder
             ['course_id' => 5, 'season' => 'فصل ۳ آب آهنگ زندگی', 'content' => 'رد پای آب در زندگی', 'pageStart' => 116, 'pageEnd' => 119],
             ['course_id' => 5, 'season' => 'فصل ۳ آب آهنگ زندگی', 'content' => 'تمرین دوره ای', 'pageStart' => 120, 'pageEnd' => 122],
 
+
         ]);
     }
 }

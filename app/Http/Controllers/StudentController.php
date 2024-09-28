@@ -91,15 +91,13 @@ class StudentController extends Controller
 
     public function import(Request $request)
     {
-        // اعتبارسنجی فایل اکسل
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls',
-        ]);
+        return DB::transaction(function () use($request) {
 
-        // فراخوانی Import برای خواندن و ثبت داده‌ها
-        Excel::import(new StudentsImport($request), $request->file('file'));
-
-        return redirect()->back()->with('success', 'دانش‌آموزان با موفقیت ثبت شدند.');
+            $file = $request->file('file');
+            $extension = $file->guessExtension();
+            Excel::import(new StudentsImport($request), $file->store('temp'));
+            return $this->successMessage();
+        });
     }
 
     /**

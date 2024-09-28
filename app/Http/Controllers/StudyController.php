@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Plan\StudyStoreValidation;
+use App\Http\Resources\Bell\BellCollection;
+use App\Http\Resources\Plan\StudyCourseResource;
 use App\Http\Resources\Plan\StudyResource;
 use App\Models\Plan;
+use App\Models\Study;
 use App\Models\StudyPlan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Morilog\Jalali\Jalalian;
 
 class StudyController extends Controller
@@ -16,7 +22,7 @@ class StudyController extends Controller
         $student = auth()->user()->student;
         $allItems =[];
 
-
+        //past Fix
         $threeWeeksAgo = Carbon::now()->subWeeks(3);
         $studyPlans = StudyPlan::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();
         foreach ($studyPlans as $item){
@@ -29,9 +35,9 @@ class StudyController extends Controller
             ];
         }
 
+        //present Fix
         $plan= $student->plan->first();
         $planCourses = $plan->coursePlans;
-
         foreach ($planCourses as $planItem ){
             $allItems[]=[
                 'id' =>$planItem->id,
@@ -42,14 +48,77 @@ class StudyController extends Controller
             ];
         }
 
+        //studies
+        $study = Study::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();
+
+        foreach ($study as $studyItem){
+            $allItems[]=[
+                'id' =>$studyItem->id,
+                'title' => $studyItem->course->name,
+                'course_id' => $studyItem->course_id,
+                "date"=>$this->makeDateString($studyItem,self::gToJ($studyItem->date)) ,
+                "isFix"=>false,
+            ];
+        }
+
+
         $plan->allItems= $allItems;
 
         return new StudyResource($plan);
     }
 
-    public function store(Request $request,StudyReaquest $validation){
+    public function store(Request $request,StudyStoreValidation $validation){
+        $student = auth()->user()->student;
+        $space = explode(" ", $validation["date"]);
+        $dash = explode("-", $space[1]);
+       $study = Study::create(
+            [
+                "student_id" => $student->id,
+                "course_id" => $validation["course_id"],
+                "date" => self::jToG($space[0]),
+                "start" => $dash[0],
+                "end" => $dash[1],
+            ]
+        );
 
+       $study->dateStr = $validation["date"];
+
+        return (new StudyCourseResource($study))
+            ->additional(['message' => "با موفقیت ثبت شد"]);
     }
+
+    public function delete($userGrade,Study $study){
+        $study->delete();
+        return $this->successMessage();
+    }
+//    public function store(Request $request,StudyStoreValidation $validation){
+//
+//        return DB::transaction(function () use($validation) {
+//            $student = auth()->user()->student;
+//
+//            $this->deleteItems($validation,$student->id);
+//
+//
+//            $items = [];
+//            foreach ($validation->plan as $planItem) {
+//                if (!$planItem["isFix"] && ($planItem["id"] ?? null) == null) {
+//                    $space = explode(" ", $planItem["date"]);
+//                    $dash = explode("-", $space[1]);
+//                    $items[] = [
+//                        "student_id" => $student->id,
+//                        "course_id" => $planItem["course_id"],
+//                        "date" => self::jToG($space[0]),
+//                        "start" => $dash[0],
+//                        "end" => $dash[1],
+//                    ];
+//                }
+//            }
+//
+//            Study::insert($items);
+//
+//            return $this->successMessage();
+//        });
+//    }
 
 
 //    public function studyPlanStore(){
@@ -91,5 +160,11 @@ class StudyController extends Controller
         return $targetDate;
 
     }
+
+//    private function deleteItems($validation,$stdId)
+//    {
+//        Study::where("student_id",$stdId)->whereBetween('date', [$validation[""], $ageTo])
+//
+//    }
 
 }

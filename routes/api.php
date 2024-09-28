@@ -165,12 +165,8 @@ Route::middleware('auth:api')->group(function () {
         //Study Api
         Route::prefix("studies")->group(function () {
             Route::get('/show', [StudyController::class, 'show']);
-
-
-            Route::post('/store', [StudentPlanController::class, 'store']);
-            Route::get('/show/{plan}', [StudentPlanController::class, 'showSingle']);
-            Route::post('/update/{plan}', [StudentPlanController::class, 'update']);
-            Route::post('/delete/{plan}', [StudentPlanController::class, 'delete']);
+            Route::post('/store', [StudyController::class, 'store']);
+            Route::post('/delete/{study}', [StudyController::class, 'delete']);
         });
 
 
@@ -184,12 +180,6 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/create', [GradeController::class, 'examsCreate']);
 
         });
-
-
-
-
-
-
 
         Route::prefix("reports")->group(function () {
             Route::get('/listItems', [ReportController::class, 'listItems']);

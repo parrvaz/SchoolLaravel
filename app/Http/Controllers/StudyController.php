@@ -7,12 +7,11 @@ use App\Http\Resources\Bell\BellCollection;
 use App\Http\Resources\Plan\StudyCourseResource;
 use App\Http\Resources\Plan\StudyResource;
 use App\Models\Plan;
+use App\Models\Student;
 use App\Models\Study;
 use App\Models\StudyPlan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Morilog\Jalali\Jalalian;
 
 class StudyController extends Controller
@@ -20,6 +19,30 @@ class StudyController extends Controller
 
     public function show(Request $request){
         $student = auth()->user()->student;
+        return $this->showMtd($student);
+    }
+
+    public function store(Request $request,StudyStoreValidation $validation){
+        $student = auth()->user()->student;
+
+        return $this->storeMtd($validation,$student);
+    }
+
+    public function delete($userGrade,Study $study){
+        $study->delete();
+        return $this->successMessage();
+    }
+
+
+    public function showStudent($userGrade,Student $student){
+        return $this->showMtd($student);
+    }
+
+    public function storeStudent(StudyStoreValidation $validation,$userGrade,Student $student){
+        return $this->storeMtd($validation,$student);
+    }
+
+    private function showMtd($student){
         $allItems =[];
 
         //present Fix
@@ -68,15 +91,15 @@ class StudyController extends Controller
 
 
         $plan->allItems= $allItems;
-
         return new StudyResource($plan);
+
     }
 
-    public function store(Request $request,StudyStoreValidation $validation){
-        $student = auth()->user()->student;
+
+    private function storeMtd($validation,$student){
         $space = explode(" ", $validation["date"]);
         $dash = explode("-", $space[1]);
-       $study = Study::create(
+        $study = Study::create(
             [
                 "student_id" => $student->id,
                 "course_id" => $validation["course_id"],
@@ -86,16 +109,41 @@ class StudyController extends Controller
             ]
         );
 
-       $study->dateStr = $validation["date"];
+        $study->dateStr = $validation["date"];
 
         return (new StudyCourseResource($study))
             ->additional(['message' => "با موفقیت ثبت شد"]);
     }
 
-    public function delete($userGrade,Study $study){
-        $study->delete();
-        return $this->successMessage();
+
+
+
+    private function makeDateString($item,$date){
+        $dateString = $date . ' '
+            . \Carbon\Carbon::createFromFormat('H:i:s', $item->start)->format('H:i')
+            . '-' . \Carbon\Carbon::createFromFormat('H:i:s', $item->end)->format('H:i');
+
+        return $dateString;
     }
+
+    private function findDate($item) {
+        $today = Jalalian::now();
+        // دریافت روز فعلی هفته (به میلادی)
+        $currentWeekDay = $today->getDayOfWeek() +1;
+        // اختلاف روز فعلی با روزی که داریم
+        $dayDifference = $item->day - $currentWeekDay;
+        // تنظیم تاریخ نهایی با اضافه کردن اختلاف روز
+        $targetDate = $today->addDays($dayDifference);
+        return $targetDate;
+
+    }
+
+//    private function deleteItems($validation,$stdId)
+//    {
+//        Study::where("student_id",$stdId)->whereBetween('date', [$validation[""], $ageTo])
+//
+//    }
+
 //    public function store(Request $request,StudyStoreValidation $validation){
 //
 //        return DB::transaction(function () use($validation) {
@@ -143,32 +191,6 @@ class StudyController extends Controller
 //        StudyPlan::insert([
 //
 //        ]);
-//
-//    }
-
-    private function makeDateString($item,$date){
-        $dateString = $date . ' '
-            . \Carbon\Carbon::createFromFormat('H:i:s', $item->start)->format('H:i')
-            . '-' . \Carbon\Carbon::createFromFormat('H:i:s', $item->end)->format('H:i');
-
-        return $dateString;
-    }
-
-    private function findDate($item) {
-        $today = Jalalian::now();
-        // دریافت روز فعلی هفته (به میلادی)
-        $currentWeekDay = $today->getDayOfWeek() +1;
-        // اختلاف روز فعلی با روزی که داریم
-        $dayDifference = $item->day - $currentWeekDay;
-        // تنظیم تاریخ نهایی با اضافه کردن اختلاف روز
-        $targetDate = $today->addDays($dayDifference);
-        return $targetDate;
-
-    }
-
-//    private function deleteItems($validation,$stdId)
-//    {
-//        Study::where("student_id",$stdId)->whereBetween('date', [$validation[""], $ageTo])
 //
 //    }
 

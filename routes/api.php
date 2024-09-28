@@ -165,7 +165,9 @@ Route::middleware('auth:api')->group(function () {
         //Study Api
         Route::prefix("studies")->group(function () {
             Route::get('/show', [StudyController::class, 'show']);
+            Route::get('/show/{student}', [StudyController::class, 'showStudent']);
             Route::post('/store', [StudyController::class, 'store']);
+            Route::post('/store/{student}', [StudyController::class, 'storeStudent']);
             Route::post('/delete/{study}', [StudyController::class, 'delete']);
         });
 

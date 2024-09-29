@@ -108,7 +108,7 @@ class StudentsImport implements OnEachRow,WithStartRow,WithValidation
             '4'=>'nullable',
             '5'=>'nullable',
             '6'=>'nullable',
-            '7'=>'nullable',
+            '7'=>'nullable ',
             '8'=>'nullable|string|min:2|max:100',
 
         ];

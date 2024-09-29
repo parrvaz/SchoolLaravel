@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("classroom_id")->constrained();
             $table->foreignId("bell_id")->constrained();
-            $table->foreignId("course_id")->constrained();
+            $table->foreignId("course_id")->constrained()->cascadeOnDelete();
             $table->tinyInteger("day");
             $table->timestamps();
         });

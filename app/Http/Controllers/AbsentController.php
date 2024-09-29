@@ -98,7 +98,7 @@ class AbsentController extends Controller
 
                     if (!isset($student['bells'][$order])) {
                         // اگر زنگی برای دانش‌آموز ثبت نشده بود، آن را اضافه کنید
-                        $attendanceRecorded = Absent::where('date', $validation->date)
+                        $attendanceRecorded = Absent::where('date', $date)
                             ->where('bell_id', $bell->id)
                             ->where('classroom_id', $classroom_id)
                             ->exists();
@@ -126,11 +126,7 @@ class AbsentController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function teachersMiss(Request $request,FilterValidation $validation){
-        $bells = $request->userGrade->user->bells->pluck("id");
 
-        return Absent::where("date",$validation->date)->whereIn("bell_id",$bells)->get();
-    }
     public function delete($userGrade,Absent $absent){
         return DB::transaction(function () use($absent) {
 

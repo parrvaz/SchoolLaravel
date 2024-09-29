@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Course\CourseGradeCollection;
+use App\Models\ClassCourseTeacher;
 use App\Models\Course;
 use App\Models\CourseGrade;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 
 class CourseGradeController extends Controller
@@ -47,9 +49,11 @@ class CourseGradeController extends Controller
 
     public function delete(Request $request,$userGrade,Course $course){
         if ($course->user_grade_id == $request->userGrade->id){
+            Schedule::where("course_id",$course->id)->delete();
+            ClassCourseTeacher::where("course_id",$course->id)->delete();
             $course->delete();
             return $this->successMessage();
         }
-        return  $this->error();
+        return  $this->errorDontExist();
     }
 }

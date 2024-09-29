@@ -20,6 +20,13 @@ trait MessageTrait
         ], 422);
     }
 
+    public function errorDontExist(){
+        return response()->json([
+            'message' => Lang::get('responses.response.dontExist'),
+            'status' => 'error',
+        ], 422);
+    }
+
     public function errorFatherPhone(){
         return response()->json([
             'message' => Lang::get('responses.error.fatherPhone'),

@@ -136,6 +136,10 @@ class StudentController extends Controller
             ]);
         }
 
+        if ($validation->classroom_id != $student->classroom_id){
+            $student->plan()->detach();
+        }
+
 
         $student->update([
             'firstName'=>$validation->firstName,

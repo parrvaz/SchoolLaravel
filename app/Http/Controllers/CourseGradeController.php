@@ -49,8 +49,8 @@ class CourseGradeController extends Controller
 
     public function delete(Request $request,$userGrade,Course $course){
         if ($course->user_grade_id == $request->userGrade->id){
-            Schedule::where("course_id",$course->id)->delete();
-            ClassCourseTeacher::where("course_id",$course->id)->delete();
+            $course->schedules()->delete();
+            $course->classTeachers()->delete();
             $course->delete();
             return $this->successMessage();
         }

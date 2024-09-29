@@ -121,45 +121,47 @@ class StudentController extends Controller
      */
     public function update(StudentUpdateValidation $validation,$userGrade, Student $student)
     {
+        return DB::transaction(function () use($validation,$student) {
 
-        //change phone if is changed
-        if ($validation->phone != $student->phone) {
-            $student->user->update([
-                'phone'=>$validation->phone
+            //change phone if is changed
+            if ($validation->phone != $student->phone) {
+                $student->user->update([
+                    'phone' => $validation->phone
+                ]);
+            }
+
+            //change father phone if is changed
+            if ($validation->fatherPhone != $student->fatherPhone) {
+                $student->user->update([
+                    'fatherPhone' => $validation->fatherPhone
+                ]);
+            }
+
+            if ($validation->classroom_id != $student->classroom_id) {
+                $student->plan()->detach();
+            }
+
+
+            $student->update([
+                'firstName' => $validation->firstName,
+                'lastName' => $validation->lastName,
+                'nationalId' => $validation->nationalId,
+                'classroom_id' => $validation->classroom_id,
+                'birthday' => self::jToG($validation->birthday) ?? null,
+                'onlyChild' => $validation->onlyChild,
+                'address' => $validation->address,
+                'phone' => $validation->phone,
+                'fatherPhone' => $validation->fatherPhone,
+                'motherPhone' => $validation->motherPhone,
+                'socialMediaID' => $validation->socialMediaID,
+                'numberOfGlasses' => $validation->numberOfGlasses,
+                'leftHand' => $validation->leftHand,
+                'religion' => $validation->religion,
+                'specialDisease' => $validation->specialDisease,
             ]);
-        }
 
-        //change father phone if is changed
-        if ($validation->fatherPhone != $student->fatherPhone) {
-            $student->user->update([
-                'fatherPhone'=>$validation->fatherPhone
-            ]);
-        }
-
-        if ($validation->classroom_id != $student->classroom_id){
-            $student->plan()->detach();
-        }
-
-
-        $student->update([
-            'firstName'=>$validation->firstName,
-            'lastName'=>$validation->lastName,
-            'nationalId'=>$validation->nationalId,
-            'classroom_id'=>$validation->classroom_id,
-            'birthday'=>self::jToG($validation->birthday) ?? null,
-            'onlyChild'=>$validation->onlyChild,
-            'address'=>$validation->address,
-            'phone'=>$validation->phone,
-            'fatherPhone'=>$validation->fatherPhone,
-            'motherPhone'=>$validation->motherPhone,
-            'socialMediaID'=>$validation->socialMediaID,
-            'numberOfGlasses'=>$validation->numberOfGlasses,
-            'leftHand'=>$validation->leftHand,
-            'religion'=>$validation->religion,
-            'specialDisease'=>$validation->specialDisease,
-        ]);
-
-        return new StudentResource($student);
+            return new StudentResource($student);
+        });
     }
 
     /**

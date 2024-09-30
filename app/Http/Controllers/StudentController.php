@@ -175,4 +175,9 @@ class StudentController extends Controller
        $student->delete();
        return $this->successMessage();
     }
+
+    public function sampleExcel(){
+        $filePath = 'public/sample.xlsx'; 
+        return Storage::download($filePath, 'sample.xlsx');
+    }
 }

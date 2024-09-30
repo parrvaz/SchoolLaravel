@@ -71,6 +71,7 @@ Route::middleware('auth:api')->group(function () {
         Route::prefix("students")->group(function () {
             Route::post('/store', [StudentController::class, 'store']);
             Route::post('/import', [StudentController::class, 'import']);
+            Route::post('/sampleExcel', [StudentController::class, 'sampleExcel']);
             Route::post('/update/{student}', [StudentController::class, 'update']);
             Route::get('/show', [StudentController::class, 'show']);
             Route::get('/show/{student}', [StudentController::class, 'showSingle']);

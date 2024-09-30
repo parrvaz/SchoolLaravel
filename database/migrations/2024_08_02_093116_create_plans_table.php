@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_grade_id')->constrained()->onDelete('cascade');
-            $table->foreignId('classroom_id')->nullable()->constrained();
+            $table->foreignId('user_grade_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('classroom_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string("title");
             $table->timestamps();
         });
 
         Schema::create('course_plan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('plan_id')->constrained()->onDelete('cascade');
-            $table->foreignId('course_id')->constrained();
+            $table->foreignId('plan_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->tinyInteger('day');
             $table->time('start');
             $table->time('end');
@@ -31,8 +31,8 @@ return new class extends Migration
 
         Schema::create('plan_student', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('plan_id')->constrained()->onDelete('cascade');
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('plan_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('student_id')->constrained()->cascadeOnDelete();
         });
     }
 

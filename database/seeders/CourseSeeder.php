@@ -30,7 +30,7 @@ class CourseSeeder extends Seeder
             ['id' => 14, 'name' => 'تفکر و سواد رسانه ای', 'title' => 'تفکر', 'grade_id' => 10],
             ['id' => 15, 'name' => 'انگلیسی ۱', 'title' => 'انگلیسی', 'grade_id' => 10],
             ['id' => 16, 'name' => 'هندسه ۱', 'title' => 'هندسه', 'grade_id' => 10],
-
+            
             ['id' => 17, 'name' => 'هنر', 'title' => 'هنر', 'grade_id' => 11],
             ['id' => 18, 'name' => 'فارسی ۲', 'title' => 'فارسی', 'grade_id' => 11],
             ['id' => 19, 'name' => 'نگارش ۲', 'title' => 'نگارش', 'grade_id' => 11],
@@ -56,10 +56,25 @@ class CourseSeeder extends Seeder
             ['id' => 39, 'name' => 'جامعه شناسی ۲', 'title' => 'جامعه شناسی', 'grade_id' => 11],
             ['id' => 40, 'name' => 'روان شناسی', 'title' => 'روان شناسی', 'grade_id' => 11],
             ['id' => 41, 'name' => ' فلسفه ۱', 'title' => 'فلسفه', 'grade_id' => 11],
-
+            
             ['id' => 42, 'name' => 'جغرافیا ۲', 'title' => 'جغرافیا', 'grade_id' => 11],
             ['id' => 43, 'name' => 'جغرافیا ۲', 'title' => 'جغرافیا', 'grade_id' => 11],
-
+            
+            ['id' => 44, 'name' => 'فارسی ۳', 'title' => 'فارسی', 'grade_id' => 12],
+            ['id' => 45, 'name' => 'نگارش ۳', 'title' => 'نگارش', 'grade_id' => 12],
+            ['id' => 46, 'name' => 'دین و زندگی ۳', 'title' => 'دینی', 'grade_id' => 12],
+            ['id' => 47, 'name' => 'عربی ۳', 'title' => 'عربی', 'grade_id' => 12],
+            ['id' => 48, 'name' => 'شیمی ۳', 'title' => 'شیمی', 'grade_id' => 12],
+            ['id' => 49, 'name' => 'ریاضی گسسته', 'title' => 'گسسته', 'grade_id' => 12],
+            ['id' => 50, 'name' => 'فیزیک ۳', 'title' => 'فیزیک', 'grade_id' => 12],
+            ['id' => 51, 'name' => 'مدیریت خانواده', 'title' => 'مدیریت', 'grade_id' => 12],
+            ['id' => 52, 'name' => 'حسابان ۲', 'title' => 'حسابان', 'grade_id' => 12],
+            ['id' => 53, 'name' => 'انگلیسی ۳', 'title' => 'انگلیسی', 'grade_id' => 12],
+            ['id' => 54, 'name' => 'ریاضی ۳', 'title' => 'ریاضی', 'grade_id' => 12],
+            ['id' => 55, 'name' => 'زیست شناسی ۳', 'title' => 'زیست', 'grade_id' => 12],
+            ['id' => 56, 'name' => 'فیزیک ۳', 'title' => 'فیزیک', 'grade_id' => 12],
+            ['id' => 57, 'name' => 'تربیت بدنی ۱', 'title' => 'ورزش', 'grade_id' => 10],
+            ['id' => 58, 'name' => 'تربیت بدنی ۳', 'title' => 'ورزش', 'grade_id' => 12],
 
         ]);
     }

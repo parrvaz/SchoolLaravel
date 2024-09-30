@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('study_plans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("student_id")->constrained();
-            $table->foreignId("course_id")->constrained();
+            $table->foreignId("student_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("course_id")->constrained()->cascadeOnDelete();
             $table->date("date");
             $table->time("start");
             $table->time("end");
@@ -23,8 +23,8 @@ return new class extends Migration
 
         Schema::create('studies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("student_id")->constrained();
-            $table->foreignId("course_id")->constrained();
+            $table->foreignId("student_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("course_id")->constrained()->cascadeOnDelete();
             $table->date("date");
             $table->time("start");
             $table->time("end");

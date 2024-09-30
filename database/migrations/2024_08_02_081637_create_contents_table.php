@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("course_id")->constrained();
+            $table->foreignId("course_id")->constrained()->cascadeOnDelete();
             $table->string("season")->nullable();
             $table->string("content");
             $table->integer("pageStart")->nullable();

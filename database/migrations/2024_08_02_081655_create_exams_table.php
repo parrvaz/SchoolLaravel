@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_grade_id')->constrained();
-            $table->foreignId('classroom_id')->constrained();
+            $table->foreignId('user_grade_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('classroom_id')->constrained()->cascadeOnDelete();
             $table->date("date");
-            $table->foreignId("course_id")->constrained();
+            $table->foreignId("course_id")->constrained()->cascadeOnDelete();
             $table->integer("expected")->default(0);
             $table->integer("totalScore")->default(0);
             $table->boolean("status")->default(0);
@@ -27,15 +27,15 @@ return new class extends Migration
 
         Schema::create('content_exam', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("exam_id")->constrained()->onDelete("cascade");
-            $table->foreignId("content_id")->constrained()->onDelete("cascade");
+            $table->foreignId("exam_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("content_id")->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
         Schema::create('student_exam', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("student_id")->constrained()->onDelete("cascade");
-            $table->foreignId("exam_id")->constrained()->onDelete("cascade");
+            $table->foreignId("student_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("exam_id")->constrained()->cascadeOnDelete();
             $table->integer("score")->default(0);
             $table->timestamps();
         });
@@ -47,7 +47,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('student_exam');
-        Schema::dropIfExists('exam_contents');
+        Schema::dropIfExists('content_exam');
         Schema::dropIfExists('exams');
     }
 };

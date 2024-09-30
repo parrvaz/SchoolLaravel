@@ -15,15 +15,15 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->foreignId('bell_id')->constrained();
-            $table->foreignId('classroom_id')->constrained();
+            $table->foreignId('classroom_id')->constrained()->cascadeOnDelete();
             $table->foreignId("user_id")->constrained();
             $table->timestamps();
         });
 
         Schema::create('absent_student', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("student_id")->constrained()->onDelete("cascade");
-            $table->foreignId("absent_id")->constrained()->onDelete("cascade");
+            $table->foreignId("student_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("absent_id")->constrained()->cascadeOnDelete();
         });
     }
 

@@ -19,14 +19,14 @@ return new class extends Migration
             $table->string("phone")->nullable();
             $table->string('degree')->nullable();
             $table->string('personalId')->nullable();
-            $table->foreignId('user_grade_id')->constrained();
+            $table->foreignId('user_grade_id')->constrained()->cascadeOnDelete();
             $table->boolean('isAssistant')->default(false);
             $table->timestamps();
         });
 
         Schema::create('class_course_teacher', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('classroom_id')->constrained();
+            $table->foreignId('classroom_id')->constrained()->cascadeOnDelete();
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->foreignId('teacher_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

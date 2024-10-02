@@ -35,8 +35,10 @@ class CourseController extends Controller
    public function show(Request $request){
        return new CourseCollection(
            Course::where('grade_id',$request->userGrade->grade_id)
-           ->where('user_grade_id',$request->userGrade->id)
-               ->orWhere('user_grade_id',null)
+           ->where(function ($query) use ($request) { 
+            $query->where('user_grade_id', $request->userGrade->id) 
+                ->orWhere('user_grade_id',null);
+             })
            ->get());
    }
 

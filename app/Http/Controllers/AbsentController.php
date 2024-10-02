@@ -118,7 +118,8 @@ class AbsentController extends Controller
             $data[] = [
                 "classroom_id" => $classroom_id,
                 "classroom" => Classroom::find($classroom_id)->title,
-                "students" => array_values($studentsData)
+                "students" => array_values($studentsData),
+                "count"=> count($studentsData)
             ];
 
         }

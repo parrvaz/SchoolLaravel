@@ -19,10 +19,10 @@ class PlanAssignValidation extends FormRequest
             "data"=>'nullable|array|min:0',
             "data.*.classroom_id"=>'nullable|exists:classrooms,id',
             "data.*.isDuplicate"=>'nullable|boolean',
-            "data.*.title"=>'required|string|min:2|max:100',
+            "data.*.title"=>'required|string|min:1|max:100',
             "data.*.students"=>'nullable|array|min:0',
             "data.*.students.*.id"=>'required|exists:students,id',
-//            "data.*.students.*.label"=>'required|string|min:2|max:100',
+//            "data.*.students.*.label"=>'required|string|min:1|max:100',
 
 
         ];

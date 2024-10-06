@@ -16,7 +16,7 @@ class PlanValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>'required|string|min:2|max:100',
+            'title'=>'required|string|min:1|max:100',
             'plan'=>'required|array|min:1',
             "plan.*.course_id"=>'required|exists:courses,id',
             "plan.*.day"=>'required|string',

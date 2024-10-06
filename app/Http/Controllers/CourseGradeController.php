@@ -13,7 +13,7 @@ class CourseGradeController extends Controller
 {
     public function store(Request $request){
         $validated = $request->validate([
-            'name' => 'required|min:2|max:255',
+            'name' => 'required|min:1|max:255',
         ]);
 
         Course::create([
@@ -30,7 +30,7 @@ class CourseGradeController extends Controller
         if ($course->user_grade_id == $request->userGrade->id){
 
         $validated = $request->validate([
-            'name' => 'required|min:2|max:255',
+            'name' => 'required|min:1|max:255',
         ]);
 
             $course->update([

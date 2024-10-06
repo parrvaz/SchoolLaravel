@@ -16,7 +16,7 @@ class ClassroomValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>'required|string|min:2|max:50',
+            'title'=>'required|string|min:1|max:50',
             'field_id' => 'required|exists:fields,id',
             'number'=>'nullable|string|min:1|max:50',
             'floor'=>'nullable|string|min:1|max:50',

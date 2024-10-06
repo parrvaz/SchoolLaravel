@@ -56,6 +56,13 @@ trait MessageTrait
         ], 422);
     }
 
+    public function errorHasStudent(){
+        return response()->json([
+            'message' => Lang::get('responses.error.hasStudent'),
+            'status' => 'error',
+        ], 422);
+    }
+
     public function errorHasSchedule(){
         return response()->json([
             'message' => Lang::get('responses.error.hasSchedule'),

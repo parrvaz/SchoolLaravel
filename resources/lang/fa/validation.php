@@ -104,6 +104,8 @@ return array(
         'serial'=>'شماره',
         'category_id'=>'دسته بندی',
         "name" => "نام",
+        "firstName" => "نام",
+        "lastName" => "نام خانوادگی",
         "username" => "نام کاربری",
         "email" => "پست الکترونیکی",
         "first_name" => "نام",

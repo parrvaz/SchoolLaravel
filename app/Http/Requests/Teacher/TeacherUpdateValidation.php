@@ -16,10 +16,10 @@ class TeacherUpdateValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'firstName'=>'required|string|min:2|max:50',
-            'lastName'=>'required|string|min:2|max:50',
+            'firstName'=>'required|string|min:1|max:50',
+            'lastName'=>'required|string|min:1|max:50',
             'nationalId'=>'required|digits:10',
-            'degree'=>'nullable|string|min:2|max:50',
+            'degree'=>'nullable|string|min:1|max:50',
             'personalId'=>'nullable|string',
             'phone'=>'required|digits:11|unique:teachers,phone,'.$this->teacher->id,
             'isAssistant'=>'required|boolean'

@@ -27,6 +27,7 @@ class StudentsImport implements OnEachRow,WithStartRow,WithValidation
 
     public function onRow(Row $row)
     {
+        $index = $row->getIndex();
         $row = $row->toArray();
 
         // داده‌های مورد نیاز را بررسی کنید
@@ -41,12 +42,13 @@ class StudentsImport implements OnEachRow,WithStartRow,WithValidation
         $data = $row[7] != null ? $this->formatDate($row[7]) : null;
 
         if (User::where("phone",$phone)->exists()  || User::where("phone",$fatherPhone)->exists())
+
             throw ValidationException::withMessages([
-            'error' => $row[0]." ".$row[1].": "." شماره تلفن دانش آموز یا پدر قبلا انتخاب شده است",
+                $index => $row[0]." ".$row[1].": "." شماره تلفن دانش آموز یا پدر قبلا انتخاب شده است",
             ]);
         if ($phone == $fatherPhone)
             throw ValidationException::withMessages([
-                'error' =>$row[0]." ".$row[1].": ". " شماره تلفن دانش آموز و پدر نمیتواند برابر باشد",
+                $index =>$row[0]." ".$row[1].": ". " شماره تلفن دانش آموز و پدر نمیتواند برابر باشد",
             ]);
 
 
@@ -101,15 +103,15 @@ class StudentsImport implements OnEachRow,WithStartRow,WithValidation
     public function rules($request=null): array
     {
         return [
-            '0'=> 'nullable|min:2|max:50',
-            '1'=>"nullable|min:2|max:50",
+            '0'=> 'nullable|min:1|max:50',
+            '1'=>"nullable|min:1|max:50",
             '2'=>'nullable',
             '3'=>'nullable',
             '4'=>'nullable',
-            '5'=>'nullable',
+            '5'=>'nullable|numeric',
             '6'=>'nullable',
             '7'=>'nullable ',
-            '8'=>'nullable|string|min:2|max:100',
+            '8'=>'nullable|string|min:1|max:100',
 
         ];
 

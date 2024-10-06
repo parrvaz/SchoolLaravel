@@ -63,6 +63,9 @@ class ClassroomController extends Controller
      */
     public function delete($userGrade,Classroom $classroom)
     {
+        if ($classroom->students->count() > 0)
+            return $this->errorHasStudent();
+
         $classroom->delete();
         return $this->successMessage();
     }

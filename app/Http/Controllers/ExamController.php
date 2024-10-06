@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Exam\ExamStoreValidation;
 use App\Http\Resources\Exam\ExamCollection;
 use App\Http\Resources\Exam\ExamResource;
+use App\Http\Resources\Exam\ScoreCollection;
 use App\Models\Exam;
+use App\Models\StudentExam;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -39,11 +42,38 @@ class ExamController extends Controller
    }
 
    public function show(Request $request){
-       return new ExamCollection($request->userGrade->exams()->get());
+       $user =  auth()->user();
+       $role =$user->role;
+       $exams = [];
+       switch ($role){
+           case config("constant.roles.student"):
+           case config("constant.roles.parent"):
+                $exams= $request->userGrade->exams()
+                    ->where("classroom_id",$user->student->classroom_id)
+                    ->get();
+               break;
+           case config("constant.roles.assistant"):
+           case config("constant.roles.manager"):
+               $exams= $request->userGrade->exams()->get();
+                break;
+           case config("constant.roles.teacher"):
+//               $exams= $request->userGrade->exams()
+//                   ->where("classroom_id",$user->teacher->classroom_id)
+//                   ->get();
+               break;
+       }
+       return new ExamCollection($exams);
+
    }
 
    public function showSingle($userGrade,Exam $exam){
        return new ExamResource($exam);
+   }
+
+   public function scores(Request $request){
+       $user =  auth()->user();
+       $student = $user->student;
+      return new ScoreCollection(StudentExam::where("student_id",$student->id)->get());
    }
 
    public function update(ExamStoreValidation $validation, $userGrade, Exam $exam){

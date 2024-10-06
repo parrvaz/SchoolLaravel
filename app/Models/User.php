@@ -72,4 +72,12 @@ class User extends Authenticatable
     public function absents(){
         return $this->hasMany(Absent::class);
     }
+
+    public function getRoleAttribute(){
+        return $this->roles->first()->id;
+    }
+
+    public function getRoleIdAttribute(){
+        return $this->modelHasRole->iRoleId;
+    }
 }

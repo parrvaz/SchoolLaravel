@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\ModelHasRole;
 use App\Models\UserGrade;
 use Illuminate\Support\Facades\Lang;
 use Morilog\Jalali\CalendarUtils;
@@ -30,5 +31,13 @@ trait ServiceTrait
             return CalendarUtils::createDatetimeFromFormat('Y-m-d', $date)->format('Y/m/d');
         else return $date;
 
+    }
+
+    public function getAllPermissionsName($user_id,$business_id){
+        $roleRow= ModelHasRole::where('business_id',$business_id)->where('model_id',$user_id)->first();
+//        return $roleRow!= null ? $roleRow->role->permissions->pluck('name')->toArray()
+//            : ModelHasPermission::where('business_id',$business_id)->where('model_id',$user_id)->get()->map(function ($item){
+//                return $item->permission->name;
+//            })->toArray();
     }
 }

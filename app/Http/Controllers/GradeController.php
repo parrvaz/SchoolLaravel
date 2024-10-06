@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Report\FilterValidation;
+use App\Http\Resources\Auth\UserResource;
 use App\Http\Resources\Classroom\ClassroomCollection;
 use App\Http\Resources\Grade\ExamCreateCollection;
 use App\Http\Resources\Grade\ExamCreateResource;
@@ -22,6 +23,8 @@ class GradeController extends Controller
 
     public function dashboard(Request $request,FilterValidation $validation){
         $userGrade=$request->userGrade;
+
+        return  new UserResource( auth()->user());
 
         return response()->json( [
             'data'=>[

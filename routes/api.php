@@ -46,10 +46,10 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('{userGrade}')->middleware("findUserGrade")->group(function () {
 
-        Route::post('/update', [UserGradeController::class, 'updateCode']);
-        Route::post('/delete', [UserGradeController::class, 'deleteCode']);
+        Route::middleware('role:manager')->post('/update', [UserGradeController::class, 'updateCode']);
+        Route::middleware('role:manager')->post('/delete', [UserGradeController::class, 'deleteCode']);
 
-        Route::get('/dashboard', [GradeController::class, 'dashboard']);
+        Route::middleware('role:general')->get('/dashboard', [GradeController::class, 'dashboard']);
 
         //Field Api
         Route::prefix("fields")->group(function () {
@@ -58,118 +58,120 @@ Route::middleware('auth:api')->group(function () {
 
         //Classroom Api
         Route::prefix("classrooms")->group(function () {
-            Route::post('/store', [ClassroomController::class, 'store']);
-            Route::post('/update/{classroom}', [ClassroomController::class, 'update']);
-            Route::get('/show', [ClassroomController::class, 'show']);
-            Route::get('/show/{classroom}', [ClassroomController::class, 'showSingle']);
-            Route::post('/delete/{classroom}', [ClassroomController::class, 'delete']);
+            Route::middleware('role:assistant')->post('/store', [ClassroomController::class, 'store']);
+            Route::middleware('role:assistant')->post('/update/{classroom}', [ClassroomController::class, 'update']);
+            Route::middleware('role:teacher')->get('/show', [ClassroomController::class, 'show']);
+            Route::middleware('role:teacher')->get('/show/{classroom}', [ClassroomController::class, 'showSingle']);
+            Route::middleware('role:assistant')->post('/delete/{classroom}', [ClassroomController::class, 'delete']);
 
-            Route::get('/list', [ClassroomController::class, 'list']);
+            Route::middleware('role:teacher')->get('/list', [ClassroomController::class, 'list']);
         });
 
         //Students Api
         Route::prefix("students")->group(function () {
-            Route::post('/store', [StudentController::class, 'store']);
-            Route::post('/import', [StudentController::class, 'import']);
-            Route::post('/sampleExcel', [StudentController::class, 'sampleExcel']);
-            Route::post('/update/{student}', [StudentController::class, 'update']);
-            Route::get('/show', [StudentController::class, 'show']);
-            Route::get('/show/{student}', [StudentController::class, 'showSingle']);
-            Route::post('/delete/{student}', [StudentController::class, 'delete']);
+            Route::middleware('role:assistant')->post('/store', [StudentController::class, 'store']);
+            Route::middleware('role:assistant')->post('/import', [StudentController::class, 'import']);
+            Route::middleware('role:assistant')->post('/sampleExcel', [StudentController::class, 'sampleExcel']);
+            Route::middleware('role:assistant')->post('/update/{student}', [StudentController::class, 'update']);
+            Route::middleware('role:teacher')->get('/show', [StudentController::class, 'show']);
+            Route::middleware('role:general')->get('/show/{student}', [StudentController::class, 'showSingle']);
+            Route::middleware('role:assistant')->post('/delete/{student}', [StudentController::class, 'delete']);
         });
 
         //Teachers Api
         Route::prefix("teachers")->group(function () {
-            Route::post('/store', [TeacherController::class, 'store']);
-            Route::post('/update/{teacher}', [TeacherController::class, 'update']);
-            Route::get('/show', [TeacherController::class, 'show']);
-            Route::get('/show/{teacher}', [TeacherController::class, 'showSingle']);
-            Route::post('/delete/{teacher}', [TeacherController::class, 'delete']);
+            Route::middleware('role:assistant')->post('/store', [TeacherController::class, 'store']);
+            Route::middleware('role:assistant')->post('/update/{teacher}', [TeacherController::class, 'update']);
+            Route::middleware('role:assistant')->get('/show', [TeacherController::class, 'show']);
+            Route::middleware('role:assistant')->get('/show/{teacher}', [TeacherController::class, 'showSingle']);
+            Route::middleware('role:assistant')->post('/delete/{teacher}', [TeacherController::class, 'delete']);
         });
 
         //Course Api
         Route::prefix("courses")->group(function () {
-            Route::post('/store', [CourseController::class, 'store']);
-            Route::get('/show', [CourseController::class, 'show']);
-            Route::get('/show/{course}', [CourseController::class, 'showSingle']);
-            Route::get('/classroom/show', [CourseController::class, 'showClassroom']);
-            Route::get('/assign/create', [CourseController::class, 'assignCreate']);
+            Route::middleware('role:assistant')->post('/store', [CourseController::class, 'store']);
+            Route::middleware('role:general')->get('/show', [CourseController::class, 'show']);
+            Route::middleware('role:general')->get('/show/{course}', [CourseController::class, 'showSingle']);
+            Route::middleware('role:general')->get('/classroom/show', [CourseController::class, 'showClassroom']);
 
-            Route::post('/delete/{course}', [CourseGradeController::class, 'delete']);
-            Route::post('/update/{course}', [CourseGradeController::class, 'update']);
+
+            Route::middleware('role:general')->get('/assign/create', [CourseController::class, 'assignCreate']);
+            Route::middleware('role:assistant')->post('/delete/{course}', [CourseGradeController::class, 'delete']);
+            Route::middleware('role:assistant')->post('/update/{course}', [CourseGradeController::class, 'update']);
 
         });
 
         //New Course
         Route::prefix("/school/courses")->group(function () {
-            Route::post('/store', [CourseGradeController::class, 'store']);
-            Route::get('/show', [CourseGradeController::class, 'show']);
+            Route::middleware('role:assistant')->post('/store', [CourseGradeController::class, 'store']);
+            Route::middleware('role:assistant')->get('/show', [CourseGradeController::class, 'show']);
 
         });
 
         //Exam Api
         Route::prefix("exams")->group(function () {
-            Route::post('/store', [ExamController::class, 'store']);
-            Route::get('/show', [ExamController::class, 'show']);
-            Route::get('/show/{exam}', [ExamController::class, 'showSingle']);
-            Route::post('/update/{exam}', [ExamController::class, 'update']);
-            Route::post('/delete/{exam}', [ExamController::class, 'delete']);
+            Route::middleware('role:teacher')->post('/store', [ExamController::class, 'store']);
+            Route::middleware('role:general')->get('/show', [ExamController::class, 'show']);
+            Route::middleware('role:student')->get('/scores', [ExamController::class, 'scores']);
+            Route::middleware('role:general')->get('/show/{exam}', [ExamController::class, 'showSingle']);
+            Route::middleware('role:teacher')->post('/update/{exam}', [ExamController::class, 'update']);
+            Route::middleware('role:teacher')->post('/delete/{exam}', [ExamController::class, 'delete']);
         });
 
         //Bell Api
         Route::prefix("bells")->group(function () {
-            Route::post('/store', [BellController::class, 'store']);
-            Route::get('/show', [BellController::class, 'show']);
-            Route::post('/update', [BellController::class, 'update']);
-            Route::post('/delete/{bell}', [BellController::class, 'delete']);
+            Route::middleware('role:assistant')->post('/store', [BellController::class, 'store']);
+            Route::middleware('role:teacher')->get('/show', [BellController::class, 'show']);
+            Route::middleware('role:assistant')->post('/update', [BellController::class, 'update']);
+            Route::middleware('role:assistant')->post('/delete/{bell}', [BellController::class, 'delete']);
         });
 
         //Schedule
         Route::prefix("schedules")->group(function () {
-            Route::post('/store/{classroom}', [ScheduleController::class, 'store']);
-            Route::get('/show', [ScheduleController::class, 'show']);
-            Route::get('/show/{classroom}', [ScheduleController::class, 'showSingle']);
-            Route::post('/update/{classroom}', [ScheduleController::class, 'update']);
-            Route::post('/delete/{classroom}', [ScheduleController::class, 'delete']);
+            Route::middleware('role:assistant')->post('/store/{classroom}', [ScheduleController::class, 'store']);
+            Route::middleware('role:assistant')->get('/show', [ScheduleController::class, 'show']);
+            Route::middleware('role:general')->get('/show/{classroom}', [ScheduleController::class, 'showSingle']);
+            Route::middleware('role:assistant')->post('/update/{classroom}', [ScheduleController::class, 'update']);
+            Route::middleware('role:assistant')->post('/delete/{classroom}', [ScheduleController::class, 'delete']);
         });
 
 
         //Absent Api
         Route::prefix("absents")->group(function () {
-            Route::post('/store', [AbsentController::class, 'store']);
-            Route::get('/show', [AbsentController::class, 'show']);
-            Route::get('/teachersMiss', [AbsentController::class, 'teachersMiss']);
-            Route::post('/update/{absent}', [AbsentController::class, 'update']);
-            Route::post('/delete/{absent}', [AbsentController::class, 'delete']);
+            Route::middleware('role:teacher')->post('/store', [AbsentController::class, 'store']);
+            Route::middleware('role:teacher')->get('/show', [AbsentController::class, 'show']);
+            Route::middleware('role:teacher')->get('/teachersMiss', [AbsentController::class, 'teachersMiss']);
+            Route::middleware('role:teacher')->post('/update/{absent}', [AbsentController::class, 'update']);
+            Route::middleware('role:teacher')->post('/delete/{absent}', [AbsentController::class, 'delete']);
         });
 
         //Message
         Route::prefix("messages")->group(function () {
-            Route::post('/send', [MessageController::class, 'send']);
-            Route::post('/markAsRead/{messageRecipient}', [MessageController::class, 'markAsRead']);
-            Route::get('/inbox', [MessageController::class, 'inbox']);
-            Route::get('/sentMessages', [MessageController::class, 'sentMessages']);
+            Route::middleware('role:general')->post('/send', [MessageController::class, 'send']);
+            Route::middleware('role:general')->post('/markAsRead/{messageRecipient}', [MessageController::class, 'markAsRead']);
+            Route::middleware('role:general')->get('/inbox', [MessageController::class, 'inbox']);
+            Route::middleware('role:general')->get('/sentMessages', [MessageController::class, 'sentMessages']);
 
         });
 
 
         //Plan Api
         Route::prefix("plans")->group(function () {
-            Route::post('/store', [PlanController::class, 'store']);
-            Route::post('/assign', [PlanController::class, 'assign']);
-            Route::get('/show', [PlanController::class, 'show']);
-            Route::get('/show/{plan}', [PlanController::class, 'showSingle']);
-            Route::post('/update/{plan}', [PlanController::class, 'update']);
-            Route::post('/delete/{plan}', [PlanController::class, 'delete']);
+            Route::middleware('role:assistant')->post('/store', [PlanController::class, 'store']);
+            Route::middleware('role:assistant')->post('/assign', [PlanController::class, 'assign']);
+            Route::middleware('role:assistant')->get('/show', [PlanController::class, 'show']);
+            Route::middleware('role:student')->get('/show/{plan}', [PlanController::class, 'showSingle']);
+            Route::middleware('role:assistant')->post('/update/{plan}', [PlanController::class, 'update']);
+            Route::middleware('role:assistant')->post('/delete/{plan}', [PlanController::class, 'delete']);
         });
 
         //Study Api
         Route::prefix("studies")->group(function () {
-            Route::get('/show', [StudyController::class, 'show']);
-            Route::get('/show/{student}', [StudyController::class, 'showStudent']);
-            Route::post('/store', [StudyController::class, 'store']);
-            Route::post('/store/{student}', [StudyController::class, 'storeStudent']);
-            Route::post('/delete/{study}', [StudyController::class, 'delete']);
+            Route::middleware('role:student')->get('/show', [StudyController::class, 'show']);
+            Route::middleware('role:assistant')->get('/show/{student}', [StudyController::class, 'showStudent']);
+            Route::middleware('role:student')->post('/store', [StudyController::class, 'store']);
+            Route::middleware('role:assistant')->post('/store/{student}', [StudyController::class, 'storeStudent']);
+            Route::middleware('role:assistant')->post('/delete/{study}', [StudyController::class, 'delete']);
         });
 
 
@@ -179,16 +181,16 @@ Route::middleware('auth:api')->group(function () {
 
         ///
         Route::prefix("allExams")->group(function () {
-            Route::get('/show', [GradeController::class, 'allExamShow']);
-            Route::get('/create', [GradeController::class, 'examsCreate']);
+            Route::middleware('role:general')->get('/show', [GradeController::class, 'allExamShow']);
+            Route::middleware('role:general')->get('/create', [GradeController::class, 'examsCreate']);
 
         });
 
         Route::prefix("reports")->group(function () {
-            Route::get('/listItems', [ReportController::class, 'listItems']);
-            Route::get('/exams/count', [ReportController::class, 'allExamCount']);
-            Route::get('/exams/progress', [ReportController::class, 'examProgress']);
-            Route::get('/classScores/progress', [ReportController::class, 'classScoreProgress']);
+            Route::middleware('role:general')->get('/listItems', [ReportController::class, 'listItems']);
+            Route::middleware('role:general')->get('/exams/count', [ReportController::class, 'allExamCount']);
+            Route::middleware('role:general')->get('/exams/progress', [ReportController::class, 'examProgress']);
+            Route::middleware('role:general')->get('/classScores/progress', [ReportController::class, 'classScoreProgress']);
 
         });
     });

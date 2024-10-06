@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Validation\ValidationException;
 
 trait MessageTrait
 {
@@ -60,5 +61,29 @@ trait MessageTrait
             'message' => Lang::get('responses.error.hasSchedule'),
             'status' => 'error',
         ], 422);
+    }
+
+    public function permissionDeniedForUser()
+    {
+        return response()->json([
+            'message' => Lang::get('responses.error.permissionForUser'),
+            'status' => 'error',
+        ], 403);
+    }
+
+
+    /**
+     * @throws ValidationException
+     */
+    public function permissionDenied()
+    {
+        $error = \Illuminate\Validation\ValidationException::withMessages([
+            'user' => [Lang::get('responses.error.permission')],
+        ]);
+        throw $error;
+//        return response()->json([
+//            'message' => Lang::get('responses.error.permission'),
+//            'status' => 'error',
+//        ],403);
     }
 }

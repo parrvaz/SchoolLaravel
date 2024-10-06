@@ -7,6 +7,7 @@ use App\Http\Resources\Messages\InboxCollection;
 use App\Http\Resources\Messages\MessageCollection;
 use App\Models\Message;
 use App\Models\MessageRecipient;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Musonza\Chat\Facades\ChatFacade as Chat;
@@ -14,6 +15,20 @@ use Musonza\Chat\Facades\ChatFacade as Chat;
 class MessageController extends Controller
 {
     public function send(Request $request, MessageValidation $validation){
+
+        $role = auth()->user()->role;
+        switch ($role){
+            case config("constant.roles.parent"):
+                return $this->permissionDeniedForUser();
+                break;
+            case config("constant.roles.student"):
+                $users = User::whereIn("id", $validation->recipients)->get();
+                foreach ($users as $user){
+                    if ($user->role != config("constant.roles.assistant") && $user->role!= config("constant.roles.manager"))
+                        return $this->permissionDeniedForUser();
+                }
+                break;
+        }
 
         return DB::transaction(function () use($request,$validation) {
             // ایجاد پیام جدید

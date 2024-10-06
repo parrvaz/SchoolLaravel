@@ -12,4 +12,12 @@ return [
         6 => 'thu', // پنج‌شنبه
         7 => 'fri'  // جمعه (اختیاری)
     ],
+    "roles"=>[
+        "admin"=>1,
+        "manager"=>2,
+        "teacher"=>3,
+        "student"=>4,
+        "parent"=>5,
+        "assistant"=>6,
+    ]
 ];

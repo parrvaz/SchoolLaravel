@@ -76,7 +76,7 @@ Route::middleware('auth:api')->group(function () {
         Route::prefix("students")->group(function () {
             Route::middleware('role:assistant')->post('/store', [StudentController::class, 'store']);
             Route::middleware('role:assistant')->post('/import', [StudentController::class, 'import']);
-            Route::middleware('role:assistant')->post('/sampleExcel', [StudentController::class, 'sampleExcel']);
+            Route::middleware('role:general')->get('/sampleExcel', [StudentController::class, 'sampleExcel']);
             Route::middleware('role:assistant')->post('/update/{student}', [StudentController::class, 'update']);
             Route::middleware('role:teacher')->get('/show', [StudentController::class, 'show']);
             Route::middleware('role:general')->get('/show/{student}', [StudentController::class, 'showSingle']);

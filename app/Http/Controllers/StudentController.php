@@ -15,6 +15,7 @@ use App\Models\UserGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -181,7 +182,9 @@ class StudentController extends Controller
     }
 
     public function sampleExcel(){
-        $filePath = 'public/sample.xlsx';
+        $filePath = 'public/sample.xlsx'; // مسیر فایل در storage/app/public
+
+        // ارسال فایل برای دانلود
         return Storage::download($filePath, 'sample.xlsx');
     }
 }

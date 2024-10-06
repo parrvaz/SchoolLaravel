@@ -58,6 +58,13 @@ class AuthenticationController extends Controller
 
     }
 
+    public function logout(Request $request){
+        // دریافت توکن کاربر
+        $token = $request->user()->token();
+        // باطل کردن توکن
+        $token->revoke();
+        return $this->successMessage();
+    }
 
     public function user(Request $request){
         return response()->json([

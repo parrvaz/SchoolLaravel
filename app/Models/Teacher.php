@@ -25,6 +25,11 @@ class Teacher extends Model
         return $this->hasMany(ClassCourseTeacher::class);
     }
 
+    public function courses(){
+        return $this->hasManyThrough(Course::class, ClassCourseTeacher::class,'teacher_id','id','id','course_id');
+
+    }
+
     public function getNameAttribute(){
         return $this->firstName ." ". $this->lastName;
     }

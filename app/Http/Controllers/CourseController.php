@@ -7,6 +7,7 @@ use App\Http\Resources\Course\AssignCreateResource;
 use App\Http\Resources\Course\CourseClassroomCollection;
 use App\Http\Resources\Course\CourseCollection;
 use App\Http\Resources\Course\CourseResource;
+use App\Http\Resources\Exam\ExamCollection;
 use App\Http\Resources\Grade\ExamCreateResource;
 use App\Models\ClassCourseTeacher;
 use App\Models\Course;
@@ -33,13 +34,34 @@ class CourseController extends Controller
    }
 
    public function show(Request $request){
-       return new CourseCollection(
-           Course::where('grade_id',$request->userGrade->grade_id)
-           ->where(function ($query) use ($request) { 
-            $query->where('user_grade_id', $request->userGrade->id) 
-                ->orWhere('user_grade_id',null);
-             })
-           ->get());
+       $user =  auth()->user();
+       $role =$user->role;
+       $courses = [];
+       switch ($role){
+           case config("constant.roles.student"):
+           case config("constant.roles.parent"):
+           case config("constant.roles.assistant"):
+           case config("constant.roles.manager"):
+               $courses= Course::where('grade_id',$request->userGrade->grade_id)
+                   ->where(function ($query) use ($request) {
+                       $query->where('user_grade_id', $request->userGrade->id)
+                           ->orWhere('user_grade_id',null);
+                   })
+                   ->get();
+               break;
+           case config("constant.roles.teacher"):
+               $teacher = $user->teacher;
+               $classCourse = $teacher->classCourses;
+               $courses= Course::where('grade_id',$request->userGrade->grade_id)
+                   ->whereIn("id",$classCourse->pluck("course_id"))
+                   ->where(function ($query) use ($request) {
+                       $query->where('user_grade_id', $request->userGrade->id)
+                           ->orWhere('user_grade_id',null);
+                   })
+                   ->get();
+               break;
+       }
+       return new CourseCollection($courses);
    }
 
    public function showSingle($userGrade,Course $course){

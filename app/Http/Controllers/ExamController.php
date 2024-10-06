@@ -57,9 +57,12 @@ class ExamController extends Controller
                $exams= $request->userGrade->exams()->get();
                 break;
            case config("constant.roles.teacher"):
-//               $exams= $request->userGrade->exams()
-//                   ->where("classroom_id",$user->teacher->classroom_id)
-//                   ->get();
+               $teacher = $user->teacher;
+               $classCourse = $teacher->classCourses;
+               $exams= $request->userGrade->exams()
+                   ->whereIn("classroom_id",$classCourse->pluck("classroom_id"))
+                   ->whereIn("course_id",$classCourse->pluck("course_id"))
+                   ->get();
                break;
        }
        return new ExamCollection($exams);

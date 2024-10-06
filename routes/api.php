@@ -28,6 +28,7 @@ use App\Http\Controllers\UserGradeController;
 
 Route::post('register', [AuthenticationController::class, 'register'])->name('register');
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
+Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:api');
 Route::post('log', [AuthenticationController::class, 'log'])->name('log');
 
 Route::middleware('auth:api')->group(function () {
@@ -112,7 +113,7 @@ Route::middleware('auth:api')->group(function () {
         Route::prefix("exams")->group(function () {
             Route::middleware('role:teacher')->post('/store', [ExamController::class, 'store']);
             Route::middleware('role:general')->get('/show', [ExamController::class, 'show']);
-            Route::middleware('role:student')->get('/scores', [ExamController::class, 'scores']);
+            Route::middleware('role:general')->get('/scores', [ExamController::class, 'scores']);
             Route::middleware('role:general')->get('/show/{exam}', [ExamController::class, 'showSingle']);
             Route::middleware('role:teacher')->post('/update/{exam}', [ExamController::class, 'update']);
             Route::middleware('role:teacher')->post('/delete/{exam}', [ExamController::class, 'delete']);
@@ -129,7 +130,7 @@ Route::middleware('auth:api')->group(function () {
         //Schedule
         Route::prefix("schedules")->group(function () {
             Route::middleware('role:assistant')->post('/store/{classroom}', [ScheduleController::class, 'store']);
-            Route::middleware('role:assistant')->get('/show', [ScheduleController::class, 'show']);
+            Route::middleware('role:teacher')->get('/show', [ScheduleController::class, 'show']);
             Route::middleware('role:general')->get('/show/{classroom}', [ScheduleController::class, 'showSingle']);
             Route::middleware('role:assistant')->post('/update/{classroom}', [ScheduleController::class, 'update']);
             Route::middleware('role:assistant')->post('/delete/{classroom}', [ScheduleController::class, 'delete']);

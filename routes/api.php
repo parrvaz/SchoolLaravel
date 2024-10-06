@@ -13,7 +13,6 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\StudentPlanController;
 use App\Http\Controllers\StudyController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\PlanController;
@@ -34,6 +33,11 @@ Route::post('log', [AuthenticationController::class, 'log'])->name('log');
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [AuthenticationController::class, 'user'])->name('user');
     Route::post('/studyPlanStore', [StudyController::class, 'studyPlanStore']);
+
+
+    Route::post('/test', [GradeController::class, 'testt']);
+
+
 
     //UserGrades Api
     Route::prefix("grades")->group(function () {

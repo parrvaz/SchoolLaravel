@@ -8,7 +8,6 @@ use App\Http\Resources\Classroom\ClassroomCollection;
 use App\Http\Resources\Grade\ExamCreateCollection;
 use App\Http\Resources\Grade\ExamCreateResource;
 use App\Http\Resources\Reports\AllCountResource;
-use App\Http\Resources\Exam\AllExamCollection;
 use App\Http\Resources\Exam\ExamCollection;
 use App\Http\Resources\Student\StudentCollection;
 use App\Models\Grade;
@@ -16,23 +15,26 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+
 class GradeController extends Controller
 {
+
+    public function testt(Request $request){
+        // ذخیره تصویر در صورت آپلود
+        $photoPath = null;
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            $photoPath = $file->storeAs('/',"sample.xlsx", 'public');
+        }
+
+        return $this->successMessage();
+    }
 
     public function dashboard(Request $request,FilterValidation $validation){
         $userGrade=$request->userGrade;
 
         return  new UserResource( auth()->user());
-
-        return response()->json( [
-            'data'=>[
-                'filterData' => new ExamCreateResource($userGrade),
-                'allCount' => new AllCountResource((new ReportController())->allExamCount($request,$validation)),
-                'examProgress' => new AllCountResource((new ReportController())->examProgress($request,$validation)),
-                'classScoreProgress' => new AllCountResource((new ReportController())->classScoreProgress($request,$validation)),],
-        ], 200);
     }
 
     public function allExamShow(Request $request){

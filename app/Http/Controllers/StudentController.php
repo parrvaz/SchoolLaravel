@@ -92,10 +92,14 @@ class StudentController extends Controller
     public function import(Request $request)
     {
         return DB::transaction(function () use($request) {
-
-            $file = $request->file('file');
-            $extension = $file->guessExtension();
-            Excel::import(new StudentsImport($request), $file->store('temp'));
+            $import = new StudentsImport($request);
+            Excel::import($import, $request->file('file'));
+            $errors = $import->getErrors();
+            if (!empty($errors)) {
+                return response()->json([
+                    'mistakes' => $errors,
+                ], 422);
+            }
             return $this->successMessage();
         });
     }
@@ -177,7 +181,7 @@ class StudentController extends Controller
     }
 
     public function sampleExcel(){
-        $filePath = 'public/sample.xlsx'; 
+        $filePath = 'public/sample.xlsx';
         return Storage::download($filePath, 'sample.xlsx');
     }
 }

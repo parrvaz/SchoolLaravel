@@ -27,6 +27,8 @@ class AuthenticationController extends Controller
         $formData['password'] = bcrypt($request->password);
 
         $user = User::create($formData);
+        $user->assignRole('manager');
+
 
         return response()->json([
             'user' => $user,

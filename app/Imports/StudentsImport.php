@@ -5,7 +5,6 @@ namespace App\Imports;
 namespace App\Imports;
 
 use App\Models\Classroom;
-use App\Models\Student;
 use App\Models\User;
 use App\Traits\ServiceTrait;
 use Illuminate\Support\Str;
@@ -14,7 +13,6 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Row;
-use Morilog\Jalali\Jalalian;
 
 class StudentsImport implements OnEachRow, WithStartRow, WithValidation
 {
@@ -40,55 +38,30 @@ class StudentsImport implements OnEachRow, WithStartRow, WithValidation
 
         $phone =  Str::length($row[4]) == 10 ? "0" . $row[4] : $row[4];
         $fatherPhone =  Str::length($row[5]) == 10 ? "0" . $row[5] : $row[5];
-
         // بررسی وجود شماره تلفن در دیتابیس
         if (User::where("phone", $phone)->exists() || User::where("phone", $fatherPhone)->exists()) {
             $this->errors[$index] = "{$row[0]} {$row[1]}: شماره تلفن دانش‌آموز یا پدر قبلاً ثبت شده است";
             return;
         }
-
         // بررسی برابری شماره تلفن دانش‌آموز و پدر
         if ($phone == $fatherPhone) {
             $this->errors[$index] = "{$row[0]} {$row[1]}: شماره تلفن دانش‌آموز و پدر نمی‌تواند یکسان باشد";
             return;
         }
 
-        // ذخیره کردن اطلاعات در صورتی که هیچ خطایی تا به حال وجود نداشته باشد
-        try {
-            $row[2] =  Str::length($row[2]) == 9 ? "0" . $row[2] : (Str::length($row[2]) == 8 ? "00" . $row[2] : $row[2]);
-
-            // ذخیره دانش‌آموز در دیتابیس
-            $student = Student::create([
-                'firstName'    => $row[0],
-                'lastName'     => $row[1],
-                'nationalId'   => $row[2],
-                'classroom_id' => Classroom::where("user_grade_id", $this->request->userGrade->id)
-                        ->where("number", $row[3])->first()->id ?? null,
-                'phone'        => $phone,
-                'fatherPhone'  => $fatherPhone,
-                'birthday'     => $row[7] != null ? $this->formatDate($row[7]) : null,
-                'address'      => $row[8] ?? null,
-            ]);
-
-            // ایجاد کاربر و ثبت نقش‌ها
-            $user = User::create([
-                "name"     => $student->firstName . " " . $student->lastName,
-                "phone"    => $student->phone,
-                "password" => bcrypt($student->nationalId),
-            ]);
-            $user->assignRole('student');
-            $user->modelHasRole()->update(["idInRole" => $student->id]);
-
-            $parentUser = User::create([
-                "name"     => "ولی " . $student->firstName . " " . $student->lastName,
-                "phone"    => $student->fatherPhone,
-                "password" => bcrypt($student->nationalId),
-            ]);
-            $parentUser->assignRole('parent');
-            $parentUser->modelHasRole()->update(["idInRole" => $student->id]);
-        } catch (\Exception $e) {
-            $this->errors[$index] = "خطایی در ذخیره اطلاعات دانش‌آموز {$row[0]} {$row[1]} رخ داد";
+        if (Str::length($row[2]) <8 ||  Str::length($row[2])>10){
+            $this->errors[$index] = "{$row[0]} {$row[1]}: کدملی اشتباه است ";
+            return;
         }
+
+        $classNum = Classroom::where("user_grade_id", $this->request->userGrade->id)
+            ->where("number", $row[3])->first()->id ?? null;
+        if ($classNum==null){
+            $this->errors[$index] = "{$row[0]} {$row[1]}: شماره کلاس در لیست کلاس ها موجود نیست ";
+            return;
+        }
+
+        return;
     }
 
     public function startRow(): int
@@ -126,14 +99,11 @@ class StudentsImport implements OnEachRow, WithStartRow, WithValidation
         ];
     }
 
+
     public function getErrors()
     {
         return $this->errors;
     }
 
-    public function formatDate($birthday)
-    {
-        // تابع تبدیل تاریخ شما
-        return Jalalian::fromFormat('Y/m/d', $birthday)->format('Y/m/d');
-    }
+
 }

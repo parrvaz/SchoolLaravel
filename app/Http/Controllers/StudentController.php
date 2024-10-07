@@ -6,6 +6,7 @@ use App\Http\Requests\Student\StudentUpdateValidation;
 use App\Http\Requests\Student\StudentValidation;
 use App\Http\Resources\Student\StudentCollection;
 use App\Http\Resources\Student\StudentResource;
+use App\Imports\StudentsCreateImport;
 use App\Imports\StudentsImport;
 use App\Models\ModelHasRole;
 use App\Models\Role;
@@ -101,7 +102,12 @@ class StudentController extends Controller
                     'mistakes' => $errors,
                 ], 422);
             }
-            return $this->successMessage();
+
+
+                $file = $request->file('file');
+                Excel::import(new StudentsCreateImport($request), $file->store('temp'));
+                return $this->successMessage();
+
         });
     }
 

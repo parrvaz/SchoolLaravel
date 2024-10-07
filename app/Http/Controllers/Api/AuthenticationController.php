@@ -10,6 +10,7 @@ use http\Exception\BadMethodCallException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
 use function PHPUnit\Framework\throwException;
@@ -18,6 +19,7 @@ class AuthenticationController extends Controller
 {
     public function register(Request $request,UserRegisterValidation $registerValidation)
     {
+
         $formData = [
             'name' => $request->name,
             'email' => $request->email,
@@ -26,14 +28,21 @@ class AuthenticationController extends Controller
 
         $formData['password'] = bcrypt($request->password);
 
-        $user = User::create($formData);
-        $user->assignRole('manager');
+        return DB::transaction(function () use($request,$formData) {
+            $user = User::create($formData);
+            $user->modelHasRole()->create([
+                "model_id"=>$user->id,
+                "role_id"=> config("constant.roles.manager"),
+                "model_type"=>"App\Models\User",
+                "idInRole"=>$user->id
+            ]);
 
+            return response()->json([
+                'user' => $user,
+                'token' => $user->createToken('passportToken')->accessToken
+            ], 200);
 
-        return response()->json([
-            'user' => $user,
-            'token' => $user->createToken('passportToken')->accessToken
-        ], 200);
+        });
 
     }
 

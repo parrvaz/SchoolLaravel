@@ -128,10 +128,10 @@ Route::middleware('auth:api')->group(function () {
 
         //Bell Api
         Route::prefix("bells")->group(function () {
-            Route::middleware('role:assistant')->post('/store', [BellController::class, 'store']);
+            Route::middleware('role:manager')->post('/store', [BellController::class, 'store']);
             Route::middleware('role:teacher')->get('/show', [BellController::class, 'show']);
-            Route::middleware('role:assistant')->post('/update', [BellController::class, 'update']);
-            Route::middleware('role:assistant')->post('/delete/{bell}', [BellController::class, 'delete']);
+            Route::middleware('role:manager')->post('/update', [BellController::class, 'update']);
+            Route::middleware('role:manager')->post('/delete/{bell}', [BellController::class, 'delete']);
         });
 
         //Schedule

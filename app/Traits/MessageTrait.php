@@ -21,11 +21,18 @@ trait MessageTrait
         ], 422);
     }
 
+    public function errorUnauthorised(){
+        return response()->json([
+            'message' => Lang::get('responses.error.unauthorised'),
+            'status' => 'error',
+        ], 422);
+    }
+
     public function errorDontExist(){
         return response()->json([
             'message' => Lang::get('responses.response.dontExist'),
             'status' => 'error',
-        ], 422);
+        ], 401);
     }
 
     public function errorFatherPhone(){

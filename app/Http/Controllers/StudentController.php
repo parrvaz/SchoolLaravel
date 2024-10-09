@@ -148,6 +148,13 @@ class StudentController extends Controller
                 ]);
             }
 
+            //change password if is changed
+            if ($validation->nationalId != $student->nationalId) {
+                $student->user->update([
+                    'password' => bcrypt($validation->nationalId)
+                ]);
+            }
+
             if ($validation->classroom_id != $student->classroom_id) {
                 $student->plan()->detach();
             }

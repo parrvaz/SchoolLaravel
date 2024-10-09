@@ -84,12 +84,12 @@ class TeacherController extends Controller
                 $userId= $teacher->user->id;
                 if (!$validation->isAssistant)
                     ModelHasRole::where("idInRole",$teacher->id)->where("model_id",$userId)->update([
-                        'role_id' => Role::whereName("teacher")->first()->id,
+                        'role_id' => config("constant.roles.teacher"),
 
                     ]);
                 else
                     ModelHasRole::where("idInRole",$teacher->id)->where("model_id",$userId)->update([
-                        'role_id' => Role::whereName("assistant")->first()->id,
+                        'role_id' => config("constant.roles.assistant"),
                     ]);
             }
 
@@ -98,6 +98,14 @@ class TeacherController extends Controller
             if ($validation->phone != $teacher->phone) {
                 $teacher->user->update([
                     'phone'=>$validation->phone
+                ]);
+            }
+
+
+            //change password if is changed
+            if ($validation->nationalId != $teacher->nationalId) {
+                $teacher->user->update([
+                    'password' => bcrypt($validation->nationalId)
                 ]);
             }
 

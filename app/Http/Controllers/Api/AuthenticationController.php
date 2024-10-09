@@ -63,9 +63,8 @@ class AuthenticationController extends Controller
             ], 200);
         }
 
-        return response()->json([
-            'error' => 'Unauthorised'
-        ], 401);
+        return $this->errorUnauthorised();
+
 
     }
 

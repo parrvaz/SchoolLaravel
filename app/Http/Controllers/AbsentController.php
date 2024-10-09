@@ -27,8 +27,11 @@ class AbsentController extends Controller
                 if ($user->role == config("constant.roles.assistant")
                     || $user->role == config("constant.roles.manager"))
                     $oldAbsent->delete();
+                else if ($user->role == config("constant.roles.teacher") && $user->id == $oldAbsent->user_id)
+                    $oldAbsent->delete();
                 else
                     return $this->error("permissionForUser",403);
+
             }
 
             $absent = Absent::create([
@@ -70,9 +73,6 @@ class AbsentController extends Controller
 
         foreach ($allAbsents as $classroom_id => $absents) {
             $studentsData = [];
-//            $students = [];
-
-
 
             // دریافت لیست تمام دانش‌آموزان غایب از کلاس
             foreach ($absents as $absent) {
@@ -124,6 +124,8 @@ class AbsentController extends Controller
                 ksort($student['bells']);
             }
 
+            if ($studentsData==null)
+                continue;
 
             $data[] = [
                 "classroom_id" => $classroom_id,

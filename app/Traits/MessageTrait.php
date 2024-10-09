@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Validation\ValidationException;
 
 trait MessageTrait
 {
@@ -13,7 +12,8 @@ trait MessageTrait
             'status' => 'success',
         ], 200);
     }
-    public function error($type="data",$status=422){
+    public function error($type="data",$status=422): \Illuminate\Http\JsonResponse
+    {
         return response()->json([
             'message' => Lang::get('responses.error.'.$type),
             'status' => 'error',

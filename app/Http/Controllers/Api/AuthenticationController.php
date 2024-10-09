@@ -24,6 +24,7 @@ class AuthenticationController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'hasChanged' => true,
         ];
 
         $formData['password'] = bcrypt($request->password);
@@ -64,8 +65,25 @@ class AuthenticationController extends Controller
         }
 
         return $this->error("unauthorised",401);
+    }
 
+    public function changePassword(Request $request){
 
+        $validated = $request->validate([
+            'password' => 'required|string|min:6',
+        ]);
+        $user = auth()->user();
+        if ($user->hasChanged)
+            return $this->error("permissionForUser",403);
+        return DB::transaction(function () use($validated,$user) {
+
+            $user->update([
+                "password" => bcrypt($validated['password']),
+                "hasChanged"=>true,
+            ]);
+
+            return $this->successMessage();
+        });
     }
 
     public function logout(Request $request){
@@ -73,7 +91,6 @@ class AuthenticationController extends Controller
         $token = $request->user()->token();
         // باطل کردن توکن
         $token->revoke();
-        return $this->successMessage();
     }
 
     public function user(Request $request){

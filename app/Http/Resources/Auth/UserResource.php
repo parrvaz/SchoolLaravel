@@ -22,9 +22,10 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'phone' => $this->phone,
             'email' => $this->email,
-            'is_admin' => $this->id == 7 ?true :false ,
+            'is_admin' => $this->id == 7,
             'role'=>$this->getRoleNames()->first(),
             'role_id'=>$this->modelHasRole->idInRole ?? null,
+            'hasChanged'=>(bool) $this->hasChanged ?? false,
             'schools'=> new SchoolCollection($this->grades),
         ];
     }

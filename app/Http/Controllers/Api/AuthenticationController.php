@@ -70,7 +70,7 @@ class AuthenticationController extends Controller
     public function changePassword(Request $request){
 
         $validated = $request->validate([
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:8',
         ]);
         $user = auth()->user();
         if ($user->hasChanged)

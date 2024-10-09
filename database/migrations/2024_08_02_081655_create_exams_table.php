@@ -28,7 +28,7 @@ return new class extends Migration
         Schema::create('content_exam', function (Blueprint $table) {
             $table->id();
             $table->foreignId("exam_id")->constrained()->cascadeOnDelete();
-            $table->foreignId("content_id")->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger("content_id");
             $table->timestamps();
         });
 

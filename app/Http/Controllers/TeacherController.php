@@ -133,7 +133,7 @@ class TeacherController extends Controller
     {
         return DB::transaction(function () use($teacher) {
             if ($teacher->user->absents->count() > 0 ){
-                return $this->errorHasAbsent();
+                return $this->error("hasAbsent");
             }
 
             User::where("phone", $teacher->phone)->delete();

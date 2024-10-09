@@ -14,7 +14,7 @@ class BellController extends Controller
 
 
         if (auth()->user()->bells()->count() > 0)
-            return $this->errorStoreBefor();
+            return $this->error("storeBefore");
 
         $items=[];
         foreach ($validation->list as $item){
@@ -66,10 +66,10 @@ class BellController extends Controller
     public function delete(Request $request,$userGrade,Bell $bell){
 
         if ($bell->absents()->count() > 0)
-            return $this->errorHasAbsent();
+            return $this->error("hasAbsent");
 
         if ($bell->schedules()->count() > 0)
-            return $this->errorHasSchedule();
+            return $this->error("hasSchedule");
 
         $bell->delete();
         return (new BellCollection($request->userGrade->user->bells))

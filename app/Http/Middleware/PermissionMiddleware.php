@@ -29,7 +29,7 @@ class PermissionMiddleware
     {
 
         if (app('auth')->guard('api')->guest()) {
-            return $this->permissionDeniedForUser();
+            return $this->error("permissionForUser",403);
         }
 
         $userGrade =$request->userGrade;
@@ -55,7 +55,7 @@ class PermissionMiddleware
             return $next($request);
         }
 
-        return $this->permissionDeniedForUser();
+        return $this->error("permissionForUser",403);
     }
 
 

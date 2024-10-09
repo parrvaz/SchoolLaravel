@@ -19,13 +19,13 @@ class MessageController extends Controller
         $role = auth()->user()->role;
         switch ($role){
             case config("constant.roles.parent"):
-                return $this->permissionDeniedForUser();
+                return $this->error("permissionForUser",403);
                 break;
             case config("constant.roles.student"):
                 $users = User::whereIn("id", $validation->recipients)->get();
                 foreach ($users as $user){
                     if ($user->role != config("constant.roles.assistant") && $user->role!= config("constant.roles.manager"))
-                        return $this->permissionDeniedForUser();
+                        return $this->error("permissionForUser",403);
                 }
                 break;
         }

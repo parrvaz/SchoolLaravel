@@ -48,7 +48,7 @@ class StudyController extends Controller
         //present Fix
         $plan= $student->plan->first();
         if ($plan==null)
-            return $this->errorNoTHavePlan();
+            return $this->error("haveNotPlan");
         $planCourses = $plan->coursePlans;
         foreach ($planCourses as $planItem ){
             $allItems[]=[

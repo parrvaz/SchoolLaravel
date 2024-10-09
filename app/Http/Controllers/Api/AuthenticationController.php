@@ -63,7 +63,7 @@ class AuthenticationController extends Controller
             ], 200);
         }
 
-        return $this->errorUnauthorised();
+        return $this->error("unauthorised",401);
 
 
     }

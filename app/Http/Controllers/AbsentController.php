@@ -16,18 +16,28 @@ use Illuminate\Support\Facades\DB;
 class AbsentController extends Controller
 {
     public function store(Request $request,AbsentStoreValidation $validation){
-
         return DB::transaction(function () use($request,$validation) {
+            $date= self::jToG($validation->date);
+            $user = auth()->user();
+            $oldAbsent = Absent::where("date",$date)
+                ->where("classroom_id",$validation->classroom_id)
+                ->where("bell_id",$validation->bell_id)->first();
+            //delete old
+            if ($oldAbsent!=null){
+                if ($user->role == config("constant.roles.assistant")
+                    || $user->role == config("constant.roles.manager"))
+                    $oldAbsent->delete();
+                else
+                    return $this->error("permissionForUser",403);
+            }
 
             $absent = Absent::create([
-                "user_id" => auth()->user()->id,
-                "date" => self::jToG($validation->date) ,
+                "user_id" => $user->id,
+                "date" => $date ,
                 "bell_id" => $validation->bell_id,
                 "classroom_id" => $validation->classroom_id
             ]);
-
             $absent->students()->attach($validation->students);
-
             return $this->successMessage();
         });
     }

@@ -54,6 +54,6 @@ class CourseGradeController extends Controller
             $course->delete();
             return $this->successMessage();
         }
-        return  $this->errorDontExist();
+        return  $this->error("dontExist");
     }
 }

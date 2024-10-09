@@ -26,7 +26,7 @@ class StudentController extends Controller
     public function store(Request $request,StudentValidation $validation)
     {
         if ($validation->phone == $validation->fatherPhone)
-            return $this->errorFatherPhone();
+            return $this->error("fatherPhone");
 
         return DB::transaction(function () use($request,$validation) {
 

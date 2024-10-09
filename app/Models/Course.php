@@ -22,4 +22,8 @@ class Course extends Model
     public function classTeachers(){
         return $this->hasMany(ClassCourseTeacher::class);
     }
+
+    public function fields(){
+        return $this->hasMany(CourseField::class);
+    }
 }

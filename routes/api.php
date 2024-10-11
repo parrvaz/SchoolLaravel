@@ -180,7 +180,7 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:assistant')->get('/show/{student}', [StudyController::class, 'showStudent']);
             Route::middleware('role:student')->post('/store', [StudyController::class, 'store']);
             Route::middleware('role:assistant')->post('/store/{student}', [StudyController::class, 'storeStudent']);
-            Route::middleware('role:assistant')->post('/delete/{study}', [StudyController::class, 'delete']);
+            Route::middleware('role:student')->post('/delete/{study}', [StudyController::class, 'delete']);
         });
 
 

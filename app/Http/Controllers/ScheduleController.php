@@ -59,7 +59,7 @@ class ScheduleController extends Controller
             || $user->role == config("constant.roles.parent")){
             $classroom = $user->student->classroom;
             $formattedSchedule = $this->createSchedule($classroom->schedules);
-            return response()->json(['schedule' => $formattedSchedule]);
+            return response()->json(['data' =>['schedule' => $formattedSchedule]]);
 
         }else{
             $classrooms = $request->userGrade->classrooms;

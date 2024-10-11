@@ -50,6 +50,7 @@ class ExamController extends Controller
            case config("constant.roles.parent"):
                 $exams= $request->userGrade->exams()
                     ->where("classroom_id",$user->student->classroom_id)
+                    ->whereIn("type",[1,3])
                     ->get();
                break;
            case config("constant.roles.assistant"):

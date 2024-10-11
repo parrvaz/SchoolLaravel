@@ -54,17 +54,29 @@ class ScheduleController extends Controller
 
 
     public function show(Request $request){
-        $classrooms = $request->userGrade->classrooms;
+        $user = auth()->user();
+        if ($user->role == config("constant.roles.student")
+            || $user->role == config("constant.roles.parent")){
+            $classroom = $user->student->classroom;
+            $formattedSchedule = $this->createSchedule($classroom->schedules);
+            return response()->json(['schedule' => $formattedSchedule]);
 
-        $data = [];
-        foreach ($classrooms as $classroom){
-            $data[]=[
-                'classroom_id' => $classroom->id,
-                'classroom' => $classroom->title,
-                'schedule' => $this->createSchedule($classroom->schedules),
-            ];
+        }else{
+            $classrooms = $request->userGrade->classrooms;
+
+            $data = [];
+            foreach ($classrooms as $classroom){
+                $data[]=[
+                    'classroom_id' => $classroom->id,
+                    'classroom' => $classroom->title,
+                    'schedule' => $this->createSchedule($classroom->schedules),
+                ];
+            }
+            return response()->json(['data' => $data]);
+
         }
-        return response()->json(['data' => $data]);
+
+
     }
 
 

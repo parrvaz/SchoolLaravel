@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources\Auth;
 
+use App\Http\Controllers\UserGradeController;
 use App\Http\Resources\Exam\ContentCollection;
 use App\Http\Resources\Exam\StudentScoreCollection;
 use App\Http\Resources\Grade\SchoolCollection;
+use App\Models\UserGrade;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,7 +28,7 @@ class UserResource extends JsonResource
             'role'=>$this->getRoleNames()->first(),
             'role_id'=>$this->modelHasRole->idInRole ?? null,
             'hasChanged'=>(bool) $this->hasChanged ?? false,
-            'schools'=> new SchoolCollection($this->grades),
+            'grades'=> new UserGrade((new UserGradeController())->getGrades()->toArray()),
         ];
     }
 }

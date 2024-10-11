@@ -42,26 +42,9 @@ class UserGradeController extends Controller
     }
 
     public function show(){
-        $grades = [];
-        $user =  auth()->user();
-        $role =$user->role;
-        switch ($role){
-            case config("constant.roles.assistant"):
-            case config("constant.roles.teacher"):
-                $teacher = $user->teacher;
-                $grades = UserGrade::where('id',$teacher->user_grade_id)->get();
-            break;
-            case config("constant.roles.manager"):
-                $grades = UserGrade::where('user_id',auth()->user()->id)->get();
-                break;
-            case config("constant.roles.student"):
-            case config("constant.roles.parent"):
-                $classroom = $user->student->classroom;
-                $grades = UserGrade::where('id',$classroom->user_grade_id)->get();
-                break;
-        }
 
-        return new UserGradeCollection($grades);
+
+        return new UserGradeCollection($this->getGrades());
     }
 
     public function delete(UserGrade $userGrade){
@@ -72,5 +55,28 @@ class UserGradeController extends Controller
     public function deleteCode( Request $request){
         $request->userGrade->delete();
         return $this->successMessage();
+    }
+
+    public function getGrades(){
+        $grades = [];
+        $user =  auth()->user();
+        $role =$user->role;
+        switch ($role){
+            case config("constant.roles.assistant"):
+            case config("constant.roles.teacher"):
+                $teacher = $user->teacher;
+                $grades = UserGrade::where('id',$teacher->user_grade_id)->get();
+                break;
+            case config("constant.roles.manager"):
+                $grades = UserGrade::where('user_id',auth()->user()->id)->get();
+                break;
+            case config("constant.roles.student"):
+            case config("constant.roles.parent"):
+                $classroom = $user->student->classroom;
+                $grades = UserGrade::where('id',$classroom->user_grade_id)->get();
+                break;
+        }
+
+        return $grades;
     }
 }

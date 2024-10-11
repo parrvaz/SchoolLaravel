@@ -34,6 +34,7 @@ class CourseController extends Controller
    }
 
    public function show(Request $request){
+       $grade_id = $request->userGrade->grade_id;
        $user =  auth()->user();
        $role =$user->role;
        $courses = [];
@@ -47,7 +48,9 @@ class CourseController extends Controller
                        $query->where('user_grade_id', $request->userGrade->id)
                            ->orWhere('user_grade_id',null);
                    })
-                   ->get();
+                   ->rightJoin('course_fields', 'courses.id', '=', 'course_fields.course_id')
+                   ->select("courses.id","courses.id as course_id","name","user_grade_id","field_id")
+               ->get();
                break;
            case config("constant.roles.teacher"):
                $teacher = $user->teacher;
@@ -58,6 +61,8 @@ class CourseController extends Controller
                        $query->where('user_grade_id', $request->userGrade->id)
                            ->orWhere('user_grade_id',null);
                    })
+                   ->rightJoin('course_fields', 'courses.id', '=', 'course_fields.course_id')
+                   ->select("courses.id","courses.id as course_id","name","user_grade_id","field_id")
                    ->get();
                break;
        }

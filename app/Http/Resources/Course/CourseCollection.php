@@ -19,6 +19,8 @@ class CourseCollection extends ResourceCollection
                 'id'=> $item->id,
                 'name'=> $item->name,
                 "isUser"=> $item->user_grade_id!=null,
+                "field_id"=> $item->field_id,
+                "field"=> config("constant.fields.".$item->field_id) ?? null,
                 'contentCount'=> $item->contents->groupBy("content")->count(),
                 'contents'=> new ContentCollection($item->contents),
             ];

@@ -66,13 +66,16 @@ class MessageController extends Controller
             $messageRecipient->update([
                 "isRead"=>true
             ]);
-            return $this->successMessage();
-        }
-        return $this->error();
+            return;
+        }else
+            return $this->error();
     }
 
     public function sentMessages()
     {
+        $role = auth()->user()->role;
+        if ($role ==config("constant.roles.parent"))
+                return $this->error("permissionForUser",403);
         $sentMessages = Message::where('user_id', auth()->user()->id)
             ->orderBy('created_at', 'desc')
             ->get();

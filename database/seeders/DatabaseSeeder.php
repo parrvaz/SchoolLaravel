@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
         //    FieldSeeder::class,
         //    GradeSeeder::class,
         //    RoleSeeder::class,
-            CourseSeeder::class,
-//           CourseField::class,
+//            CourseSeeder::class,
+            ContentSeeder::class,
            CourseFieldSeeder::class,
         ]);
     }

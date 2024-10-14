@@ -13,6 +13,8 @@ class CourseFieldSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('course_fields')->delete();
+
         DB::table('course_fields')->insert([
             ['course_id' => 1, 'field_id' => null],
             ['course_id' => 2, 'field_id' => null],
@@ -33,7 +35,6 @@ class CourseFieldSeeder extends Seeder
             ['course_id' => 14, 'field_id' => null],
             ['course_id' => 15, 'field_id' => null],
             ['course_id' => 16, 'field_id' => 1],
-            ['course_id' => 17, 'field_id' => null],
             ['course_id' => 57, 'field_id' => null],
 
             ['course_id' => 17, 'field_id' => null],

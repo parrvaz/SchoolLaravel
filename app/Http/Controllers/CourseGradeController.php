@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Course\CourseGradeCollection;
 use App\Models\ClassCourseTeacher;
 use App\Models\Course;
+use App\Models\CourseField;
 use App\Models\CourseGrade;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
@@ -16,11 +17,16 @@ class CourseGradeController extends Controller
             'name' => 'required|min:1|max:255',
         ]);
 
-        Course::create([
+       $course = Course::create([
             "name"=>$validated['name'],
             "title"=>$validated['name'],
             "grade_id"=> $request->userGrade->grade_id ,
             "user_grade_id"=> $request->userGrade->id,
+        ]);
+
+
+        CourseField::create([
+            "course_id"=>$course->id
         ]);
 
         return $this->successMessage();

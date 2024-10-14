@@ -245,6 +245,10 @@ class ContentSeeder extends Seeder
 //                ['course_id' => 22, 'season' => 'فصل۱ قدر هدایای زمینی را بدانیم', 'content' => 'دنیایی رنگی با عنصرهای دسته d', 'pageStart' => 15, 'pageEnd' => 17],
 //
 
+
+
+
+
             ['course_id' => 22, 'season' => 'فصل۱ قدر هدایای زمینی را بدانیم', 'content' => 'عنصرها به چه شکلی در طبیعت یافت می شوند؟', 'pageStart' => 18, 'pageEnd' => 21],
             ['course_id' => 22, 'season' => 'فصل۱ قدر هدایای زمینی را بدانیم', 'content' => 'دنیای واقعی واکنش ها', 'pageStart' => 22, 'pageEnd' => 25],
             ['course_id' => 22, 'season' => 'فصل۱ قدر هدایای زمینی را بدانیم', 'content' => 'گنج های اعماق دریا', 'pageStart' => 26, 'pageEnd' => 26],
@@ -305,7 +309,42 @@ class ContentSeeder extends Seeder
             ['course_id' => 20, 'season' => 'بخش دوم: در مسیر', 'content' => 'شروع', 'pageStart' => 134, 'pageEnd' => 137],
             ['course_id' => 20, 'season' => 'بخش دوم: در مسیر', 'content' => 'درس یازدهم: عزت نفس', 'pageStart' => 138, 'pageEnd' => 147],
             ['course_id' => 20, 'season' => 'بخش دوم: در مسیر', 'content' => 'درس دوازدهم: پیوند مقدس', 'pageStart' => 148, 'pageEnd' => 158],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'بار الکتریکی', 'pageStart' => 1, 'pageEnd' => 2],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'دایستگی و کوانتیده بودن بار الکتریکی', 'pageStart' => 3, 'pageEnd' => 4],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'قانون کولن', 'pageStart' => 5, 'pageEnd' => 9],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'میدان الکتریکی', 'pageStart' => 10, 'pageEnd' => 11],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'میدان الکتریکی حاصل از یک ذره باردار', 'pageStart' => 12, 'pageEnd' => 16],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'خطوط میدان الکتریکی', 'pageStart' => 17, 'pageEnd' => 20],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'انرژی پتانسیل الکتریکی', 'pageStart' => 21, 'pageEnd' => 22],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'پتانسیل الکتریکی', 'pageStart' => 23, 'pageEnd' => 26],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'میدان الکتریکی در داخل رساناها', 'pageStart' => 27, 'pageEnd' => 31],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'خازن', 'pageStart' => 32, 'pageEnd' => 33],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'خازن با دی الکتریک', 'pageStart' => 34, 'pageEnd' => 37],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'انرژی خازن', 'pageStart' => 38, 'pageEnd' => 40],
+            ['course_id' => 27, 'season' => 'الکتریسیته ساکن', 'content' => 'پرسش‌ها', 'pageStart' => 41, 'pageEnd' => 44],
 
+            ['course_id' => 27, 'season' => 'جریان الکتریکی و مدارهای جریان مستقیم', 'content' => 'جریان الکتریکی', 'pageStart' => 45, 'pageEnd' => 48],
+            ['course_id' => 27, 'season' => 'جریان الکتریکی و مدارهای جریان مستقیم', 'content' => 'مقاومت الکتریکی و قانون اهم', 'pageStart' => 49, 'pageEnd' => 50],
+            ['course_id' => 27, 'season' => 'جریان الکتریکی و مدارهای جریان مستقیم', 'content' => 'عوامل موثر بر مقاومت الکتریکی', 'pageStart' => 51, 'pageEnd' => 60],
+            ['course_id' => 27, 'season' => 'جریان الکتریکی و مدارهای جریان مستقیم', 'content' => 'نیروی محرکه الکتریکی و مدارها', 'pageStart' => 61, 'pageEnd' => 66],
+            ['course_id' => 27, 'season' => 'جریان الکتریکی و مدارهای جریان مستقیم', 'content' => 'توان در مدارهای الکتریکی', 'pageStart' => 67, 'pageEnd' => 69],
+            ['course_id' => 27, 'season' => 'جریان الکتریکی و مدارهای جریان مستقیم', 'content' => 'ترکیب مقاومت‌ها', 'pageStart' => 70, 'pageEnd' => 78],
+            ['course_id' => 27, 'season' => 'جریان الکتریکی و مدارهای جریان مستقیم', 'content' => 'پرسش‌ها', 'pageStart' => 79, 'pageEnd' => 82],
+
+            ['course_id' => 27, 'season' => 'مغناطیس', 'content' => 'مغناطیس و قطب های مغناطیسی', 'pageStart' => 83, 'pageEnd' => 84],
+            ['course_id' => 27, 'season' => 'مغناطیس', 'content' => 'میدان مغناطیسی', 'pageStart' => 85, 'pageEnd' => 88],
+            ['course_id' => 27, 'season' => 'مغناطیس', 'content' => 'نیروی مغناطیسی وارد بر ذره باردار متحرک در میدان مغناطیسی', 'pageStart' => 89, 'pageEnd' => 90],
+            ['course_id' => 27, 'season' => 'مغناطیس', 'content' => 'نیروی مغناطیسی وارد بر سیم حامل جریان', 'pageStart' => 91, 'pageEnd' => 93],
+            ['course_id' => 27, 'season' => 'مغناطیس', 'content' => 'میدان مغناطیسی حاصل از جریان الکتریکی', 'pageStart' => 94, 'pageEnd' => 100],
+            ['course_id' => 27, 'season' => 'مغناطیس', 'content' => 'ویژگی های مغناطیسی مواد', 'pageStart' => 101, 'pageEnd' => 103],
+            ['course_id' => 27, 'season' => 'مغناطیس', 'content' => 'پرسش ها', 'pageStart' => 104, 'pageEnd' => 108],
+
+            ['course_id' => 27, 'season' => 'القای الکترومغناطیسی و جریان متناوب', 'content' => 'پدیده القای الکترومغناطیسی', 'pageStart' => 109, 'pageEnd' => 110],
+            ['course_id' => 27, 'season' => 'القای الکترومغناطیسی و جریان متناوب', 'content' => 'قانون القای الکترومغناطیسی فاراده', 'pageStart' => 111, 'pageEnd' => 116],
+            ['course_id' => 27, 'season' => 'القای الکترومغناطیسی و جریان متناوب', 'content' => 'قانون لنز', 'pageStart' => 117, 'pageEnd' => 117],
+            ['course_id' => 27, 'season' => 'القای الکترومغناطیسی و جریان متناوب', 'content' => 'القاگرها', 'pageStart' => 118, 'pageEnd' => 121],
+            ['course_id' => 27, 'season' => 'القای الکترومغناطیسی و جریان متناوب', 'content' => 'جریان متناوب', 'pageStart' => 122, 'pageEnd' => 127],
+            ['course_id' => 27, 'season' => 'القای الکترومغناطیسی و جریان متناوب', 'content' => 'پرسش‌ها', 'pageStart' => 128, 'pageEnd' => 130],
         ]);
     }
 }

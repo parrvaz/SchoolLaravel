@@ -56,7 +56,7 @@ class CourseController extends Controller
                $teacher = $user->teacher;
                $classCourse = $teacher->classCourses;
                $courses= Course::where('grade_id',$request->userGrade->grade_id)
-                   ->whereIn("id",$classCourse->pluck("course_id"))
+                   ->whereIn("courses.id", $classCourse->pluck("course_id"))
                    ->where(function ($query) use ($request) {
                        $query->where('user_grade_id', $request->userGrade->id)
                            ->orWhere('user_grade_id',null);

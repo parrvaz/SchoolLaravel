@@ -20,6 +20,7 @@ class PlanController extends Controller
 
             $plan = Plan::create([
                 'user_grade_id' => $request->userGrade->id,
+                'classroom_id' => $validation->classroom_id ?? null,
                 'title' => $validation->title,
             ]);
 

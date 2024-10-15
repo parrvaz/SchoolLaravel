@@ -17,6 +17,7 @@ class PlanValidation extends FormRequest
     {
         return [
             'title'=>'required|string|min:1|max:100',
+            'classroom_id'=>'required|exists:classrooms,id',
             'plan'=>'required|array|min:1',
             "plan.*.course_id"=>'required|exists:courses,id',
             "plan.*.day"=>'required|string',

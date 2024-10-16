@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("field_id")->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId("course_id")->constrained()->cascadeOnDelete();
+            $table->tinyInteger("factor")->default(0);
             $table->timestamps();
         });
     }

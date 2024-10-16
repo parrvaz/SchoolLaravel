@@ -20,10 +20,9 @@ class ExamCountCollection extends ResourceCollection
         return $this->collection->map(function ($item){
             return[
                 'id'=> $item->id ?? null,
-                'title'=> $item->title?? null,
-                'count'=> $item->count?? null,
                 'date'=> self::gToJ( $item->date)?? null,
                 'score'=> $item->score?? null,
+                'averageScore'=> $item->averageScore ?? null,
                 'totalScore'=> $item->totalScore?? null,
                 'expected'=> $item->expected?? null,
             ];

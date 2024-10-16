@@ -184,24 +184,15 @@ Route::middleware('auth:api')->group(function () {
         });
 
 
-
-
-
-
-        ///
-        Route::prefix("allExams")->group(function () {
-            Route::middleware('role:general')->get('/show', [GradeController::class, 'allExamShow']);
-            Route::middleware('role:general')->get('/create', [GradeController::class, 'examsCreate']);
-
-        });
-
+        //Report Api
         Route::prefix("reports")->group(function () {
-            Route::middleware('role:general')->get('/listItems', [ReportController::class, 'listItems']);
-            Route::middleware('role:general')->get('/exams/count', [ReportController::class, 'allExamCount']);
-            Route::middleware('role:general')->get('/exams/progress', [ReportController::class, 'examProgress']);
-            Route::middleware('role:general')->get('/classScores/progress', [ReportController::class, 'classScoreProgress']);
-
+            Route::middleware('role:general')->get('/progress', [ReportController::class, 'progress']);
         });
+
+
+
+
+
     });
 
 });

@@ -19,9 +19,6 @@ class AllCountResource extends JsonResource
     {
         return [
             'exam' =>new ExamCountCollection($this["exam"]) ?? null,
-            'classScore' =>new ExamCountCollection($this["classScore"]?? []) ,
-//            'user' =>new UserResource(auth()->user()) ,
-//            'listItems' =>new ListItemsResource($this['userGrade']) ,
             'tickValues' =>$this["tickValues"] ?? null,
             'tickFormat' =>$this["tickFormat"] ?? null,
 

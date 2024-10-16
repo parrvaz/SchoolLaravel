@@ -46,6 +46,7 @@ class ReportController extends Controller
             ->groupBy("student_id","absents.classroom_id","students.firstName","students.lastName")
             ->select("student_id","absents.classroom_id","students.firstName","students.lastName",
                 DB::raw('count(*) as number'))
+            ->orderBy("student_id")
             ->get();
 
         //absents map

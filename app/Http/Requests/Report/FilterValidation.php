@@ -17,12 +17,12 @@ class FilterValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'course'=>'nullable|array',
-            'course.*'=>'exists:courses,id',
-            'classroom'=>'nullable|array',
-            'classroom.*'=>'nullable|exists:classrooms,id',
-            'student'=>'nullable|array',
-            'student.*'=>'nullable|exists:students,id',
+            'courses'=>'nullable|array',
+            'courses.*'=>'exists:courses,id',
+            'classrooms'=>'nullable|array',
+            'classrooms.*'=>'nullable|exists:classrooms,id',
+            'students'=>'nullable|array',
+            'students.*'=>'nullable|exists:students,id',
 
 
             'date'=>['nullable', new JalaliDateValidation()],

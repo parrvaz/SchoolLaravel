@@ -31,7 +31,7 @@ class GradeController extends Controller
         return $this->successMessage();
     }
 
-    public function dashboard(Request $request,FilterValidation $validation){
+    public function dashboard(Request $request){
         $userGrade=$request->userGrade;
 
         return  new UserResource( auth()->user());

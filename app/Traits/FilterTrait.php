@@ -2,25 +2,50 @@
 
 namespace App\Traits;
 
+use phpseclib3\Math\BigInteger\Engines\GMP\DefaultEngine;
+
 trait FilterTrait
 {
+
+    public static function filterByDate($query, $start,$end="2080/01/01")
+    {
+        if ($start)
+            return $query->whereBetween('date', [self::jToG($start), self::jToG($end)]);
+        return $query;
+    }
+
+
+    public static function globalFilter($query,$fieldName,$fieldValue){
+        if ( !is_null($fieldValue)  )
+            $query = $query->where($fieldName,$fieldValue);
+        return $query;
+    }
+
+    public function globalFilterWhereIn($query,$fieldName,$fieldValue){
+        if ($fieldValue != null)
+            $query = $query->whereIn($fieldName,$fieldValue);
+        return $query;
+    }
+
+
+
+
+
+
+
+
+
+    //use less
+
     private function filterByActivity($query,$dbName,$active){
         if ($active['active'] ?? null)
             $query = $query->where("$dbName.is_active",1);
         return $query;
     }
 
-    public function globalFilter($query,$fieldValue,$fieldName){
-        if ( !is_null($fieldValue)  )
-            $query = $query->where($fieldName,$fieldValue);
-        return $query;
-    }
 
-    public function globalFilterWhereIn($query,$fieldValue,$fieldName){
-        if ($fieldValue != null)
-            $query = $query->whereIn($fieldName,$fieldValue);
-        return $query;
-    }
+
+
 
     public function globalFilterRelation($query, $fieldName,$fieldValue, $relation = 'students')
     {
@@ -54,12 +79,6 @@ trait FilterTrait
         return $query;
     }
 
-    public static function filterByDate($query, $start,$end="2080/01/01")
-    {
-        if ($start)
-            return $query = $query->whereBetween('date', [$start, $end]);
-        return $query;
-    }
 
     public function filterDateRelation($query, $start, $end, $relation = 'accounting_document')
     {

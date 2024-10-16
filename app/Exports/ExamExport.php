@@ -70,13 +70,6 @@ class ExamExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
                 ));
 
                 $cellRange = 'A1:C1';
-//                $cellRangeAll = 'A1:C'. $this->items->count();
-
-//
-//                // تنظیم وسط‌چین کردن افقی و عمودی
-//                $event->sheet->getStyle($cellRange)->getAlignment()->setHorizontal('center');
-//                $event->sheet->getStyle($cellRange)->getAlignment()->setVertical('center');
-//
 
                 $event->sheet->styleCells(
                     $cellRange,

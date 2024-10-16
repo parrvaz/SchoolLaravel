@@ -25,6 +25,14 @@ trait ServiceTrait
         }
     }
 
+    public static function gToJDash($date){
+        try {
+            return Jalalian::forge($date)->format("Y-m-d");
+        }catch (\Exception $e){
+            return str_replace('-', '/', $date);
+        }
+    }
+
     public static function jToG($date)
     {
 

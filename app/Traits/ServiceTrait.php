@@ -2,8 +2,11 @@
 
 namespace App\Traits;
 
+use App\AccountingItem;
 use App\Models\ModelHasRole;
 use App\Models\UserGrade;
+use App\Repositories\AccountingItemRepository;
+use App\Services\AccountService;
 use Illuminate\Support\Facades\Lang;
 use Morilog\Jalali\CalendarUtils;
 use Morilog\Jalali\Jalalian;
@@ -33,11 +36,5 @@ trait ServiceTrait
 
     }
 
-    public function getAllPermissionsName($user_id,$business_id){
-        $roleRow= ModelHasRole::where('business_id',$business_id)->where('model_id',$user_id)->first();
-//        return $roleRow!= null ? $roleRow->role->permissions->pluck('name')->toArray()
-//            : ModelHasPermission::where('business_id',$business_id)->where('model_id',$user_id)->get()->map(function ($item){
-//                return $item->permission->name;
-//            })->toArray();
-    }
+
 }

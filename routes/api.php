@@ -123,6 +123,7 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:general')->get('/show', [ExamController::class, 'show']);
             Route::middleware('role:general')->get('/scores', [ExamController::class, 'scores']);
             Route::middleware('role:general')->get('/show/{exam}', [ExamController::class, 'showSingle']);
+            Route::middleware('role:general')->get('/excel/{exam}', [ExamController::class, 'excel']);
             Route::middleware('role:teacher')->post('/update/{exam}', [ExamController::class, 'update']);
             Route::middleware('role:teacher')->post('/delete/{exam}', [ExamController::class, 'delete']);
         });
@@ -186,6 +187,7 @@ Route::middleware('auth:api')->group(function () {
 
         //Report Api
         Route::prefix("reports")->group(function () {
+            Route::middleware('role:general')->get('/card', [ReportController::class, 'card']);
             Route::middleware('role:general')->get('/progress', [ReportController::class, 'progress']);
         });
 

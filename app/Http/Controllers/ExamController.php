@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExamExport;
 use App\Http\Requests\Exam\ExamStoreValidation;
 use App\Http\Resources\Exam\ExamCollection;
 use App\Http\Resources\Exam\ExamResource;
 use App\Http\Resources\Exam\ScoreCollection;
+use App\Http\Resources\Exam\StudentScoreCollection;
 use App\Models\Exam;
 use App\Models\StudentExam;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExamController extends Controller
 {
@@ -74,6 +77,12 @@ class ExamController extends Controller
        return new ExamResource($exam);
    }
 
+   public function excel(Request $request,$userGrade,Exam $exam){
+
+       $students = $this->calculateRank($exam);
+       return Excel::download(new ExamExport($students), 'exam.xlsx');
+   }
+
    public function scores(Request $request){
        $user =  auth()->user();
        $student = $user->student;
@@ -127,5 +136,31 @@ class ExamController extends Controller
     private function deleteExamStudents(Exam $exam)
     {
         $exam->students()->delete();
+    }
+
+    private function calculateRank($exam){
+        $students = $exam->students()->orderBy("score","Desc")->get();
+        $expected = $exam->expected;
+        $total = $exam->totalScore;
+
+        foreach ($students as $std){
+            $score = $std->score;
+
+                if  ($score == $total)
+                    $std->rank = "😎";
+                elseif ( $score >$total-(($total-$expected)/2))
+                    $std->rank = "👌🏻";
+                elseif ( $score >$expected)
+                    $std->rank = "👍🏻";
+                elseif ( $score >$expected/2)
+                    $std->rank = "🤐";
+                elseif ( $score >$expected/4)
+                    $std->rank = "🤬";
+                else
+                    $std->rank = "😒";
+
+        }
+
+        return $students;
     }
 }

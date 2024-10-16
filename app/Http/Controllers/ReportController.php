@@ -7,6 +7,7 @@ use App\Http\Resources\Grade\ExamCreateResource;
 use App\Http\Resources\Reports\AllCountResource;
 use App\Http\Resources\Reports\ExamCountCollection;
 use App\Http\Resources\Reports\ListItemsResource;
+use App\Models\Absent;
 use App\Models\ClassScore;
 use App\Models\Exam;
 use App\Traits\ServiceTrait;
@@ -16,11 +17,31 @@ use Illuminate\Support\Facades\DB;
 class ReportController extends Controller
 {
 
-    public function listItems(Request $request){
-        return new ListItemsResource($request["userGrade"]);
+    public function absents(Request $request,FilterValidation $validation){
+        $absents = Absent::query();
+
+
     }
 
+    public function card(Request $request){
+        $userGrade = $request->userGrade;
 
+        $exams =  Exam::query()->where("exams.user_grade_id",$userGrade->id)
+            ->join("student_exam","exams.id","student_exam.exam_id")
+            ->rightJoin("courses","courses.id","exams.course_id")
+            ->where("courses.grade_id",$userGrade->grade_id);
+
+        $exams = $exams->groupBy("course_id");
+        $exams = $exams->select(
+            DB::raw("course_id"),
+            DB::raw("ROUND(AVG(student_exam.score),1) as score"),
+//            DB::raw("ROUND(AVG(student_exam.score),1) as averageScore"),
+//            DB::raw("ROUND(AVG(exams.totalScore),1) as totalScore"),
+//            DB::raw("ROUND(AVG(exams.expected),1) as expected"),
+        );
+        $exams = $exams->get();
+        return $exams;
+    }
     public function progress(Request $request,FilterValidation $validation){
         $userGrade = $request->userGrade;
         $exams= Exam::query()->where("user_grade_id",$userGrade->id)

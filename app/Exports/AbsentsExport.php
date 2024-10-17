@@ -29,6 +29,7 @@ class AbsentsExport implements FromCollection,WithMapping,WithHeadings, ShouldAu
     {
         return [
             'نام',
+            'نام خانوادگی',
             'کلاس',
             'تعداد زنگ غیبت',
             'تعداد کل زنگ ها',
@@ -40,7 +41,8 @@ class AbsentsExport implements FromCollection,WithMapping,WithHeadings, ShouldAu
     public function map($row): array
     {
         return [
-            $row->name,
+            $row->firstName,
+            $row->lastName,
             $row->classroomTitle,
             $row->number,
             $row->total,
@@ -76,7 +78,7 @@ class AbsentsExport implements FromCollection,WithMapping,WithHeadings, ShouldAu
                     'color' => array('rgb' => '#ff0000')
                 ));
 
-                $cellRange = 'A1:F1';
+                $cellRange = 'A1:G1';
 
                 $event->sheet->styleCells(
                     $cellRange,

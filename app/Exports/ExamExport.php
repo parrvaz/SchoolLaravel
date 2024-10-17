@@ -28,6 +28,8 @@ class ExamExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
     {
         return [
             'نام',
+            'نام خانوادگی',
+            'کلاس',
             'نمره',
             'بازخورد',
         ];
@@ -36,7 +38,9 @@ class ExamExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
     public function map($row): array
     {
         return [
-            $row->student->name,
+            $row->student->firstName,
+            $row->student->lastName,
+            $row->student->classroom->title,
             $row->score,
             $row->rank ?? null,
         ];
@@ -69,7 +73,7 @@ class ExamExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
                     'color' => array('rgb' => '#ff0000')
                 ));
 
-                $cellRange = 'A1:C1';
+                $cellRange = 'A1:E1';
 
                 $event->sheet->styleCells(
                     $cellRange,

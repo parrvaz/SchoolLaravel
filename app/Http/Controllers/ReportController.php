@@ -3,14 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AbsentsExport;
-use App\Exports\ExamExport;
 use App\Http\Requests\Report\FilterValidation;
-use App\Http\Resources\Grade\ExamCreateResource;
 use App\Http\Resources\Reports\AllCountResource;
-use App\Http\Resources\Reports\ExamCountCollection;
-use App\Http\Resources\Reports\ListItemsResource;
 use App\Models\Absent;
-use App\Models\ClassScore;
 use App\Models\Exam;
 use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
@@ -51,7 +46,6 @@ class ReportController extends Controller
 
         //absents map
         foreach ($absents as $absent){
-            $absent->name = $absent->firstName ." ".$absent->lastName;
             $absent->total = $classrooms[$absent->classroom_id];
             $absent->percent=  ($absent->number / $absent->total) * 100 ?? 0;
             $absent->classroomTitle =  $absent->classroom->title;

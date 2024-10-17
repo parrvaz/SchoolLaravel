@@ -46,7 +46,7 @@ class ReportController extends Controller
             ->groupBy("student_id","absents.classroom_id","students.firstName","students.lastName")
             ->select("student_id","absents.classroom_id","students.firstName","students.lastName",
                 DB::raw('count(*) as number'))
-            ->orderBy("student_id")
+            ->orderBy(DB::raw('count(*)'),"DESC")
             ->get();
 
         //absents map
@@ -55,6 +55,18 @@ class ReportController extends Controller
             $absent->total = $classrooms[$absent->classroom_id];
             $absent->percent=  ($absent->number / $absent->total) * 100 ?? 0;
             $absent->classroomTitle =  $absent->classroom->title;
+
+            if  ($absent->percent < 5)
+                $absent->rank = "😓";
+            elseif ( $absent->percent < 10)
+                $absent->rank = "😢";
+            elseif ($absent->percent < 25)
+                $absent->rank = "😳";
+            elseif ( $absent->percent < 40)
+                $absent->rank = "🤯";
+            else
+                $absent->rank = "😡";
+
         }
 
         $name = "لیست غیبت ها" ;

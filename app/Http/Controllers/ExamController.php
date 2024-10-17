@@ -154,11 +154,11 @@ class ExamController extends Controller
                 elseif ( $score >$expected)
                     $std->rank = "👍🏻";
                 elseif ( $score >$expected/2)
-                    $std->rank = "🤐";
+                    $std->rank = "😐";
                 elseif ( $score >$expected/4)
-                    $std->rank = "🤬";
+                    $std->rank = "🫢";
                 else
-                    $std->rank = "😒";
+                    $std->rank = "🤬";
 
         }
 

@@ -19,7 +19,7 @@ class UserGrade extends Model
     }
 
     public function teachers(){
-        return $this->hasMany(Teacher::class);
+        return $this->hasManyThrough(Teacher::class, User::class,'id','user_id','user_id','id');
     }
 
     public function exams(){

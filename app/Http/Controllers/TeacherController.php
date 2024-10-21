@@ -32,7 +32,7 @@ class TeacherController extends Controller
             'nationalId'=>$validation->nationalId,
             'degree'=>$validation->degree,
             'personalId'=>$validation->personalId,
-            'user_grade_id'=>$request->userGrade->id,
+            'user_id'=>$request->userGrade->user_id,
             'phone'=>$validation->phone,
             'isAssistant'=>$validation->isAssistant,
         ]);

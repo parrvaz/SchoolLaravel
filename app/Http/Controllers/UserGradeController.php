@@ -65,7 +65,7 @@ class UserGradeController extends Controller
             case config("constant.roles.assistant"):
             case config("constant.roles.teacher"):
                 $teacher = $user->teacher;
-                $grades = UserGrade::where('id',$teacher->user_grade_id)->get();
+                $grades = UserGrade::where('user_id',$teacher->user_id)->get();
                 break;
             case config("constant.roles.manager"):
                 $grades = UserGrade::where('user_id',auth()->user()->id)->get();

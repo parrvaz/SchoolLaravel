@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("phone")->nullable();
             $table->string('degree')->nullable();
             $table->string('personalId')->nullable();
-            $table->foreignId('user_grade_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->boolean('isAssistant')->default(false);
             $table->timestamps();
         });

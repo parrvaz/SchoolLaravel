@@ -7,6 +7,7 @@ use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Reports\AllCountResource;
 use App\Models\Absent;
 use App\Models\Exam;
+use App\Models\StudentExam;
 use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -76,9 +77,30 @@ class ReportController extends Controller
 
         $exams =  Exam::query()->where("exams.user_grade_id",$userGrade->id)
             ->join("student_exam","exams.id","student_exam.exam_id")
-            ->rightJoin("courses","courses.id","exams.course_id")
-            ->where("courses.grade_id",$userGrade->grade_id);
+            ->join("course_fields","course_fields.course_id","exams.course_id")
+            ->where("course_fields.field_id","student_exam.classroom")
+//            ->whereHas('student.classroom', function($query) use($request) {
+//                return $query->where('field_id', "course_fields.field_id");
+//            })
+//            ->rightJoin("courses","courses.id","exams.course_id")
+//            ->where("courses.grade_id",$userGrade->grade_id)
+        ;
 
+
+        $studentExam = StudentExam::query()
+            ->join("exams","exams.id","student_exam.exam_id")
+            ->join("course_fields","course_fields.course_id","exams.course_id")
+            ->join("classrooms","classrooms.id","exams.classroom_id")
+            ->where("classrooms.field_id","course_fields.field_id")
+//            ->whereHas('exam.classroom', function($query) use($request) {
+//                return $query;
+////                    ->where('id', "exam.classroom_id");
+//            })
+//            ->join("students","students.id","student_exam.student_id")
+        ;
+
+
+        return $studentExam->get();
         $exams = $exams->groupBy("course_id");
         $exams = $exams->select(
             DB::raw("course_id"),

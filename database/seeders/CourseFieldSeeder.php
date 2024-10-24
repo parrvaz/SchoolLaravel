@@ -57,7 +57,7 @@ class CourseFieldSeeder extends Seeder
             ['course_id' => 26, 'field_id' => 3,"factor"=>3],
             ['course_id' => 27, 'field_id' => 1,"factor"=>4],
             ['course_id' => 28, 'field_id' => null,"factor"=>3],
-            ['course_id' => 29, 'field_id' => 2,"factor"=>2],
+            ['course_id' => 29, 'field_id' => null,"factor"=>2],
             ['course_id' => 30, 'field_id' => null,"factor"=>2],
             ['course_id' => 31, 'field_id' => null,"factor"=>2],
             ['course_id' => 32, 'field_id' => 1,"factor"=>3],

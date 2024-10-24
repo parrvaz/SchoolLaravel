@@ -36,8 +36,18 @@ class ExamController extends Controller
 
 
 
-           if ($validation["students"])
-           $exam->students()->createMany($validation->students);
+           if ($validation["students"]){
+
+               $students =[];
+               foreach ($validation->students as $std){
+                   $students[]=[
+                       "student_id"=>$std['student_id'],
+                       "score"=>$std['score'],
+                       'scaledScore' => ($std['score'] * 100) / $validation->totalScore,
+                   ];
+               }
+               $exam->students()->createMany($students);
+           }
 
 
            return $this->successMessage();
@@ -113,7 +123,18 @@ class ExamController extends Controller
            $exam->contents()->attach($validation->contents);
 
            //create student items
-           $exam->students()->createMany($validation->students);
+           if ($validation["students"]){
+
+               $students =[];
+               foreach ($validation->students as $std){
+                   $students[]=[
+                       "student_id"=>$std['student_id'],
+                       "score"=>$std['score'],
+                       'scaledScore' => ($std['score'] * 100) / $validation->totalScore,
+                   ];
+               }
+               $exam->students()->createMany($students);
+           }
 
            return $this->successMessage();
        });

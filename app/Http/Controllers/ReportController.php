@@ -75,23 +75,24 @@ class ReportController extends Controller
     public function card(Request $request){
         $userGrade = $request->userGrade;
 
-        $exams =  Exam::query()->where("exams.user_grade_id",$userGrade->id)
-            ->join("student_exam","exams.id","student_exam.exam_id")
-            ->join("course_fields","course_fields.course_id","exams.course_id")
-            ->where("course_fields.field_id","student_exam.classroom")
-//            ->whereHas('student.classroom', function($query) use($request) {
-//                return $query->where('field_id', "course_fields.field_id");
-//            })
-//            ->rightJoin("courses","courses.id","exams.course_id")
-//            ->where("courses.grade_id",$userGrade->grade_id)
-        ;
+//        $exams =  Exam::query()->where("exams.user_grade_id",$userGrade->id)
+//            ->join("student_exam","exams.id","student_exam.exam_id")
+//            ->join("course_fields","course_fields.course_id","exams.course_id")
+//            ->where("course_fields.field_id","student_exam.classroom")
+////            ->whereHas('student.classroom', function($query) use($request) {
+////                return $query->where('field_id', "course_fields.field_id");
+////            })
+////            ->rightJoin("courses","courses.id","exams.course_id")
+////            ->where("courses.grade_id",$userGrade->grade_id)
+//        ;
 
 
         $studentExam = StudentExam::query()
             ->join("exams","exams.id","student_exam.exam_id")
             ->join("course_fields","course_fields.course_id","exams.course_id")
             ->join("classrooms","classrooms.id","exams.classroom_id")
-            ->where("classrooms.field_id","course_fields.field_id")
+//            ->where("classrooms.field_id","course_fields.field_id")
+//            ->where("student_exam.student_id",1)
 //            ->whereHas('exam.classroom', function($query) use($request) {
 //                return $query;
 ////                    ->where('id', "exam.classroom_id");
@@ -100,17 +101,16 @@ class ReportController extends Controller
         ;
 
 
-        return $studentExam->get();
-        $exams = $exams->groupBy("course_id");
-        $exams = $exams->select(
-            DB::raw("course_id"),
+        $studentExam = $studentExam->groupBy("exams.course_id","factor");
+        $studentExam = $studentExam->select(
+            DB::raw("exams.course_id"),
             DB::raw("ROUND(AVG(student_exam.score),1) as score"),
 //            DB::raw("ROUND(AVG(student_exam.score),1) as averageScore"),
 //            DB::raw("ROUND(AVG(exams.totalScore),1) as totalScore"),
 //            DB::raw("ROUND(AVG(exams.expected),1) as expected"),
         );
-        $exams = $exams->get();
-        return $exams;
+        $studentExam = $studentExam->get();
+        return $studentExam;
     }
     public function progress(Request $request){
         $userGrade = $request->userGrade;

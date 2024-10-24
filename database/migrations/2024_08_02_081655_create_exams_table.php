@@ -36,7 +36,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId("student_id")->constrained()->cascadeOnDelete();
             $table->foreignId("exam_id")->constrained()->cascadeOnDelete();
-            $table->integer("score")->default(0);
+            $table->float("score")->default(0);
+            $table->float("scaledScore")->default(0);
             $table->timestamps();
         });
     }

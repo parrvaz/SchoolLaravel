@@ -39,7 +39,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/studyPlanStore', [StudyController::class, 'studyPlanStore']);
 
 
-    Route::post('/test', [GradeController::class, 'testt']);
+    Route::post('/operation', [GradeController::class, 'operation']);
 
 
 

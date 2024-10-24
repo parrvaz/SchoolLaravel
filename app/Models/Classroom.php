@@ -26,6 +26,10 @@ class Classroom extends Model
         return $this->hasMany(Schedule::class);
     }
 
+    public function exams(){
+        return $this->hasMany(Exam::class);
+    }
+
     public function Absents(){
         return $this->hasMany(Absent::class);
     }

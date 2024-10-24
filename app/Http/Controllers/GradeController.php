@@ -12,6 +12,7 @@ use App\Http\Resources\Exam\ExamCollection;
 use App\Http\Resources\Student\StudentCollection;
 use App\Models\Grade;
 use App\Models\Student;
+use App\Models\StudentExam;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,13 +20,13 @@ use Illuminate\Support\Facades\DB;
 class GradeController extends Controller
 {
 
-    public function testt(Request $request){
-        // ذخیره تصویر در صورت آپلود
-        $photoPath = null;
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
+    public function operation(Request $request){
 
-            $photoPath = $file->storeAs('/',"sample.xlsx", 'public');
+        $studentExam = StudentExam::all();
+        foreach ($studentExam as $std){
+            $std->update([
+                "scaledScore"=> round((($std->score*100 )/ $std->exam->totalScore),2)
+            ]);
         }
 
         return $this->successMessage();

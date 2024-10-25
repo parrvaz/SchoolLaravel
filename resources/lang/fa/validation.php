@@ -396,6 +396,7 @@ return array(
         'payableDoc.*.id'=>'نام در اسناد پرداختنی',
         'payableDoc.*.number'=>'شماره در اسناد پرداختنی',
         'payableDoc.*.date'=>'تاریخ در اسناد پرداختنی',
+        "exams.*" => "آزمون",
 
 
         'assets.*.debtor'=> 'بدهکار در سایر دارایی ها',

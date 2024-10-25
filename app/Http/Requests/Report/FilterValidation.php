@@ -23,6 +23,10 @@ class FilterValidation extends FormRequest
             'classrooms.*'=>'nullable|exists:classrooms,id',
             'students'=>'nullable|array',
             'students.*'=>'nullable|exists:students,id',
+            'types'=>'nullable|array',
+            'types.*'=>'nullable|in:1,2,3',
+            'exams'=>'nullable|array',
+            'exams.*'=>'nullable|exists:exams,id',
 
 
             'date'=>['nullable', new JalaliDateValidation()],

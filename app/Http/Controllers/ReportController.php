@@ -72,42 +72,34 @@ class ReportController extends Controller
 
     }
 
-    public function card(Request $request){
+    public function card(Request $request,FilterValidation $validation){
         $userGrade = $request->userGrade;
-
-//        $exams =  Exam::query()->where("exams.user_grade_id",$userGrade->id)
-//            ->join("student_exam","exams.id","student_exam.exam_id")
-//            ->join("course_fields","course_fields.course_id","exams.course_id")
-//            ->where("course_fields.field_id","student_exam.classroom")
-////            ->whereHas('student.classroom', function($query) use($request) {
-////                return $query->where('field_id', "course_fields.field_id");
-////            })
-////            ->rightJoin("courses","courses.id","exams.course_id")
-////            ->where("courses.grade_id",$userGrade->grade_id)
-//        ;
-
 
         $studentExam = StudentExam::query()
             ->join("exams","exams.id","student_exam.exam_id")
-            ->join("course_fields","course_fields.course_id","exams.course_id")
             ->join("classrooms","classrooms.id","exams.classroom_id")
-//            ->where("classrooms.field_id","course_fields.field_id")
-//            ->where("student_exam.student_id",1)
-//            ->whereHas('exam.classroom', function($query) use($request) {
-//                return $query;
-////                    ->where('id', "exam.classroom_id");
-//            })
-//            ->join("students","students.id","student_exam.student_id")
+            ->join('course_fields', function ($join) {
+                $join->on('course_fields.course_id', '=', 'exams.course_id')
+                    ->on('course_fields.field_id', '=', "classrooms.field_id");
+            })
         ;
 
+        $studentExam = $this->globalFilterWhereIn($studentExam,"exams.type",$validation->types);
+        $studentExam = $this->globalFilterWhereIn($studentExam,"exams.classroom_id",$validation->classrooms);
+        $studentExam = $this->globalFilterWhereIn($studentExam,"exams.course_id",$validation->courses);
+        $studentExam = $this->globalFilterWhereIn($studentExam,"exams.id",$validation->exams);
+        $studentExam = $this->globalFilterWhereIn($studentExam,"student_exam.student_id",$validation->students);
+        $studentExam = $this->filterByDate($studentExam,$validation->startDate,$validation->endDate);
 
-        $studentExam = $studentExam->groupBy("exams.course_id","factor");
+        $studentExam = $studentExam->groupBy(
+            "exams.course_id",
+            "course_fields.factor",
+        );
+
         $studentExam = $studentExam->select(
-            DB::raw("exams.course_id"),
-            DB::raw("ROUND(AVG(student_exam.score),1) as score"),
-//            DB::raw("ROUND(AVG(student_exam.score),1) as averageScore"),
-//            DB::raw("ROUND(AVG(exams.totalScore),1) as totalScore"),
-//            DB::raw("ROUND(AVG(exams.expected),1) as expected"),
+            "exams.course_id",
+            "course_fields.factor",
+            DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
         );
         $studentExam = $studentExam->get();
         return $studentExam;

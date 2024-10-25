@@ -67,7 +67,7 @@ class AbsentController extends Controller
         $allAbsents = Absent::whereIn("classroom_id",$request->userGrade->classrooms->pluck("id"))->where("date", $date)->get();
         $allAbsents = $allAbsents->groupBy('classroom_id');
 
-        $allBells = Bell::orderBy('order')->get();
+        $allBells = Bell::where("user_id",$request->userGrade->user_id)->orderBy('order')->get();
 
         $data = [];
 

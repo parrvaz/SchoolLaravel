@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Exports\AbsentsExport;
 use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Reports\AllCountResource;
+use App\Http\Resources\Reports\Card\CardCourseCollection;
+use App\Http\Resources\Reports\Card\CardResource;
 use App\Models\Absent;
 use App\Models\Exam;
 use App\Models\StudentExam;
@@ -100,9 +102,18 @@ class ReportController extends Controller
             "exams.course_id",
             "course_fields.factor",
             DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
+            DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) * factor as wightedScore"),
         );
         $studentExam = $studentExam->get();
-        return $studentExam;
+
+        $factors = $studentExam->sum("factor");
+        $wightedScores = $studentExam->sum("wightedScore");
+        $average = round( $wightedScores / $factors,2);
+        $result = [];
+        $result['average'] = $average;
+        $result['studentExam'] = $studentExam;
+
+        return new CardResource($result);
     }
     public function progress(Request $request){
         $userGrade = $request->userGrade;

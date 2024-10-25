@@ -171,7 +171,7 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:assistant')->post('/assign', [PlanController::class, 'assign']);
             Route::middleware('role:assistant')->get('/show', [PlanController::class, 'show']);
             Route::middleware('role:student')->get('/show/{plan}', [PlanController::class, 'showSingle']);
-            Route::middleware('role:assistant')->post('/update/{plan}', [PlanController::class, 'update']);
+            Route::middleware('role:assistant')->post('/update/{planModel}', [PlanController::class, 'update']);
             Route::middleware('role:assistant')->post('/delete/{plan}', [PlanController::class, 'delete']);
         });
 

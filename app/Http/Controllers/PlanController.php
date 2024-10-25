@@ -30,16 +30,16 @@ class PlanController extends Controller
         });
     }
 
-    public function update(PlanValidation $validation,$userGrade, Plan $plan){
-        return DB::transaction(function () use($plan,$validation) {
+    public function update(PlanValidation $validation,$userGrade, Plan $planModel){
+        return DB::transaction(function () use($planModel,$validation) {
 
-            $plan->update([
+            $planModel->update([
                 'title' => $validation->title,
             ]);
 
-            $plan->coursePlans()->delete();
+            $planModel->coursePlans()->delete();
 
-            $items = $this->makeItems($validation, $plan->id);
+            $items = $this->makeItems($validation, $planModel->id);
             $coursePlans = CoursePlan::insert($items);
             return $this->successMessage();
         });

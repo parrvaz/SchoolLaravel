@@ -15,8 +15,9 @@ class PlanValidation extends FormRequest
     }
     public function rules(): array
     {
+        $str = $this->planModel==null ? "" : ",".$this->planModel->id;
         return [
-            'title'=>'required|string|min:1|max:100',
+            'title'=>'required|string|min:1|max:100|unique:plans,title'.$str,
             'classroom_id'=>'required|exists:classrooms,id',
             'plan'=>'required|array|min:1',
             "plan.*.course_id"=>'required|exists:courses,id',

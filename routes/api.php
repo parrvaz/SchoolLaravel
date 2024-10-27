@@ -188,6 +188,7 @@ Route::middleware('auth:api')->group(function () {
         //Report Api
         Route::prefix("reports")->group(function () {
             Route::middleware('role:general')->get('/card', [ReportController::class, 'card']);
+            Route::middleware('role:general')->get('/card/excel', [ReportController::class, 'cardExcel']);
             Route::middleware('role:general')->get('/progress', [ReportController::class, 'progress']);
             Route::middleware('role:assistant')->get('/absents', [ReportController::class, 'absents']);
         });

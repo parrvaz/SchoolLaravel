@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AbsentsExport;
+use App\Exports\CardExport;
 use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Reports\AllCountResource;
 use App\Http\Resources\Reports\Card\CardCourseCollection;
@@ -75,8 +76,51 @@ class ReportController extends Controller
     }
 
     public function card(Request $request,FilterValidation $validation){
-        $userGrade = $request->userGrade;
 
+        $result = $this->cardMtd($request,$validation);
+        return new CardResource($result);
+    }
+
+    public function cardExcel(Request $request,FilterValidation $validation){
+        $result = $this->cardMtd($request,$validation);
+        return Excel::download(new CardExport($result['studentExam']), "کارنامه".".xlsx");
+
+
+
+    }
+    public function progress(Request $request){
+        $userGrade = $request->userGrade;
+        $exams= Exam::query()->where("user_grade_id",$userGrade->id)
+            ->join("student_exam","exams.id","student_exam.exam_id");
+
+        $exams =  $exams->orderBy("date")
+            ->groupBy("exams.date")
+            ->select(
+                "exams.date",
+                DB::raw("MIN(exams.id) as id"),
+                DB::raw("ROUND(AVG(student_exam.score),1) as score"),
+                DB::raw("ROUND(AVG(student_exam.score),1) as averageScore"),
+                DB::raw("ROUND(AVG(exams.totalScore),1) as totalScore"),
+                DB::raw("ROUND(AVG(exams.expected),1) as expected"),
+                );
+
+        $exams= $exams->get();
+
+
+        $result = collect([
+            'userGrade'=>$userGrade,
+            'exam' => $exams,
+            "tickValues"=> $exams->pluck("id"),
+            "tickFormat"=> $exams->pluck("date")->map(function ($item){
+                return ServiceTrait::gToJ( $item);
+              })->toArray(),
+        ]);
+
+        return new AllCountResource($result);
+    }
+
+
+    private function cardMtd($request,$validation){
         $studentExam = StudentExam::query()
             ->join("exams","exams.id","student_exam.exam_id")
             ->join("classrooms","classrooms.id","exams.classroom_id")
@@ -113,36 +157,6 @@ class ReportController extends Controller
         $result['average'] = $average;
         $result['studentExam'] = $studentExam;
 
-        return new CardResource($result);
-    }
-    public function progress(Request $request){
-        $userGrade = $request->userGrade;
-        $exams= Exam::query()->where("user_grade_id",$userGrade->id)
-            ->join("student_exam","exams.id","student_exam.exam_id");
-
-        $exams =  $exams->orderBy("date")
-            ->groupBy("exams.date")
-            ->select(
-                "exams.date",
-                DB::raw("MIN(exams.id) as id"),
-                DB::raw("ROUND(AVG(student_exam.score),1) as score"),
-                DB::raw("ROUND(AVG(student_exam.score),1) as averageScore"),
-                DB::raw("ROUND(AVG(exams.totalScore),1) as totalScore"),
-                DB::raw("ROUND(AVG(exams.expected),1) as expected"),
-                );
-
-        $exams= $exams->get();
-
-
-        $result = collect([
-            'userGrade'=>$userGrade,
-            'exam' => $exams,
-            "tickValues"=> $exams->pluck("id"),
-            "tickFormat"=> $exams->pluck("date")->map(function ($item){
-                return ServiceTrait::gToJ( $item);
-              })->toArray(),
-        ]);
-
-        return new AllCountResource($result);
+        return $result;
     }
 }

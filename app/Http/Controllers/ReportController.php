@@ -128,6 +128,7 @@ class ReportController extends Controller
                 $join->on('course_fields.course_id', '=', 'exams.course_id')
                     ->on('course_fields.field_id', '=', "classrooms.field_id");
             })
+            ->where("exams.status",1)
         ;
 
         $studentExam = $this->globalFilterWhereIn($studentExam,"exams.type",$validation->types);

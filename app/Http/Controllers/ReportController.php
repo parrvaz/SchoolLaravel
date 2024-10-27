@@ -141,10 +141,20 @@ class ReportController extends Controller
         $studentExam = StudentExam::query()
             ->join("exams","exams.id","student_exam.exam_id")
             ->join("classrooms","classrooms.id","exams.classroom_id")
-            ->join('course_fields', function ($join) {
+//            ->join('course_fields', function ($join) {
+//                $join->on('course_fields.course_id', '=', 'exams.course_id')
+//                    ->on('course_fields.field_id', '=', "classrooms.field_id")
+//                    ;
+//            })
+
+            ->leftJoin('course_fields', function ($join) {
                 $join->on('course_fields.course_id', '=', 'exams.course_id')
-                    ->on('course_fields.field_id', '=', "classrooms.field_id");
+                    ->where(function ($query) {
+                        $query->whereColumn('course_fields.field_id', 'classrooms.field_id')
+                            ->orWhereNull('course_fields.field_id');
+                    });
             })
+
             ->where("exams.status",1)
         ;
 
@@ -154,6 +164,7 @@ class ReportController extends Controller
         $studentExam = $this->globalFilterWhereIn($studentExam,"exams.id",$validation->exams);
         $studentExam = $this->globalFilterWhereIn($studentExam,"student_exam.student_id",$validation->students);
         $studentExam = $this->filterByDate($studentExam,$validation->startDate,$validation->endDate);
+
 
         $studentExam = $studentExam->groupBy(
             "exams.course_id",

@@ -32,7 +32,7 @@ class FilterValidation extends FormRequest
             'date'=>['nullable', new JalaliDateValidation()],
             'startDate'=>['nullable', new JalaliDateValidation()],
             'endDate'=>['nullable', new JalaliDateValidation()],
-
+            'isSeparate'=>["boolean","nullable"],
         ];
     }
 }

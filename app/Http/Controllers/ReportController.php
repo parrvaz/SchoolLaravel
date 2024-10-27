@@ -8,6 +8,7 @@ use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Reports\AbsentsReportCollection;
 use App\Http\Resources\Reports\AllCountResource;
 use App\Http\Resources\Reports\Card\CardResource;
+use App\Http\Resources\Reports\Card\CardSeparateCollection;
 use App\Models\Absent;
 use App\Models\Exam;
 use App\Models\StudentExam;
@@ -20,10 +21,7 @@ class ReportController extends Controller
 {
 
     public function absents(Request $request,FilterValidation $validation){
-
-
         $absents = $this->absentMtd($request,$validation);
-
         return new AbsentsReportCollection($absents);
     }
     public function absentsExcel(Request $request,FilterValidation $validation){
@@ -42,7 +40,11 @@ class ReportController extends Controller
     public function card(Request $request,FilterValidation $validation){
 
         $result = $this->cardMtd($request,$validation);
-        return new CardResource($result);
+        if (!$validation->isSeparate)
+            return new CardResource($result);
+        else
+            return new CardSeparateCollection($result);
+
     }
 
     public function cardExcel(Request $request,FilterValidation $validation){
@@ -52,19 +54,29 @@ class ReportController extends Controller
 
 
     }
-    public function progress(Request $request){
-        $userGrade = $request->userGrade;
-        $exams= Exam::query()->where("user_grade_id",$userGrade->id)
+    public function progress(Request $request,FilterValidation $validation){
+        $exams= Exam::query()->where("user_grade_id", $request->userGrade->id)
             ->join("student_exam","exams.id","student_exam.exam_id");
+
+        $exams = $this->globalFilterWhereIn($exams,"exams.type",$validation->types);
+        $exams = $this->globalFilterWhereIn($exams,"exams.classroom_id",$validation->classrooms);
+        $exams = $this->globalFilterWhereIn($exams,"exams.course_id",$validation->courses);
+        $exams = $this->globalFilterWhereIn($exams,"exams.students",$validation->students);
+        $exams = $this->filterByDate($exams,$validation->startDate,$validation->endDate);
 
         $exams =  $exams->orderBy("date")
             ->groupBy("exams.date")
             ->select(
                 "exams.date",
                 DB::raw("MIN(exams.id) as id"),
+                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
+
+                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
+                DB::raw("ROUND(AVG(exams.expected) / 5,2) as averageScore"),
+                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
+//                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) * factor as wightedScore"),
                 DB::raw("ROUND(AVG(student_exam.score),1) as score"),
                 DB::raw("ROUND(AVG(student_exam.score),1) as averageScore"),
-                DB::raw("ROUND(AVG(exams.totalScore),1) as totalScore"),
                 DB::raw("ROUND(AVG(exams.expected),1) as expected"),
                 );
 
@@ -141,12 +153,6 @@ class ReportController extends Controller
         $studentExam = StudentExam::query()
             ->join("exams","exams.id","student_exam.exam_id")
             ->join("classrooms","classrooms.id","exams.classroom_id")
-//            ->join('course_fields', function ($join) {
-//                $join->on('course_fields.course_id', '=', 'exams.course_id')
-//                    ->on('course_fields.field_id', '=', "classrooms.field_id")
-//                    ;
-//            })
-
             ->leftJoin('course_fields', function ($join) {
                 $join->on('course_fields.course_id', '=', 'exams.course_id')
                     ->where(function ($query) {
@@ -156,7 +162,9 @@ class ReportController extends Controller
             })
 
             ->where("exams.status",1)
+            ->where("exams.user_grade_id",$request->userGrade->id)
         ;
+
 
         $studentExam = $this->globalFilterWhereIn($studentExam,"exams.type",$validation->types);
         $studentExam = $this->globalFilterWhereIn($studentExam,"exams.classroom_id",$validation->classrooms);
@@ -165,26 +173,59 @@ class ReportController extends Controller
         $studentExam = $this->globalFilterWhereIn($studentExam,"student_exam.student_id",$validation->students);
         $studentExam = $this->filterByDate($studentExam,$validation->startDate,$validation->endDate);
 
-
-        $studentExam = $studentExam->groupBy(
-            "exams.course_id",
-            "course_fields.factor",
-        );
-
-        $studentExam = $studentExam->select(
-            "exams.course_id",
-            "course_fields.factor",
-            DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
-            DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) * factor as wightedScore"),
-        );
-        $studentExam = $studentExam->get();
-
-        $factors = $studentExam->sum("factor");
-        $wightedScores = $studentExam->sum("wightedScore");
-        $average = round( $wightedScores / $factors,2);
         $result = [];
-        $result['average'] = $average;
-        $result['studentExam'] = $studentExam;
+
+        if (!$validation->isSeparate){
+            $studentExam = $studentExam->groupBy(
+                "exams.course_id",
+                "course_fields.factor",
+            );
+
+            $studentExam = $studentExam->select(
+                "exams.course_id",
+                "course_fields.factor",
+                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
+                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) * factor as wightedScore"),
+            );
+            $studentExam = $studentExam->get();
+
+            $factors = $studentExam->sum("factor");
+            $wightedScores = $studentExam->sum("wightedScore");
+            $average = round( $wightedScores / $factors,2);
+            $result['average'] = $average;
+            $result['studentExam'] = $studentExam;
+        }else{
+            $studentExam = $studentExam->groupBy(
+                "exams.course_id",
+                "course_fields.factor",
+                "student_exam.student_id"
+            );
+
+            $studentExam = $studentExam->select(
+                "exams.course_id",
+                "course_fields.factor",
+                "student_exam.student_id",
+
+                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
+                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) * factor as wightedScore"),
+            );
+
+            $studentExam = $studentExam->get();
+
+            $students =  $studentExam->groupBy("student_id");
+            foreach ($students as $id=>$studentE){
+                $factors = $studentE->sum("factor");
+                $wightedScores = $studentE->sum("wightedScore");
+                $average = round( $wightedScores / $factors,2);
+                $result[$id]['average'] = $average;
+                $result[$id]['scores'] = $studentE;
+            }
+
+            return $result;
+
+        }
+
+
 
         return $result;
     }

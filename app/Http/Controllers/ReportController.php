@@ -9,8 +9,10 @@ use App\Http\Resources\Reports\AbsentsReportCollection;
 use App\Http\Resources\Reports\AllCountResource;
 use App\Http\Resources\Reports\Card\CardResource;
 use App\Http\Resources\Reports\Card\CardSeparateCollection;
+use App\Http\Resources\Reports\Progress\ProgressCollection;
 use App\Models\Absent;
 use App\Models\Exam;
+use App\Models\Student;
 use App\Models\StudentExam;
 use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
@@ -55,13 +57,23 @@ class ReportController extends Controller
 
     }
     public function progress(Request $request,FilterValidation $validation){
-        $exams= Exam::query()->where("user_grade_id", $request->userGrade->id)
-            ->join("student_exam","exams.id","student_exam.exam_id");
-
+        $exams= Exam::query()
+            ->where("exams.user_grade_id", $request->userGrade->id)
+            ->where("exams.status",1)
+            ->join("student_exam","exams.id","student_exam.exam_id")
+            ->join("classrooms","classrooms.id","exams.classroom_id")
+            ->leftJoin('course_fields', function ($join) {
+                $join->on('course_fields.course_id', '=', 'exams.course_id')
+                    ->where(function ($query) {
+                        $query->whereColumn('course_fields.field_id', 'classrooms.field_id')
+                            ->orWhereNull('course_fields.field_id');
+                    });
+            })
+            ;
         $exams = $this->globalFilterWhereIn($exams,"exams.type",$validation->types);
         $exams = $this->globalFilterWhereIn($exams,"exams.classroom_id",$validation->classrooms);
         $exams = $this->globalFilterWhereIn($exams,"exams.course_id",$validation->courses);
-        $exams = $this->globalFilterWhereIn($exams,"exams.students",$validation->students);
+        $exams = $this->globalFilterWhereIn($exams,"student_exam.student_id",$validation->students);
         $exams = $this->filterByDate($exams,$validation->startDate,$validation->endDate);
 
         $exams =  $exams->orderBy("date")
@@ -69,30 +81,49 @@ class ReportController extends Controller
             ->select(
                 "exams.date",
                 DB::raw("MIN(exams.id) as id"),
-                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
-
-                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
-                DB::raw("ROUND(AVG(exams.expected) / 5,2) as averageScore"),
-                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) as score"),
-//                DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) * factor as wightedScore"),
-                DB::raw("ROUND(AVG(student_exam.score),1) as score"),
-                DB::raw("ROUND(AVG(student_exam.score),1) as averageScore"),
-                DB::raw("ROUND(AVG(exams.expected),1) as expected"),
+                DB::raw("ROUND( SUM((student_exam.scaledScore /5 ) * course_fields.factor) / SUM(course_fields.factor)  ,2) as score"),
+                DB::raw("ROUND(AVG( ROUND((exams.expected/exams.totalScore)*20,2 ) ),2) as expected"),
                 );
 
         $exams= $exams->get();
 
+//        return $exams;
+        $classExam=collect();
+        if($validation->students != null){
+            $classroomsIds = Student::whereIn("id",$validation->students)->pluck("classroom_id");
+            $classExam =  Exam::query()
+                ->where("exams.user_grade_id", $request->userGrade->id)
+                ->where("exams.status",1)
+                ->join("student_exam","exams.id","student_exam.exam_id")
+                ->join("classrooms","classrooms.id","exams.classroom_id")
+                ->leftJoin('course_fields', function ($join) {
+                    $join->on('course_fields.course_id', '=', 'exams.course_id')
+                        ->where(function ($query) {
+                            $query->whereColumn('course_fields.field_id', 'classrooms.field_id')
+                                ->orWhereNull('course_fields.field_id');
+                        });
+                })
+            ;
+            $classExam = $this->globalFilterWhereIn($classExam,"exams.type",$validation->types);
+            $classExam = $this->globalFilterWhereIn($classExam,"exams.classroom_id",$classroomsIds);
+            $classExam = $this->globalFilterWhereIn($classExam,"exams.course_id",$validation->courses);
+            $classExam = $this->filterByDate($classExam,$validation->startDate,$validation->endDate);
 
-        $result = collect([
-            'userGrade'=>$userGrade,
-            'exam' => $exams,
-            "tickValues"=> $exams->pluck("id"),
-            "tickFormat"=> $exams->pluck("date")->map(function ($item){
-                return ServiceTrait::gToJ( $item);
-              })->toArray(),
-        ]);
 
-        return new AllCountResource($result);
+            $classExam =  $classExam->orderBy("date")
+                ->groupBy("exams.date")
+                ->select(
+                    "exams.date",
+                    DB::raw("MIN(exams.id) as id"),
+                    DB::raw("ROUND( SUM((student_exam.scaledScore /5 ) * course_fields.factor) / SUM(course_fields.factor)  ,2) as score"),
+                );
+
+            $classExam= $classExam->get();
+        }
+
+
+
+        return new ProgressCollection($exams,$classExam);
     }
 
 

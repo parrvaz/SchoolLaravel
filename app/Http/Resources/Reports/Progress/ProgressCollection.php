@@ -1,15 +1,22 @@
 <?php
 
-namespace App\Http\Resources\Reports;
+namespace App\Http\Resources\Reports\Progress;
 
-use App\Http\Resources\Course\ContentCollection;
 use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ExamCountCollection extends ResourceCollection
+class ProgressCollection extends ResourceCollection
 {
     use ServiceTrait;
+    protected $classExam;
+
+    public function __construct($resource, $classExam)
+    {
+        parent::__construct($resource);
+        $this->classExam = $classExam;
+    }
+
     /**
      * Transform the resource collection into an array.
      *
@@ -22,9 +29,9 @@ class ExamCountCollection extends ResourceCollection
                 'id'=> $item->id ?? null,
                 'date'=> self::gToJ( $item->date)?? null,
                 'score'=> $item->score?? null,
-                'averageScore'=> $item->averageScore ?? null,
-                'totalScore'=> $item->totalScore?? null,
-                'expected'=> $item->expected?? null,
+                'expected'=> (int) $item->expected?? null,
+                'average'=> $this->classExam->where("date",$item->date)->first()->score ?? null,
+
             ];
         })->toArray();
     }

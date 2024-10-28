@@ -191,7 +191,6 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:general')->get('/card/excel', [ReportController::class, 'cardExcel']);
             Route::middleware('role:assistant')->get('/absents', [ReportController::class, 'absents']);
             Route::middleware('role:assistant')->get('/absents/excel', [ReportController::class, 'absentsExcel']);
-
             Route::middleware('role:general')->get('/progress', [ReportController::class, 'progress']);
 
         });

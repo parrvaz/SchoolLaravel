@@ -2,11 +2,7 @@
 
 namespace App\Http\Resources\Grade;
 
-use App\Http\Resources\Auth\UserResource;
-use App\Http\Resources\Reports\AllCountResource;
-use App\Http\Resources\Reports\ExamCountCollection;
-use App\Http\Resources\Exam\ContentCollection;
-use App\Http\Resources\Exam\StudentScoreCollection;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,8 +20,8 @@ class DashboardResource extends JsonResource
 //            'filterDate'=> new ExamCreateResource($this),
 //            'examCount'=> new AllCountResource($this)
 //
-//            'exam' =>new ExamCountCollection($this["exam"]) ?? null,
-//            'classScore' =>new ExamCountCollection($this["classScore"]?? []) ,
+//            'exam' =>new ProgressCollection($this["exam"]) ?? null,
+//            'classScore' =>new ProgressCollection($this["classScore"]?? []) ,
 //            'user' =>new UserResource(auth()->user()) ,
 //            'tickValues' =>$this["tickValues"] ?? null,
 //            'tickFormat' =>$this["tickFormat"] ?? null,

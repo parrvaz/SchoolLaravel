@@ -2,10 +2,7 @@
 
 namespace App\Http\Resources\Reports\Card;
 
-use App\Http\Resources\Auth\UserResource;
-use App\Http\Resources\Exam\ContentCollection;
-use App\Http\Resources\Exam\StudentScoreCollection;
-use App\Http\Resources\Reports\ExamCountCollection;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

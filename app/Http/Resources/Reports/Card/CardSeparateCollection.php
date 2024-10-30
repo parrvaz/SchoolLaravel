@@ -23,8 +23,7 @@ class CardSeparateCollection extends ResourceCollection
             $std = Student::find($key);
             return[
                 'student_id'=>$std->id,
-                'firstName'=>$std->firstName,
-                'lastName'=>$std->lastName,
+                'name'=>$std->name,
                 'classroom_id'=>$std->classroom_id,
                 'classroom'=>$std->classroom->title,
                 'field_id'=>$std->classroom->field_id,

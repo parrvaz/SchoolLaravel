@@ -19,13 +19,12 @@ class AbsentsReportCollection extends ResourceCollection
     {
         return $this->collection->map(function ($item){
             return[
-                'firstName'=> $item->firstName ?? null,
-                'lastName'=> $item->lastName ?? null,
+                'name'=> $item->firstName ." ".$item->lastName ?? null,
                 'classroom'=> $item->classroomTitle ?? null,
-                'number'=> $item->number ?? null,
-                'total'=> $item->total ?? null,
+                'absents'=> $item->number ?? null,
+                'allBells'=> $item->total ?? null,
                 'percent'=> $item->percent ?? null,
-                'rank'=> $item->rank ?? null,
+                'status'=> $item->rank ?? null,
             ];
         })->toArray();
     }

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Bell\AbsentStoreValidation;
 use App\Http\Requests\Bell\BellStoreValidation;
+use App\Http\Requests\Bell\SetJustifiedValidation;
 use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Bell\BellCollection;
 use App\Models\Absent;
+use App\Models\AbsentStudent;
 use App\Models\Bell;
 use App\Models\Classroom;
 use App\Traits\ServiceTrait;
@@ -61,10 +63,23 @@ class AbsentController extends Controller
         });
     }
 
+    public function setJustified(Request $request,SetJustifiedValidation $validation){
+        $absent_students = AbsentStudent::where("student_id",$validation->student_id)
+            ->whereHas('absent', function ($query)use($validation) {
+                return $query->where('date', self::jToG($validation->date));
+            })
+        ->get();
+        AbsentStudent::whereIn("id",$absent_students->pluck("id"))->update([
+            "isJustified"=> ! $absent_students->first()->isJustified
+        ]);
+        return $this->successMessage();
+    }
+
     public function show(Request $request,FilterValidation $validation){
         $date = self::jToG($validation->date);
 
-        $allAbsents = Absent::whereIn("classroom_id",$request->userGrade->classrooms->pluck("id"))->where("date", $date)->get();
+        $allAbsents = Absent::whereIn("classroom_id",$request->userGrade->classrooms->pluck("id"))
+            ->where("date", $date)->get();
         $allAbsents = $allAbsents->groupBy('classroom_id');
 
         $allBells = Bell::where("user_id",$request->userGrade->user_id)->orderBy('order')->get();
@@ -76,14 +91,14 @@ class AbsentController extends Controller
 
             // دریافت لیست تمام دانش‌آموزان غایب از کلاس
             foreach ($absents as $absent) {
-                foreach ($absent->students as &$student) {
+                foreach ($absent->absentStudents as &$student) {
 
                     // بررسی اینکه آیا دانش‌آموز قبلاً در آرایه وجود دارد
                     if (!isset($studentsData[$student->id])) {
                         $studentsData[$student->id] = [
                             "student_id" => $student->id,
-                            "student" => $student->name,
-                            "fatherPhone" => $student->fatherPhone,
+                            "student" => $student->student->name,
+                            "fatherPhone" => $student->student->fatherPhone,
                             "bells" => []
                         ];
                     }
@@ -93,7 +108,7 @@ class AbsentController extends Controller
 
                     // افزودن وضعیت غیاب برای زنگ خاص
                     $studentsData[$student->id]['bells'][$order] = [
-                        "status" => "absent",
+                        "status" => $student->isJustified ? "justified" :"absent",
                         "reporter" => $absent->user->name
                     ];
                 }

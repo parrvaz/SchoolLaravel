@@ -153,6 +153,8 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:teacher')->get('/teachersMiss', [AbsentController::class, 'teachersMiss']);
             Route::middleware('role:teacher')->post('/update/{absent}', [AbsentController::class, 'update']);
             Route::middleware('role:teacher')->post('/delete/{absent}', [AbsentController::class, 'delete']);
+
+            Route::middleware('role:assistant')->post('/setJustified', [AbsentController::class, 'setJustified']);
         });
 
         //Message

@@ -17,6 +17,7 @@ class FilterValidation extends FormRequest
     public function rules(): array
     {
         return [
+            'isSeparate'=>'nullable|boolean',
             'courses'=>'nullable|array',
             'courses.*'=>'exists:courses,id',
             'classrooms'=>'nullable|array',
@@ -32,7 +33,6 @@ class FilterValidation extends FormRequest
             'date'=>['nullable', new JalaliDateValidation()],
             'startDate'=>['nullable', new JalaliDateValidation()],
             'endDate'=>['nullable', new JalaliDateValidation()],
-            'isSeparate'=>'nullable|boolean',
         ];
     }
 }

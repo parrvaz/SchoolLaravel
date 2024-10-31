@@ -24,6 +24,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("student_id")->constrained()->cascadeOnDelete();
             $table->foreignId("absent_id")->constrained()->cascadeOnDelete();
+            $table->boolean("isJustified")->default(0);
         });
     }
 

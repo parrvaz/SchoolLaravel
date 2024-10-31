@@ -22,8 +22,4 @@ class Bell extends Model
         return $this->hasOneThrough(Course::class, Schedule::class,'bell_id','id','id','course_id');
     }
 
-    public function GetTeacher($classroomId){
-        ClassCourseTeacher::weher("classroom_id",$classroomId)->where("course_id",$this->course->id)->first()->techer;
-
-    }
 }

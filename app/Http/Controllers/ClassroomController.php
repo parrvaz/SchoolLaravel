@@ -35,7 +35,20 @@ class ClassroomController extends Controller
      */
     public function show(Request $request)
     {
-        return new ClassroomCollection($request->userGrade->classrooms()->get());
+        $classrooms = [];
+        switch (auth()->user()->role){
+            case config("constant.roles.assistant"):
+            case config("constant.roles.manager"):
+                $classrooms =$request->userGrade->classrooms()->get();
+                break;
+
+            case config("constant.roles.teacher"):
+                $teacher = auth()->user()->teacher;
+               $classrooms = $teacher->classrooms;
+                break;
+
+        }
+        return new ClassroomCollection($classrooms);
     }
 
     public function showSingle($userGrade,Classroom $classroom)

@@ -41,7 +41,7 @@ class ExamController extends Controller
                    $students[]=[
                        "student_id"=>$std['student_id'],
                        "score"=>$std['score'],
-                       'scaledScore' => ($std['score'] * 100) / $validation->totalScore,
+                       'scaledScore' => $validation->totalScore ? ($std['score'] * 100) / $validation->totalScore : 0,
                    ];
                }
                $exam->students()->createMany($students);

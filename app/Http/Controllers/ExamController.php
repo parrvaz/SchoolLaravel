@@ -62,11 +62,14 @@ class ExamController extends Controller
                 $exams= $request->userGrade->exams()
                     ->where("classroom_id",$user->student->classroom_id)
                     ->whereIn("type",[1,3])
+                    ->orderBy("updated_at","desc")
                     ->get();
                break;
            case config("constant.roles.assistant"):
            case config("constant.roles.manager"):
-               $exams= $request->userGrade->exams()->get();
+               $exams= $request->userGrade->exams()
+                   ->orderBy("updated_at","desc")
+                   ->get();
                 break;
            case config("constant.roles.teacher"):
                $teacher = $user->teacher;
@@ -74,6 +77,7 @@ class ExamController extends Controller
                $exams= $request->userGrade->exams()
                    ->whereIn("classroom_id",$classCourse->pluck("classroom_id"))
                    ->whereIn("course_id",$classCourse->pluck("course_id"))
+                   ->orderBy("updated_at","desc")
                    ->get();
                break;
        }

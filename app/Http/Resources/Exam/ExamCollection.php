@@ -25,6 +25,7 @@ class ExamCollection extends ResourceCollection
                 'classroom_id' => $item->classroom_id,
                 'classroom' => $item->classroomTitle?? Classroom::find($item->classroom_id)->title,
                 'date' => self::gToJ( $item->date),
+                'modifiedDate' => self::gToJ( $item->updated_at),
                 'course_id' => $item->course_id,
                 'course' => $item->courseName ?? Course::find( $item->course_id)->name,
                 'expected' => $item->expected,

@@ -6,7 +6,6 @@ use App\Exports\AbsentsExport;
 use App\Exports\CardExport;
 use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Reports\AbsentsReportCollection;
-use App\Http\Resources\Reports\AllCountResource;
 use App\Http\Resources\Reports\Card\CardResource;
 use App\Http\Resources\Reports\Card\CardSeparateCollection;
 use App\Http\Resources\Reports\Progress\ProgressCollection;
@@ -14,7 +13,6 @@ use App\Models\Absent;
 use App\Models\Exam;
 use App\Models\Student;
 use App\Models\StudentExam;
-use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -220,11 +218,13 @@ class ReportController extends Controller
             );
             $studentExam = $studentExam->get();
 
-            $factors = $studentExam->sum("factor");
-            $wightedScores = $studentExam->sum("wightedScore");
-            $average = round( $wightedScores / $factors,2);
-            $result['average'] = $average;
-            $result['studentExam'] = $studentExam;
+            if ($studentExam->count() > 0) {
+                $factors = $studentExam->sum("factor");
+                $wightedScores = $studentExam->sum("wightedScore");
+                $average = round($wightedScores / $factors, 2);
+                $result['average'] = $average;
+                $result['studentExam'] = $studentExam;
+            }
         }else{
             $studentExam = $studentExam->groupBy(
                 "exams.course_id",
@@ -243,7 +243,9 @@ class ReportController extends Controller
 
             $studentExam = $studentExam->get();
 
+
             $students =  $studentExam->groupBy("student_id");
+
             foreach ($students as $id=>$studentE){
                 $factors = $studentE->sum("factor");
                 $wightedScores = $studentE->sum("wightedScore");

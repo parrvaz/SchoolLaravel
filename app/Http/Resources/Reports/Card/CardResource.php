@@ -16,10 +16,8 @@ class CardResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'average'=>$this["average"],
-            'scores' =>new CardCourseCollection($this['studentExam']) ?? null,
-
-
+            'average'=>$this["average"] ?? null,
+            'scores' =>new CardCourseCollection($this['studentExam'] ?? []) ?? null,
         ];
     }
 }

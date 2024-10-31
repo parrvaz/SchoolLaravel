@@ -16,6 +16,7 @@ class FilterValidation extends FormRequest
     }
     public function rules(): array
     {
+        $this->merge(['isSeparate' => filter_var($this->input('isSeparate'), FILTER_VALIDATE_BOOLEAN)]);
         return [
             'isSeparate'=>'nullable|boolean',
             'courses'=>'nullable|array',

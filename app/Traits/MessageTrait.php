@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Lang;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 trait MessageTrait
 {
@@ -18,6 +19,11 @@ trait MessageTrait
             'message' => Lang::get('responses.error.'.$type),
             'status' => 'error',
         ], $status);
+    }
+
+    public function throwExp($type="permissionForUser",$status=403): \Illuminate\Http\JsonResponse
+    {
+        abort($status, Lang::get('responses.error.'.$type));
     }
 
 }

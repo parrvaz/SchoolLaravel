@@ -27,7 +27,19 @@ trait FilterTrait
         return $query;
     }
 
+    public function arrayDiffFilter($validation,$itemsRelation,$filter)
+    {
+        $ids = $itemsRelation->pluck("id")->unique()->toArray();
+        if ($validation[$filter] ?? null) {
+            if (!empty(array_diff($validation[$filter] ?? [], $ids))){
+                return $this->throwExp();
 
+            }
+        }
+        else
+            $validation[$filter] =$ids;
+        return $validation;
+    }
 
 
 

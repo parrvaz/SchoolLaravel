@@ -10,6 +10,7 @@ use App\Http\Resources\Reports\Card\CardResource;
 use App\Http\Resources\Reports\Card\CardSeparateCollection;
 use App\Http\Resources\Reports\Progress\ProgressCollection;
 use App\Models\Absent;
+use App\Models\Course;
 use App\Models\Exam;
 use App\Models\Student;
 use App\Models\StudentExam;
@@ -38,7 +39,6 @@ class ReportController extends Controller
 
 
     public function card(Request $request,FilterValidation $validation){
-
         $result = $this->cardMtd($request,$validation);
         if (!$validation->isSeparate)
             return new CardResource($result);
@@ -179,6 +179,20 @@ class ReportController extends Controller
     }
 
     private function cardMtd($request,$validation){
+        $user = auth()->user();
+        switch ($user->role) {
+            case config("constant.roles.student"):
+            case config("constant.roles.parent"):
+                $student = $user->student;
+                $validation['students'] = [$student->id];
+                break;
+            case config("constant.roles.teacher"):
+                $teacher = $user->teacher;
+                $validation = $this->arrayDiffFilter($validation,$teacher->courses,"courses");
+                $validation = $this->arrayDiffFilter($validation,$teacher->classrooms,"classrooms");
+                break;
+        }
+
         $studentExam = StudentExam::query()
             ->join("exams","exams.id","student_exam.exam_id")
             ->join("classrooms","classrooms.id","exams.classroom_id")

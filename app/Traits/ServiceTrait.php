@@ -18,6 +18,8 @@ trait ServiceTrait
     }
 
     public static function gToJ($date){
+        if ($date == null)
+            return null;
         try {
             return Jalalian::forge($date)->format("Y/m/d");
         }catch (\Exception $e){

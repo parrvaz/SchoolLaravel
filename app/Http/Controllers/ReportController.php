@@ -43,7 +43,9 @@ class ReportController extends Controller
         if (!$validation->isSeparate)
             return new CardResource($result);
         else
-            return new CardSeparateCollection($result);
+        {
+           return new CardSeparateCollection($result);
+        }
 
     }
 
@@ -255,7 +257,13 @@ class ReportController extends Controller
                 DB::raw("ROUND(AVG(student_exam.scaledScore) / 5,2) * factor as wightedScore"),
             );
 
-            $studentExam = $studentExam->get();
+            $studentExam = $studentExam
+                ->orderBy(
+                    Student::select('lastName')
+                        ->whereColumn('students.id', 'student_exam.student_id')
+                        ->limit(1)
+                )
+                ->get();
 
 
             $students =  $studentExam->groupBy("student_id");
@@ -267,8 +275,6 @@ class ReportController extends Controller
                 $result[$id]['average'] = $average;
                 $result[$id]['scores'] = $studentE;
             }
-
-            return $result;
 
         }
 

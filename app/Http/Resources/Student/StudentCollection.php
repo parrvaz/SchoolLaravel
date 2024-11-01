@@ -25,7 +25,7 @@ class StudentCollection extends ResourceCollection
                 'nationalId'=>$item->nationalId,
                 'classroom_id'=>$item->classroom_id,
                 'classroom'=>$item->classroomTitle,
-                'birthday'=> self::gToJ($item->birthday) ,
+                'birthday'=>   self::gToJ($item->birthday) ,
                 'isOnlyChild'=> (bool)$item->onlyChild,
                 'address'=>$item->address,
                 'phone'=>$item->phone,

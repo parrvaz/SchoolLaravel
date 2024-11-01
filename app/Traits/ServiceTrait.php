@@ -13,9 +13,6 @@ use Morilog\Jalali\Jalalian;
 
 trait ServiceTrait
 {
-    public  function findUserGrade($code){
-       return UserGrade::whereCode($code)->first();
-    }
 
     public static function gToJ($date){
         if ($date == null)
@@ -43,8 +40,36 @@ trait ServiceTrait
         elseif (strpos($date, '-') != false)
             return CalendarUtils::createDatetimeFromFormat('Y-m-d', $date)->format('Y/m/d');
         else return $date;
-
     }
 
+
+    public function saveGroupFile($request,$prePath,$name){
+        $paths = [];
+        if ($request->hasFile($name)){
+            foreach ($request->file($name) as $item){
+                $paths[]= $this->saveFile($item,$prePath,$name);
+            }
+        }
+
+        return $paths;
+    }
+
+    public function saveSingleFile($request,$prePath,$name="photo"){// ذخیره تصویر در صورت آپلود
+        $photoPath = null;
+        if ($request->hasFile($name)) {
+            $file = $request->file($name);
+            $photoPath= $this->saveFile($file,$prePath,$name);
+        }
+        return $photoPath;
+    }
+
+    private function saveFile($file,$prePath,$name="photo"){// ذخیره تصویر در صورت آپلود
+        $timestamp = now()->timestamp; // دریافت timestamp
+        $extension = $file->getClientOriginalExtension(); // گرفتن پسوند فایل
+        $oldName = $file->getClientOriginalName(); // گرفتن پسوند فایل
+        $filename = $oldName."_". $timestamp . '.' . $extension; // ایجاد نام یونیک با timestamp
+        $photoPath = $file->storeAs($prePath,$filename, 'public');
+        return $photoPath;
+    }
 
 }

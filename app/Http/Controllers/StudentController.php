@@ -30,16 +30,7 @@ class StudentController extends Controller
 
         return DB::transaction(function () use($request,$validation) {
 
-            // ذخیره تصویر در صورت آپلود
-            $photoPath = null;
-            if ($request->hasFile('picture')) {
-                $file = $request->file('picture');
-                $timestamp = now()->timestamp; // دریافت timestamp
-                $extension = $file->getClientOriginalExtension(); // گرفتن پسوند فایل
-                $filename = $timestamp . '.' . $extension; // ایجاد نام یونیک با timestamp
-
-                $photoPath = $file->storeAs('images/students',$filename, 'public');
-            }
+            $photoPath = $this->saveSingleFile($request,"students/images");
 
             $student = Student::create([
             'firstName'=>$validation->firstName,

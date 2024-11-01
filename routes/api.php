@@ -8,6 +8,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseGradeController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\FieldController;
+use App\Http\Controllers\HomeworkController;
 use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportController;
@@ -185,6 +186,17 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:assistant')->post('/store/{student}', [StudyController::class, 'storeStudent']);
             Route::middleware('role:student')->post('/delete/{study}', [StudyController::class, 'delete']);
         });
+
+        //Homework Api
+        Route::prefix("homework")->group(function () {
+            Route::middleware('role:teacher')->post('/store', [HomeworkController::class, 'store']);
+            Route::middleware('role:teacher')->get('/show', [HomeworkController::class, 'show']);
+            Route::middleware('role:teacher')->get('/show/{homework}', [HomeworkController::class, 'showSingle']);
+            Route::middleware('role:teacher')->post('/update/{homework}', [HomeworkController::class, 'update']);
+            Route::middleware('role:teacher')->post('/delete/{homework}', [HomeworkController::class, 'delete']);
+        });
+
+
 
 
         //Report Api

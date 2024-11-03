@@ -69,10 +69,20 @@ class AbsentController extends Controller
                 return $query->where('date', self::jToG($validation->date));
             })
         ->get();
-        AbsentStudent::whereIn("id",$absent_students->pluck("id"))->update([
-            "isJustified"=> ! $absent_students->first()->isJustified
-        ]);
-        return $this->successMessage();
+
+        if ($absent_students->count() > 0){
+            $justified = $absent_students->first()->isJustified;
+            $ids = $absent_students->pluck("id")->toArray();
+
+            AbsentStudent::whereIn("id",$ids)->update([
+                "isJustified"=> ! $justified
+            ]);
+
+            return $this->successMessage();
+        }
+        else
+            return $this->error("dontExist");
+
     }
 
     public function show(Request $request,FilterValidation $validation){

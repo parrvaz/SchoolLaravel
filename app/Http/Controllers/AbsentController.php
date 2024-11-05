@@ -106,7 +106,7 @@ class AbsentController extends Controller
                     // بررسی اینکه آیا دانش‌آموز قبلاً در آرایه وجود دارد
                     if (!isset($studentsData[$student->id])) {
                         $studentsData[$student->id] = [
-                            "student_id" => $student->id,
+                            "student_id" => $student->student->id,
                             "student" => $student->student->name,
                             "fatherPhone" => $student->student->fatherPhone,
                             "bells" => []

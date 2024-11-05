@@ -30,9 +30,9 @@ class HomeworkCollection extends ResourceCollection
                 'isFinal' => (bool) $item->isFinal,
                 'link' => $item->link,
                 'classrooms' => $item->classrooms,
-                'photos' => $item->photos,
-                'voices' => $item->voices,
-                'pdfs' => $item->pdfs,
+                'photos' => new FileCollection($item->photos),
+                'voices' =>new FileCollection( $item->voices),
+                'pdfs' =>new FileCollection( $item->pdfs),
             ];
         })->toArray();
     }

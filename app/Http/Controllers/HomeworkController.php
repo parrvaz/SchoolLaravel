@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Exam\HomeworkStoreValidation;
 use App\Http\Resources\Homework\HomeworkCollection;
+use App\Http\Resources\Homework\HomeworkResource;
 use App\Models\FileHomework;
 use App\Models\Homework;
 use Illuminate\Http\Request;
@@ -24,15 +25,9 @@ class HomeworkController extends Controller
                 'description'=>$validation->description,
                 'link'=>$validation->link,
             ]);
-            $homework->classrooms()->attach($validation->classrooms);
-
-            $files=[];
-            $files=$this->fileHandler($request,$homework->id,"photos",$files);
-            $files=$this->fileHandler($request,$homework->id,"voices",$files);
-            $files=$this->fileHandler($request,$homework->id,"pdfs",$files);
-
-            FileHomework::insert($files);
+            $this->saveFilesOfHomeWork($homework, $validation, $request);
             return $this->successMessage();
+
         });
     }
 
@@ -53,36 +48,60 @@ class HomeworkController extends Controller
         return new HomeworkCollection($homework);
     }
 
-//    public function update(Request $request,HomeworkStoreValidation $validation,$userGrade,Homework $homework){
-//        return DB::transaction(function () use($request,$validation,$homework) {
-//
-//            $homework->classrooms()->detach();
-//            $homework->files()->delete();
-//
-//            $homework  = Homework::create([
-//                "user_id"=>auth()->user()->id,
-//                'course_id'=>$validation->course_id,
-//                'expected'=>$validation->expected,
-//                'score'=>$validation->score,
-//                'isFinal'=>$validation->isFinal ?? false,
-//                'date'=>self::jToG($validation->date),
-//                'title'=>$validation->title,
-//                'description'=>$validation->description,
-//                'link'=>$validation->link,
-//            ]);
-//            $homework->classrooms()->attach($validation->classrooms);
-//
-//            $files=[];
-//            $files=$this->fileHandler($request,$homework->id,"photos",$files);
-//            $files=$this->fileHandler($request,$homework->id,"voices",$files);
-//            $files=$this->fileHandler($request,$homework->id,"pdfs",$files);
-//
-//            FileHomework::insert($files);
-//            return $this->successMessage();
-//        });
-//    }
+    public function showSingle($userGrade, Homework $homework){
 
 
+        return new HomeworkResource($homework);
+    }
+
+    public function update(Request $request,HomeworkStoreValidation $validation,$userGrade,Homework $homework){
+        return DB::transaction(function () use($request,$validation,$homework) {
+
+            $homework->classrooms()->detach();
+            $this->deleteGroupFile($homework->files()->pluck("file"));
+            $homework->files()->delete();
+
+            $homework->update([
+                'course_id'=>$validation->course_id,
+                'expected'=>$validation->expected,
+                'score'=>$validation->score,
+                'isFinal'=>$validation->isFinal ?? false,
+                'date'=>self::jToG($validation->date),
+                'title'=>$validation->title,
+                'description'=>$validation->description,
+                'link'=>$validation->link,
+            ]);
+            $this->saveFilesOfHomeWork($homework, $validation, $request);
+            return $this->successMessage();
+        });
+    }
+
+    public function delete($userGrade,Homework $homework){
+        return DB::transaction(function () use($homework) {
+            $homework->classrooms()->detach();
+            $this->deleteGroupFile($homework->files()->pluck("file"));
+            $homework->files()->delete();
+            //todo scores
+            $homework->delete();
+
+            return $this->successMessage();
+        });
+    }
+
+
+
+
+    private function saveFilesOfHomeWork($homework, $validation, $request): void
+    {
+        $homework->classrooms()->attach($validation->classrooms);
+
+        $files = [];
+        $files = $this->fileHandler($request, $homework->id, "photos", $files);
+        $files = $this->fileHandler($request, $homework->id, "voices", $files);
+        $files = $this->fileHandler($request, $homework->id, "pdfs", $files);
+
+        FileHomework::insert($files);
+    }
 
     private function fileHandler($request,$id,$name,$files){
         $filePaths = $this->saveGroupFile($request,"teachers/homework",$name);
@@ -95,4 +114,6 @@ class HomeworkController extends Controller
         }
         return $files;
     }
+
+
 }

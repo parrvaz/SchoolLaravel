@@ -8,6 +8,7 @@ use App\Models\UserGrade;
 use App\Repositories\AccountingItemRepository;
 use App\Services\AccountService;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Storage;
 use Morilog\Jalali\CalendarUtils;
 use Morilog\Jalali\Jalalian;
 
@@ -63,13 +64,28 @@ trait ServiceTrait
         return $photoPath;
     }
 
+    public function deleteGroupFile($items,$prePath=""){
+        foreach ($items as $item){
+            $this->deleteFile($item,$prePath);
+        }
+    }
+
+    public function deleteFile($name,$prePath=""){
+        $filename = $prePath . $name;
+        if (Storage::disk('public')->exists($filename)) {
+            Storage::disk('public')->delete($filename);
+        }
+    }
+
     private function saveFile($file,$prePath,$name="photo"){// ذخیره تصویر در صورت آپلود
         $timestamp = now()->timestamp; // دریافت timestamp
         $extension = $file->getClientOriginalExtension(); // گرفتن پسوند فایل
-        $oldName = $file->getClientOriginalName(); // گرفتن پسوند فایل
+        $oldName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $filename = $oldName."_". $timestamp . '.' . $extension; // ایجاد نام یونیک با timestamp
         $photoPath = $file->storeAs($prePath,$filename, 'public');
         return $photoPath;
     }
+
+
 
 }

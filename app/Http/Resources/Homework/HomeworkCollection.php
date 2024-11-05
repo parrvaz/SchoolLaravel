@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\Homework;
 
+use App\Http\Resources\Classroom\ClassroomShortCollection;
 use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use function Laravel\Prompts\select;
 
 class HomeworkCollection extends ResourceCollection
 {
@@ -21,18 +21,15 @@ class HomeworkCollection extends ResourceCollection
             return[
                 'id' =>$item->id,
                 'title' => $item->title,
-                'description' => $item->description,
-                'date' => self::gToJ($item->date),
                 'course_id' => $item->course_id,
                 'course' => $item->course->name,
-                'score' => $item->score,
-                'expected' => $item->expected,
+                'classrooms' =>new ClassroomShortCollection($item->classrooms),
+                'modifiedDate' => self::gToJ( $item->updated_at),
+                'date' => self::gToJ($item->date),
+                'studentsNumber'=> 0, //todo
+                'scoredNumber'=> 0,
                 'isFinal' => (bool) $item->isFinal,
-                'link' => $item->link,
-                'classrooms' => $item->classrooms,
-                'photos' => new FileCollection($item->photos),
-                'voices' =>new FileCollection( $item->voices),
-                'pdfs' =>new FileCollection( $item->pdfs),
+
             ];
         })->toArray();
     }

@@ -196,6 +196,10 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:teacher')->post('/update/{homework}', [HomeworkController::class, 'update']);
             Route::middleware('role:teacher')->post('/delete/{homework}', [HomeworkController::class, 'delete']);
 
+            Route::middleware('role:teacher')->get('/score/{homework}', [HomeworkController::class, 'showStudent']);
+            Route::middleware('role:teacher')->get('/scoreList/{homework}', [HomeworkController::class, 'showScore']);
+
+
             Route::prefix("student")->group(function () {
                 Route::middleware('role:student')->get('/show', [StudentHomeworkController::class, 'show']);
                 Route::middleware('role:student')->get('/show/{homework}', [StudentHomeworkController::class, 'showSingle']);

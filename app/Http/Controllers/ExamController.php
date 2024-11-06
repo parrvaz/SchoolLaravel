@@ -168,20 +168,7 @@ class ExamController extends Controller
 
         foreach ($students as $std){
             $score = $std->score;
-
-                if  ($score == $total)
-                    $std->rank = "😎";
-                elseif ( $score >$total-(($total-$expected)/2))
-                    $std->rank = "👌🏻";
-                elseif ( $score >$expected)
-                    $std->rank = "👍🏻";
-                elseif ( $score >$expected/2)
-                    $std->rank = "😐";
-                elseif ( $score >$expected/4)
-                    $std->rank = "🫢";
-                else
-                    $std->rank = "🤬";
-
+            $std->rank = $this->scoreFeedback($score,$total,$expected);
         }
 
         return $students;

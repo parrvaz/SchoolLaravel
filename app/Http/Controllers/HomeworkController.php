@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Exam\HomeworkStoreValidation;
 use App\Http\Resources\Homework\HomeworkCollection;
 use App\Http\Resources\Homework\HomeworkResource;
+use App\Http\Resources\Homework\ScoreHomeworkCollection;
+use App\Http\Resources\Homework\ScoreHomeworkResource;
 use App\Models\FileHomework;
 use App\Models\Homework;
 use Illuminate\Http\Request;
@@ -88,6 +90,14 @@ class HomeworkController extends Controller
         });
     }
 
+
+    public function showStudent($userGrade, Homework $homework){
+        return new ScoreHomeworkCollection($homework->students);
+    }
+
+    public function showScore($userGrade, Homework $homework){
+        return new ScoreHomeworkResource($homework);
+    }
 
 
 

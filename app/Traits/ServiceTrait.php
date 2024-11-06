@@ -87,5 +87,23 @@ trait ServiceTrait
     }
 
 
+    public function scoreFeedback($score,$total,$expected){
+        $feedback = null;
+        if  ($score == $total)
+            $feedback = "😎";
+        elseif ( $score >$total-(($total-$expected)/2))
+            $feedback = "👌🏻";
+        elseif ( $score >$expected)
+            $feedback = "👍🏻";
+        elseif ( $score >$expected/2)
+            $feedback = "😐";
+        elseif ( $score >$expected/4)
+            $feedback = "🫢";
+        elseif($feedback > 0)
+            $feedback = "🤬";
+
+        return $feedback;
+    }
+
 
 }

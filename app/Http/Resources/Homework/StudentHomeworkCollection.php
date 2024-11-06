@@ -33,6 +33,8 @@ class StudentHomeworkCollection extends ResourceCollection
                 'course' => $item->course->name,
                 'modifiedDate' => self::gToJ( $item->updated_at),
                 'date' => self::gToJ($item->date),
+
+                'studentHomework_id'=> $stdHomework->id ?? null,
                 'score'=> $score,
                 'status'=> $status,
 

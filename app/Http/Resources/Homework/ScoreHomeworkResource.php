@@ -27,6 +27,7 @@ class ScoreHomeworkResource extends JsonResource
             'course' => $this->course->name,
             'score' => $this->score,
             'expected' => $this->expected,
+            "isFinal"=>(bool) $this->isFinal,
 
             'scores'=> new ScoreListHomeworkCollection($this->students),
 

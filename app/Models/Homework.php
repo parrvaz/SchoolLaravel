@@ -44,4 +44,7 @@ class Homework extends Model
         return $this->hasMany(FileHomework::class)->where("type",config("constant.files.pdfs"));
     }
 
+    public function studentHomework($stdId){
+        return $this->hasOne(StudentHomework::class)->where("student_id",$stdId);
+    }
 }

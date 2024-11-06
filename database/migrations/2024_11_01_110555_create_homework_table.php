@@ -46,8 +46,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId("student_id")->constrained()->cascadeOnDelete();
             $table->foreignId("homework_id")->constrained()->cascadeOnDelete();
-            $table->float("score")->default(0);
-            $table->float("scaledScore")->default(0);
+            $table->float("score")->nullable();
+            $table->float("scaledScore")->nullable();
             $table->string("note")->nullable();
             $table->string("solution")->nullable();
             $table->timestamps();

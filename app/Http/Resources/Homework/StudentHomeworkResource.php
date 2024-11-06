@@ -18,6 +18,7 @@ class StudentHomeworkResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $stdHomework = $this->studentHomework(auth()->user()->modelHasRole->idInRole)->first();
         return [
             'id' =>$this->id,
             'title' => $this->title,
@@ -30,6 +31,10 @@ class StudentHomeworkResource extends JsonResource
             'photos' => new FileCollection($this->photos),
             'voices' =>new FileCollection( $this->voices),
             'pdfs' =>new FileCollection( $this->pdfs),
+
+            'solution'=> $stdHomework!= null ? url('storage/' . $stdHomework->solution) : null,
+            "note"=> $stdHomework!=null ? $stdHomework->note : null,
+
         ];
     }
 }

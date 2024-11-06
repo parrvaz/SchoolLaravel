@@ -21,7 +21,7 @@ class StudentHomeworkController extends Controller
             ->where("student_id",$stdId)->exists()
         )
             return $this->error("permissionForUser",403);
-        
+
         return DB::transaction(function () use($request,$validation,$stdId) {
             $solution =  $this->saveSingleFile($request, "students/homework", "pdf");
             $homework  = StudentHomework::create([

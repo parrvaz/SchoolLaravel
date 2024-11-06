@@ -18,6 +18,14 @@ class StudentHomeworkCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return $this->collection->map(function ($item){
+            $stdHomework = $item->studentHomework(auth()->user()->modelHasRole->idInRole)->first();
+            $status = "notSubmitted";
+            $score = null;
+            if ($stdHomework!=null){
+                $days = $stdHomework->updated_at->diffInDays($item->date);
+                $status = $days > -1 ? "okSubmitted" : "delaySubmitted";
+                $score = $stdHomework->score;
+            }
             return[
                 'id' =>$item->id,
                 'title' => $item->title,
@@ -25,8 +33,8 @@ class StudentHomeworkCollection extends ResourceCollection
                 'course' => $item->course->name,
                 'modifiedDate' => self::gToJ( $item->updated_at),
                 'date' => self::gToJ($item->date),
-                'score'=> $item->score,
-                'status'=> $item->status,
+                'score'=> $score,
+                'status'=> $status,
 
             ];
         })->toArray();

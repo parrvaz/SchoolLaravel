@@ -138,60 +138,6 @@ class StudyController extends Controller
 
     }
 
-//    private function deleteItems($validation,$stdId)
-//    {
-//        Study::where("student_id",$stdId)->whereBetween('date', [$validation[""], $ageTo])
-//
-//    }
 
-//    public function store(Request $request,StudyStoreValidation $validation){
-//
-//        return DB::transaction(function () use($validation) {
-//            $student = auth()->user()->student;
-//
-//            $this->deleteItems($validation,$student->id);
-//
-//
-//            $items = [];
-//            foreach ($validation->plan as $planItem) {
-//                if (!$planItem["isFix"] && ($planItem["id"] ?? null) == null) {
-//                    $space = explode(" ", $planItem["date"]);
-//                    $dash = explode("-", $space[1]);
-//                    $items[] = [
-//                        "student_id" => $student->id,
-//                        "course_id" => $planItem["course_id"],
-//                        "date" => self::jToG($space[0]),
-//                        "start" => $dash[0],
-//                        "end" => $dash[1],
-//                    ];
-//                }
-//            }
-//
-//            Study::insert($items);
-//
-//            return $this->successMessage();
-//        });
-//    }
-
-
-//    public function studyPlanStore(){
-//
-//        $today = Carbon::now()->format("Y/m/d");
-//
-//        $plans = Plan::with("students")->with("coursePlans")->get();
-//
-//        foreach ($plans as $plan){
-//            foreach ($plan->students as $std){
-//                return $plan;
-//            }
-//        }
-//
-//        return $plans;
-//
-//        StudyPlan::insert([
-//
-//        ]);
-//
-//    }
 
 }

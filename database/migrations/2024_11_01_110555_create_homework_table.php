@@ -46,10 +46,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId("student_id")->constrained()->cascadeOnDelete();
             $table->foreignId("homework_id")->constrained()->cascadeOnDelete();
-            $table->date("date");
             $table->float("score")->default(0);
             $table->float("scaledScore")->default(0);
+            $table->string("note")->nullable();
             $table->string("solution")->nullable();
+            $table->timestamps();
         });
 
 

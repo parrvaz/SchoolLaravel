@@ -30,9 +30,11 @@ class Classroom extends Model
         return $this->hasMany(Exam::class);
     }
 
-    public function Absents(){
-        return $this->hasMany(Absent::class);
+    public function homework(){
+        return $this->belongsToMany(Homework::class);
     }
+
+
 
     public function getFieldTitleAttribute(){
         return $this->field->title;

@@ -56,12 +56,12 @@ trait ServiceTrait
     }
 
     public function saveSingleFile($request,$prePath,$name="photo"){// ذخیره تصویر در صورت آپلود
-        $photoPath = null;
+        $filePath = null;
         if ($request->hasFile($name)) {
             $file = $request->file($name);
-            $photoPath= $this->saveFile($file,$prePath,$name);
+            $filePath= $this->saveFile($file,$prePath,$name);
         }
-        return $photoPath;
+        return $filePath;
     }
 
     public function deleteGroupFile($items,$prePath=""){

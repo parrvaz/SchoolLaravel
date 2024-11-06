@@ -14,6 +14,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentHomeworkController;
 use App\Http\Controllers\StudyController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\PlanController;
@@ -194,6 +195,15 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:teacher')->get('/show/{homework}', [HomeworkController::class, 'showSingle']);
             Route::middleware('role:teacher')->post('/update/{homework}', [HomeworkController::class, 'update']);
             Route::middleware('role:teacher')->post('/delete/{homework}', [HomeworkController::class, 'delete']);
+
+            Route::prefix("student")->group(function () {
+                Route::middleware('role:student')->get('/show', [StudentHomeworkController::class, 'show']);
+                Route::middleware('role:student')->get('/show/{homework}', [StudentHomeworkController::class, 'showSingle']);
+                Route::middleware('role:student')->post('/store', [StudentHomeworkController::class, 'store']);
+                Route::middleware('role:student')->post('/update/{studentHomework}', [StudentHomeworkController::class, 'update']);
+                Route::middleware('role:student')->post('/delete/{studentHomework}', [StudentHomeworkController::class, 'delete']);
+            });
+
         });
 
 

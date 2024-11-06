@@ -134,14 +134,17 @@ class StudentController extends Controller
 
             //change father phone if is changed
             if ($validation->fatherPhone != $student->fatherPhone) {
-                $student->user->update([
-                    'fatherPhone' => $validation->fatherPhone
+                $student->parentUser->update([
+                    'phone' => $validation->fatherPhone
                 ]);
             }
 
             //change password if is changed
             if ($validation->nationalId != $student->nationalId) {
                 $student->user->update([
+                    'password' => bcrypt($validation->nationalId)
+                ]);
+                $student->parentUser->update([
                     'password' => bcrypt($validation->nationalId)
                 ]);
             }

@@ -109,5 +109,9 @@ trait ServiceTrait
         return $feedback;
     }
 
+    public function zeroChar($number){
+        return $number == 0 ? '0' : $number;
+    }
+
 
 }

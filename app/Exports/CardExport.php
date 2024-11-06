@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Course;
+use App\Traits\ServiceTrait;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -14,6 +15,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class CardExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoSize, WithEvents,WithStyles
 {
+    use ServiceTrait;
     protected $items;
 
     public function __construct($items)
@@ -39,7 +41,7 @@ class CardExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
         return [
             Course::find($row->course_id)->name,
             $row->factor,
-            $row->score,
+            $this->zeroChar($row->score),
         ];
     }
 

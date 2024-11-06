@@ -2,6 +2,8 @@
 
 namespace App\Exports;
 
+use App\Traits\ServiceTrait;
+use Hamcrest\SelfDescribing;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -13,6 +15,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class ExamExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoSize, WithEvents,WithStyles
 {
+    use ServiceTrait;
     protected $items;
 
     public function __construct($items)
@@ -41,7 +44,7 @@ class ExamExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
             $row->student->firstName,
             $row->student->lastName,
             $row->student->classroom->title,
-            $row->score,
+            $this->zeroChar($row->score),
             $row->rank ?? null,
         ];
     }

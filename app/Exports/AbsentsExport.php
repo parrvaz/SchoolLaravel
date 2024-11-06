@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Traits\ServiceTrait;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -14,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class AbsentsExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoSize, WithEvents,WithStyles
 {
+    use ServiceTrait;
     protected $items;
 
     public function __construct($items)
@@ -44,9 +46,9 @@ class AbsentsExport implements FromCollection,WithMapping,WithHeadings, ShouldAu
             $row->firstName,
             $row->lastName,
             $row->classroomTitle,
-            $row->number,
+            $this->zeroChar($row->number),
             $row->total,
-            $row->percent,
+            $this->zeroChar($row->percent),
             $row->rank
         ];
     }

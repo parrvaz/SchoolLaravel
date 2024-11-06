@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use Morilog\Jalali\CalendarUtils;
 use Morilog\Jalali\Jalalian;
+use function PHPUnit\Framework\isNull;
 
 trait ServiceTrait
 {
@@ -88,7 +89,10 @@ trait ServiceTrait
 
 
     public function scoreFeedback($score,$total,$expected){
+        if ($score === null)
+            return null;
         $feedback = null;
+
         if  ($score == $total)
             $feedback = "😎";
         elseif ( $score >$total-(($total-$expected)/2))
@@ -99,7 +103,7 @@ trait ServiceTrait
             $feedback = "😐";
         elseif ( $score >$expected/4)
             $feedback = "🫢";
-        elseif($feedback > 0)
+        elseif($score >= 0)
             $feedback = "🤬";
 
         return $feedback;

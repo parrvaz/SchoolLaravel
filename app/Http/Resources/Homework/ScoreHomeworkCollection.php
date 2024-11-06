@@ -19,7 +19,7 @@ class ScoreHomeworkCollection extends ResourceCollection
     {
         return $this->collection->map(function ($item){
             $student = $item->student;
-            $diffDay = $item->updated_at->diffInDays($item->homework->date);
+            $diffDay =  $item->updated_at!=null ? $item->updated_at->diffInDays($item->homework->date) : null;
             return[
                 'id' =>$item->id,
                 "student_id"=>$student->id,
@@ -28,11 +28,11 @@ class ScoreHomeworkCollection extends ResourceCollection
                 "lastName"=>$student->lastName,
                 "classroom"=>$student->classroom->title,
                 "classroom_id"=>$student->classroom_id,
-                'solution' => url('storage/' . $item->solution) ,
+                'solution' => $item->solution != null ? url('storage/' . $item->solution) : null ,
                 'note' => $item->note,
 
                 'score'=> $item->score,
-                'status'=> $diffDay > -1 ? "okSubmitted" : (int) $diffDay * -1,
+                'status'=> $item->updated_at!=null ? ($diffDay > -1 ? "okSubmitted" : (int) $diffDay * -1) : "notSubmitted",
 
             ];
         })->toArray();

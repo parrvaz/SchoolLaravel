@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Exam\HomeworkStoreValidation;
+use App\Http\Requests\Exam\ScoreStoreValidation;
 use App\Http\Resources\Homework\HomeworkCollection;
 use App\Http\Resources\Homework\HomeworkResource;
 use App\Http\Resources\Homework\ScoreHomeworkCollection;
 use App\Http\Resources\Homework\ScoreHomeworkResource;
 use App\Models\FileHomework;
 use App\Models\Homework;
+use App\Models\Student;
+use App\Models\StudentHomework;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,6 +35,30 @@ class HomeworkController extends Controller
 
         });
     }
+
+    public function scoreStore(ScoreStoreValidation $validation,$userGrade,StudentHomework $studentHomework){
+        return DB::transaction(function () use($studentHomework,$validation) {
+            $studentHomework->timestamps = false;
+            $studentHomework->score = $validation->score;
+            $studentHomework->scaledScore =  round((( $validation->score*100 )/ $studentHomework->homework->score),2) ;
+            $studentHomework->save();
+            $studentHomework->timestamps = true;
+            return $this->successMessage();
+        });
+    }
+
+    public function setFinal($userGrade,Homework $homework){
+        return DB::transaction(function () use($homework) {
+            $homework->timestamps = false;
+            $homework->isFinal = !$homework->isFinal;
+            $homework->save();
+            $homework->timestamps = true;
+            return $this->successMessage();
+        });
+    }
+
+
+
 
     public function show(Request $request){
         $homework = Homework::query();

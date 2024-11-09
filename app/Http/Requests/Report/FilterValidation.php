@@ -26,7 +26,7 @@ class FilterValidation extends FormRequest
             'students'=>'nullable|array',
             'students.*'=>'nullable|exists:students,id',
             'types'=>'nullable|array',
-            'types.*'=>'nullable|in:1,2,3',
+            'types.*'=>'nullable|in:1,2,3,4',
             'exams'=>'nullable|array',
             'exams.*'=>'nullable|exists:exams,id',
 

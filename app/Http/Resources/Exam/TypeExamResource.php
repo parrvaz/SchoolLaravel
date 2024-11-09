@@ -16,7 +16,7 @@ class TypeExamResource extends JsonResource
     {
         return [
             'id' =>$this->type,
-            'label' => $this->type== 1 ? "written" : ($this->type==2 ? "oral" : "test" )
+            'label' => $this->type== 1 ? "written" : ($this->type==2 ? "oral" : ($this->type==3 ? "test" : "homework" ) )
         ];
     }
 }

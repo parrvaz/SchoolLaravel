@@ -23,7 +23,7 @@ class ExamStoreValidation extends FormRequest
             'expected'=>'nullable|numeric|min:0|max:100',
             'totalScore'=>'nullable|numeric|min:0|max:100',
             'isFinal'=>'nullable|boolean',
-            'type'=>'nullable|in:1,2,3',//1:katbi 2:shafahi 3:testi
+            'type'=>'nullable|in:1,2,3,4',//1:katbi 2:shafahi 3:testi 4:homework
             'isGeneral'=>'nullable|boolean',
 
             'contents'=>'nullable|array',

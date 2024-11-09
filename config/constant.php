@@ -38,4 +38,9 @@ return [
       "voices"=>3,
     ],
 
+    "SMS"=>[
+        "token"=>"14EC1755C1D996705342B07BDA108BE66E67F8BF",
+//        "url"=>"14EC1755C1D996705342B07BDA108BE66E67F8BF",
+    ],
+
 ];

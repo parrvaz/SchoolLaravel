@@ -13,6 +13,7 @@ use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SMSController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentHomeworkController;
 use App\Http\Controllers\StudyController;
@@ -214,7 +215,10 @@ Route::middleware('auth:api')->group(function () {
         });
 
 
-
+        //SMS Api
+        Route::prefix("sms")->group(function () {
+            Route::middleware('role:assistant')->post('/send', [SMSController::class, 'sendMessage']);
+        });
 
         //Report Api
         Route::prefix("reports")->group(function () {

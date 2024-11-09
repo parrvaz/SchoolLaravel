@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
         //    GradeSeeder::class,
         //    RoleSeeder::class,
 //            CourseSeeder::class,
-//            ContentSeeder::class,
-           CourseFieldSeeder::class,
+            ContentSeeder::class,
+//           CourseFieldSeeder::class,
         ]);
     }
 }

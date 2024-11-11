@@ -29,6 +29,7 @@ class FilterValidation extends FormRequest
             'types.*'=>'nullable|in:1,2,3,4',
             'exams'=>'nullable|array',
             'exams.*'=>'nullable|exists:exams,id',
+            'title'=>'nullable|string|max:100',
 
 
             'date'=>['nullable', new JalaliDateValidation()],

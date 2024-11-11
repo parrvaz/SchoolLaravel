@@ -227,6 +227,7 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:assistant')->get('/absents', [ReportController::class, 'absents']);
             Route::middleware('role:assistant')->get('/absents/excel', [ReportController::class, 'absentsExcel']);
             Route::middleware('role:general')->get('/progress', [ReportController::class, 'progress']);
+            Route::middleware('role:assistant')->get('/generalExcel', [ReportController::class, 'generalExcel']);
 
         });
 

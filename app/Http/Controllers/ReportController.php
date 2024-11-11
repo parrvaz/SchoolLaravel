@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\AbsentsExport;
 use App\Exports\CardExport;
+use App\Exports\ExamExport;
+use App\Exports\GeneralExcelExport;
 use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Reports\AbsentsReportCollection;
 use App\Http\Resources\Reports\Card\CardResource;
@@ -15,6 +17,7 @@ use App\Models\Exam;
 use App\Models\Student;
 use App\Models\StudentExam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -125,6 +128,34 @@ class ReportController extends Controller
 
         return new ProgressCollection($exams,$classExam);
     }
+
+
+    public function generalExcel(Request $request,FilterValidation $validation){
+        $exams= Exam::where("exams.user_grade_id", $request->userGrade->id)
+            ->where("exams.status",1)
+            ->orderBy("exams.course_id")
+            ->orderBy("date")
+            ->get();
+
+        $students = StudentExam::
+            whereHas('exam', function ($query)use($request) {
+                return $query->where('user_grade_id', $request->userGrade->id);
+            })
+            ->orderBy("student_id")
+            ->get()
+            ->groupBy("student_id")
+        ;
+
+        $items = $this->makeItemsForExcel($exams,$students);
+
+
+        $validation->title = $validation->title ?? "اکسل کامل";
+        $name = $validation->title  . ".xlsx" ;
+        return Excel::download(new GeneralExcelExport($items), $name);
+    }
+
+
+
 
 
     private function absentMtd($request,$validation){
@@ -281,5 +312,75 @@ class ReportController extends Controller
 
 
         return $result;
+    }
+
+    private function makeHeaderRows($exams)
+    {
+        $headers =collect();
+
+
+        $row = collect(["","","درس"]);
+        foreach ($exams as $exam){
+            $row->add($exam->course->title);
+        }
+        $headers->add($row);
+
+        $row = collect(["","","تاریخ"]);
+        foreach ($exams as $exam){
+            $row->add(self::gToJ($exam->date));
+        }
+        $headers->add($row);
+
+        $row = collect(["","","حداکثر نمره"]);
+        foreach ($exams as $exam){
+            $row->add($exam->totalScore);
+        }
+        $headers->add($row);
+
+        $row = collect(["","","نمره مورد انتظار"]);
+        foreach ($exams as $exam){
+            $row->add($exam->expected);
+        }
+        $headers->add($row);
+
+        $row = collect(["","","نوع آزمون"]);
+        foreach ($exams as $exam){
+            $row->add( config("constant.exams.".$exam->type));
+        }
+        $headers->add($row);
+
+        $row = collect(["نام","نام خانوادگی","کلاس"]);
+        $headers->add($row);
+
+
+        return $headers;
+
+//        $headers->add((new Collection(["","","درس"]))->merge($exams->pluck("title"))) ;
+//        $headers->add((new Collection(["","","تاریخ"]))->merge($exams->pluck("date"))) ;
+//        $headers->add((new Collection(["","","حداکثر نمره"]))->merge($exams->pluck("totalScore"))) ;
+//        $headers->add((new Collection(["","","نمره مورد انتظار"]))->merge($exams->pluck("expected"))) ;
+//        $headers->add((new Collection(["","","نوع آزمون"]))->merge($exams->pluck("type"))) ;
+//        return $headers;
+    }
+
+    private function makeItemsForExcel($exams, $students)
+    {
+        $items = $this->makeHeaderRows($exams);
+
+        foreach ($students as $key=>$student){
+            $row = collect();
+
+            $std = Student::find($key);
+
+            $row->add( $std->firstName);
+            $row->add( $std->lastName);
+            $row->add( $std->classroom->title);
+            foreach ($exams as $exam){
+                $row->add( $student->where("exam_id",$exam->id)->first()->score ?? "" );
+            }
+            $items->add($row);
+        }
+
+        return $items;
     }
 }

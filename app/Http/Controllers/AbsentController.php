@@ -102,13 +102,13 @@ class AbsentController extends Controller
             // دریافت لیست تمام دانش‌آموزان غایب از کلاس
             foreach ($absents as $absent) {
                 foreach ($absent->absentStudents as &$student) {
-
+                    $studentModel = $student->student;
                     // بررسی اینکه آیا دانش‌آموز قبلاً در آرایه وجود دارد
-                    if (!isset($studentsData[$student->id])) {
-                        $studentsData[$student->id] = [
-                            "student_id" => $student->student->id,
-                            "student" => $student->student->name,
-                            "fatherPhone" => $student->student->fatherPhone,
+                    if (!isset($studentsData[$studentModel->id])) {
+                        $studentsData[$studentModel->id] = [
+                            "student_id" => $studentModel->id,
+                            "student" => $studentModel->name,
+                            "fatherPhone" => $studentModel->fatherPhone,
                             "bells" => []
                         ];
                     }
@@ -117,7 +117,7 @@ class AbsentController extends Controller
                     $order = $absent->bell->order;
 
                     // افزودن وضعیت غیاب برای زنگ خاص
-                    $studentsData[$student->id]['bells'][$order] = [
+                    $studentsData[$studentModel->id]['bells'][$order] = [
                         "status" => $student->isJustified ? "justified" :"absent",
                         "reporter" => $absent->user->name
                     ];

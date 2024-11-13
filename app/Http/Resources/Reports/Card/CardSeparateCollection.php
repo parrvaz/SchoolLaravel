@@ -25,6 +25,7 @@ class CardSeparateCollection extends ResourceCollection
                 'student_id'=>$std->id,
                 'name'=>$std->name,
                 'lastName'=>$std->lastName,
+                'firstName'=>$std->firstName,
                 'classroom_id'=>$std->classroom_id,
                 'classroom'=>$std->classroom->title,
                 'field_id'=>$std->classroom->field_id,

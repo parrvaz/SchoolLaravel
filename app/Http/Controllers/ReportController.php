@@ -77,6 +77,8 @@ class ReportController extends Controller
         $exams = $this->globalFilterWhereIn($exams,"exams.classroom_id",$validation->classrooms);
         $exams = $this->globalFilterWhereIn($exams,"exams.course_id",$validation->courses);
         $exams = $this->globalFilterWhereIn($exams,"student_exam.student_id",$validation->students);
+        $exams = $this->globalFilterWhereIn($exams,"exams.id",$validation->exams);
+
         $exams = $this->filterByDate($exams,$validation->startDate,$validation->endDate);
 
         $exams =  $exams->orderBy("date")
@@ -110,6 +112,8 @@ class ReportController extends Controller
             $classExam = $this->globalFilterWhereIn($classExam,"exams.type",$validation->types);
             $classExam = $this->globalFilterWhereIn($classExam,"exams.classroom_id",$classroomsIds);
             $classExam = $this->globalFilterWhereIn($classExam,"exams.course_id",$validation->courses);
+            $classExam = $this->globalFilterWhereIn($classExam,"exams.id",$validation->exams);
+            
             $classExam = $this->filterByDate($classExam,$validation->startDate,$validation->endDate);
 
 

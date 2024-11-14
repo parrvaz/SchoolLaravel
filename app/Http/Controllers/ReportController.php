@@ -88,11 +88,12 @@ class ReportController extends Controller
                 DB::raw("MIN(exams.id) as id"),
                 DB::raw("ROUND( SUM((student_exam.scaledScore /5 ) * course_fields.factor) / SUM(course_fields.factor)  ,2) as score"),
                 DB::raw("ROUND(AVG( ROUND((exams.expected/exams.totalScore)*20,2 ) ),2) as expected"),
-                );
+                DB::raw("GROUP_CONCAT(DISTINCT exams.course_id) as course_ids") // اضافه کردن course_ids
+
+            );
 
         $exams= $exams->get();
 
-//        return $exams;
         $classExam=collect();
         if($validation->students != null){
             $classroomsIds = Student::whereIn("id",$validation->students)->pluck("classroom_id");
@@ -113,7 +114,7 @@ class ReportController extends Controller
             $classExam = $this->globalFilterWhereIn($classExam,"exams.classroom_id",$classroomsIds);
             $classExam = $this->globalFilterWhereIn($classExam,"exams.course_id",$validation->courses);
             $classExam = $this->globalFilterWhereIn($classExam,"exams.id",$validation->exams);
-            
+
             $classExam = $this->filterByDate($classExam,$validation->startDate,$validation->endDate);
 
 

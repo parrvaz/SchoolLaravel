@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Reports\Progress;
 
+use App\Http\Resources\Course\GroupCourseResource;
+use App\Http\Resources\Course\ShortCourseCollection;
 use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -31,7 +33,7 @@ class ProgressCollection extends ResourceCollection
                 'score'=> $item->score?? null,
                 'expected'=> (int) $item->expected?? null,
                 'average'=> $this->classExam->where("date",$item->date)->first()->score ?? null,
-
+                'courses'=> new GroupCourseResource($item->course_ids),
             ];
         })->toArray();
     }

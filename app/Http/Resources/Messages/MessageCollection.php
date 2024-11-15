@@ -21,6 +21,7 @@ class MessageCollection extends ResourceCollection
                 'id'=> $item->id,
                 'subject'=> $item->subject,
                 'body'=> $item->body,
+                'type'=> $item->type==2 ? "SMS":"system",
                 "recipients"=> new UserCollection($item->recipients)
             ];
         })];

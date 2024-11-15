@@ -8,10 +8,9 @@ use Illuminate\Http\Request;
 
 class SMSController extends Controller
 {
-    public function sendMessage(){
-        $message= " اس ام سا تبلیعانی";
-        $phone= "09383851960";
-
+    public function sendMessage($message,$phones){
+//        $message= " اس ام سا تبلیعانی";
+//        $phone= "09383851960";
         $url = "https://portal.amootsms.com/rest/SendSimple";
 
         $url = $url."?"."Token=".urlencode(config("constant.SMS.token"));
@@ -21,12 +20,11 @@ class SMSController extends Controller
         $url = $url."&"."SMSMessageText=".urlencode($message);
         $url = $url."&"."LineNumber=public";
 
-        $url = $url."&"."Mobiles=".$phone;
+        $url = $url."&"."Mobiles=".$phones;
 
         $json = file_get_contents($url);
         echo $json;
 
 //$result = json_decode($json);
-//echo $result->Status;
     }
 }

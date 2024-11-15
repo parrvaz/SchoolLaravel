@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // شناسه فرستنده پیام
             $table->string('subject'); // موضوع پیام
             $table->text('body'); // متن پیام
+            $table->tinyInteger('type')->default(1);//1:message 2:SMS
             $table->timestamps();
         });
 

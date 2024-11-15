@@ -22,6 +22,7 @@ class InboxCollection extends ResourceCollection
                 'sender'=> $item->message->sender->name,
                 'subject'=> $item->message->subject,
                 'body'=> $item->message->body,
+                'type'=> $item->message->type ==2 ? "SMS":"system",
                 'isRead'=> (bool) $item->isRead,
             ];
         })];

@@ -15,7 +15,6 @@ use Musonza\Chat\Facades\ChatFacade as Chat;
 class MessageController extends Controller
 {
     public function send(Request $request, MessageValidation $validation){
-
         $role = auth()->user()->role;
         switch ($role){
             case config("constant.roles.parent"):
@@ -31,20 +30,32 @@ class MessageController extends Controller
         }
 
         return DB::transaction(function () use($request,$validation) {
+
+            $type = $validation->type ?? 1;
             // ایجاد پیام جدید
             $message = Message::create([
                 'user_id' => auth()->user()->id, // فرستنده پیام
                 'subject' => $validation->subject,
                 'body' => $validation->body,
+                'type'=>$type,
             ]);
+                // ثبت گیرندگان پیام
+                foreach ($validation->recipients as $recipient_id) {
+                    MessageRecipient::create([
+                        'message_id' => $message->id,
+                        'user_id' => $recipient_id, // شناسه گیرنده
+                    ]);
+                }
 
-            // ثبت گیرندگان پیام
-            foreach ($validation->recipients as $recipient_id) {
-                MessageRecipient::create([
-                    'message_id' => $message->id,
-                    'user_id' => $recipient_id, // شناسه گیرنده
-                ]);
+            if ($type==2){
+                $usersPhone = User::whereIn("id",$validation->recipients)->pluck("phone");
+                $phones = "";
+                foreach ($usersPhone as $phone)
+                    $phones = $phones . $phone . ",";
+                $phones = substr_replace($phones, '', -1);
+                (new SMSController())->sendMessage($validation->body,$phones);
             }
+
 
             return $this->successMessage();
         });

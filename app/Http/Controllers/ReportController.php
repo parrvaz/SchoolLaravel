@@ -47,14 +47,16 @@ class ReportController extends Controller
             return new CardResource($result);
         else
         {
-           return new CardSeparateCollection($result);
+           return new CardSeparateCollection($result["students"]);
         }
 
     }
 
     public function cardExcel(Request $request,FilterValidation $validation){
         $result = $this->cardMtd($request,$validation);
-        return Excel::download(new CardExport($result['studentExam']), "کارنامه".".xlsx");
+        $courseNames = Course::whereIn("id",$result["courses"])->get();
+        $result["courses"] = $courseNames;
+        return Excel::download(new CardExport($result), "کارنامه".".xlsx");
 
 
 
@@ -301,15 +303,19 @@ class ReportController extends Controller
                 )
                 ->get();
 
-
+            $courseIds = $studentExam->pluck("course_id")->unique();
+            $result['courses'] = $courseIds;
             $students =  $studentExam->groupBy("student_id");
 
             foreach ($students as $id=>$studentE){
+
                 $factors = $studentE->sum("factor");
                 $wightedScores = $studentE->sum("wightedScore");
                 $average = round( $wightedScores / $factors,2);
-                $result[$id]['average'] = $average;
-                $result[$id]['scores'] = $studentE;
+                $result["students"][$id]['average'] = $average;
+                $result["students"][$id]['name'] = $average;
+                $result["students"][$id]['lastName'] = $average;
+                $result["students"][$id]['scores'] = $studentE;
             }
 
         }

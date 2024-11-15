@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Course;
+use App\Models\Student;
 use App\Traits\ServiceTrait;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -16,33 +17,47 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class CardExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoSize, WithEvents,WithStyles
 {
     use ServiceTrait;
-    protected $items;
+    protected $students;
+    protected $courses;
 
     public function __construct($items)
     {
-        $this->items = $items;
+        $this->students = collect($items['students']);
+        $this->courses = $items['courses'];
     }
     public function collection()
     {
-       return $this->items;
+       return $this->students;
     }
 
     public function headings(): array
     {
-        return [
-            'نام درس',
-            'ضریب درس',
-            'نمره',
-        ];
+        $courseName = $this->courses->pluck("title")->toArray();
+        return array_merge([
+            'نام',
+            'نام خانوادگی',
+            'کلاس',
+            'معدل کل',
+        ],
+            $courseName
+        );
     }
 
     public function map($row): array
     {
-        return [
-            Course::find($row->course_id)->name,
-            $row->factor,
-            $this->zeroChar($row->score),
-        ];
+        $std = Student::find($row['scores']->first()->student_id);
+        $scores = $row['scores'];
+        $result =[];
+        $result[]= $std->firstName;
+        $result[]= $std->lastName;
+        $result[]= $std->classroom->title;
+        $result[]= $this->zeroChar($row['average']);
+
+        foreach ($this->courses as $course){
+            $result[]= $this->zeroChar($scores->where("course_id",$course->id)->first()->score ?? "");
+        }
+
+        return $result;
     }
 
     public function styles(Worksheet $sheet)
@@ -72,7 +87,7 @@ class CardExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
                     'color' => array('rgb' => '#ff0000')
                 ));
 
-                $cellRange = 'A1:C1';
+                $cellRange = 'A1:I1';
 
                 $event->sheet->styleCells(
                     $cellRange,

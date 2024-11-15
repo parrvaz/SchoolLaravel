@@ -53,6 +53,7 @@ class ReportController extends Controller
     }
 
     public function cardExcel(Request $request,FilterValidation $validation){
+        $validation['isSeparate'] = 1;
         $result = $this->cardMtd($request,$validation);
         $courseNames = Course::whereIn("id",$result["courses"])->get();
         $result["courses"] = $courseNames;

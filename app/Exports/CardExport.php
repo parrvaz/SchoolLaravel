@@ -87,19 +87,19 @@ class CardExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
                     'color' => array('rgb' => '#ff0000')
                 ));
 
-                $cellRange = 'A1:I1';
-
-                $event->sheet->styleCells(
-                    $cellRange,
-                    [
-
-                        'fill' => [
-                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                            'color' => ['argb' => 'BB66d979']
-                        ]
-
-                    ]
-                );
+//                $cellRange = 'A1:I1';
+//
+//                $event->sheet->styleCells(
+//                    $cellRange,
+//                    [
+//
+//                        'fill' => [
+//                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+//                            'color' => ['argb' => 'BB66d979']
+//                        ]
+//
+//                    ]
+//                );
             },
         ];
     }

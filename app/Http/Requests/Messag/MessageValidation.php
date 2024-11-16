@@ -18,7 +18,7 @@ class MessageValidation extends FormRequest
         return [
             'subject' => 'required|string|max:255',
             'body' => 'required|string',
-            'type' => 'nullable|in:1,2',
+            'type' => 'nullable|in:system,sms',
             'recipients' => 'required|array', // شناسه‌های گیرندگان
             'recipients.*' => 'exists:users,id',
         ];

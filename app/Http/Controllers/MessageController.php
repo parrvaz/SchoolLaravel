@@ -15,6 +15,8 @@ use Musonza\Chat\Facades\ChatFacade as Chat;
 class MessageController extends Controller
 {
     public function send(Request $request, MessageValidation $validation){
+        $type = ($validation->type=="sms" ?? 1) ? 2 :1;
+
         $role = auth()->user()->role;
         switch ($role){
             case config("constant.roles.parent"):
@@ -29,9 +31,8 @@ class MessageController extends Controller
                 break;
         }
 
-        return DB::transaction(function () use($request,$validation) {
+        return DB::transaction(function () use($request,$validation,$type) {
 
-            $type = $validation->type ?? 1;
             // ایجاد پیام جدید
             $message = Message::create([
                 'user_id' => auth()->user()->id, // فرستنده پیام

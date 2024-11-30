@@ -3,6 +3,8 @@
 namespace App\Http\Resources\Homework;
 
 use App\Http\Resources\Classroom\ClassroomShortCollection;
+use App\Http\Resources\Classroom\FieldCollection;
+use App\Http\Resources\Classroom\FieldShortCollection;
 use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -30,6 +32,9 @@ class HomeworkResource extends JsonResource
             'isFinal' => (bool) $this->isFinal,
             'link' => $this->link,
             'classrooms' => new ClassroomShortCollection($this->classrooms),
+            'fields' => new FieldShortCollection($this->classrooms->map(function ($classroom) {
+                return $classroom->field;
+            })),
             'photos' => new FileCollection($this->photos),
             'voices' =>new FileCollection( $this->voices),
             'pdfs' =>new FileCollection( $this->pdfs),

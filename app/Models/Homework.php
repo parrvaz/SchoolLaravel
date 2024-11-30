@@ -19,6 +19,11 @@ class Homework extends Model
         return $this->hasMany(StudentHomework::class);
     }
 
+    public function allStudents()
+    {
+        return $this->hasManyThrough(Student::class, Classroom::class);
+    }
+
     public function course(){
         return $this->belongsTo(Course::class);
     }

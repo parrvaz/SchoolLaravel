@@ -26,8 +26,13 @@ class HomeworkCollection extends ResourceCollection
                 'classrooms' =>new ClassroomShortCollection($item->classrooms),
                 'modifiedDate' => self::gToJ( $item->updated_at),
                 'date' => self::gToJ($item->date),
-                'studentsNumber'=> 0, //todo
-                'scoredNumber'=> 0,
+                'totalStdNumber'=> $item->classrooms->reduce(function ($carry, $classroom) {
+                    return $carry + $classroom->students->count();
+                }, 0),
+                'submitStdNumber'=> $item->students->filter(function ($e) {
+                    return !is_null($e->note) || !is_null($e->solution);
+                })->count(),
+                'scoredNumber'=>$item->students->whereNotNull("score")->count(),
                 'isFinal' => (bool) $item->isFinal,
 
             ];

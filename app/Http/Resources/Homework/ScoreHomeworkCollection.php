@@ -22,6 +22,7 @@ class ScoreHomeworkCollection extends ResourceCollection
             $diffDay =  $item->updated_at!=null ? $item->updated_at->diffInDays($item->homework->date) : null;
             return[
                 'id' =>$item->id,
+                'totalScore'=> $item->score,
                 "student_id"=>$student->id,
                 "name"=>$student->name,
                 "firstName"=>$student->firstName,

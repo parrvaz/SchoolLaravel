@@ -87,8 +87,8 @@ class HomeworkController extends Controller
         return DB::transaction(function () use($request,$validation,$homework) {
 
             $homework->classrooms()->detach();
-            $this->deleteGroupFile($homework->files()->pluck("file"));
-            $homework->files()->delete();
+            $this->deleteGroupFile($homework->allFiles()->pluck("file"));
+            $homework->allFiles()->delete();
 
             $homework->update([
                 'course_id'=>$validation->course_id,
@@ -108,8 +108,8 @@ class HomeworkController extends Controller
     public function delete($userGrade,Homework $homework){
         return DB::transaction(function () use($homework) {
             $homework->classrooms()->detach();
-            $this->deleteGroupFile($homework->files()->pluck("file"));
-            $homework->files()->delete();
+            $this->deleteGroupFile($homework->allFiles()->pluck("file"));
+            $homework->allFiles()->delete();
             //todo scores
             $homework->delete();
 
@@ -133,9 +133,12 @@ class HomeworkController extends Controller
         $homework->classrooms()->attach($validation->classrooms);
 
         $files = [];
-        $files = $this->fileHandler($request, $homework->id, "photos", $files);
         $files = $this->fileHandler($request, $homework->id, "voices", $files);
-        $files = $this->fileHandler($request, $homework->id, "pdfs", $files);
+
+        $files = $this->fileHandler($request, $homework->id, "files", $files);
+
+//        $files = $this->fileHandler($request, $homework->id, "photos", $files);
+//        $files = $this->fileHandler($request, $homework->id, "pdfs", $files);
 
         FileHomework::insert($files);
     }

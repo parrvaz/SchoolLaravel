@@ -30,14 +30,17 @@ class HomeworkStoreValidation extends FormRequest
             'classrooms'=>'required|array|min:1',
             'classrooms.*'=>'required|exists:classrooms,id',
 
-            'photos'=>'nullable|array',
-            'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-
             'voices'=>'nullable|array',
             'voices.*' => 'required|mimes:mp3,wav,ogg|max:10240',
 
-            'pdfs'=>'nullable|array',
-            'pdfs.*' => 'required|mimes:pdf|max:5120',
+//            'photos'=>'nullable|array',
+//            'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+//
+//            'pdfs'=>'nullable|array',
+//            'pdfs.*' => 'required|mimes:pdf|max:5120',
+
+            'files'=>'nullable|array',
+            'files.*' => 'required|mimes:jpeg,png,jpg,gif,pdf|max:5120',
 
         ];
     }

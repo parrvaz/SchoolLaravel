@@ -32,8 +32,12 @@ class Homework extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function files(){
+    public function allFiles(){
         return $this->hasMany(FileHomework::class);
+    }
+
+    public function files(){
+        return $this->hasMany(FileHomework::class)->where("type",config("constant.files.files"));
     }
 
     public function photos(){

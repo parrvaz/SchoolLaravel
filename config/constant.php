@@ -33,8 +33,9 @@ return [
         9=>"😡",
     ],
     "files"=>[
-      "photos"=>1,
-      "pdfs"=>2,
+//      "photos"=>1,
+//      "pdfs"=>2,
+      "files"=>1,
       "voices"=>3,
     ],
 

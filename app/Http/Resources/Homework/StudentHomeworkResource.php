@@ -28,9 +28,11 @@ class StudentHomeworkResource extends JsonResource
             'course' => $this->course->name,
             'score' => $this->score,
             'link' => $this->link,
-            'photos' => new FileCollection($this->photos),
             'voices' =>new FileCollection( $this->voices),
-            'pdfs' =>new FileCollection( $this->pdfs),
+            'files' =>new FileCollection( $this->files),
+
+//            'photos' => new FileCollection($this->photos),
+//            'pdfs' =>new FileCollection( $this->pdfs),
 
             'studentHomework_id'=> $stdHomework->id ?? null,
             'solution'=> $stdHomework!= null ? url('storage/' . $stdHomework->solution) : null,

@@ -35,9 +35,11 @@ class HomeworkResource extends JsonResource
             'fields' => new FieldShortCollection($this->classrooms->map(function ($classroom) {
                 return $classroom->field;
             })),
-            'photos' => new FileCollection($this->photos),
+//            'photos' => new FileCollection($this->photos),
+//            'pdfs' =>new FileCollection( $this->pdfs),
+            'files' =>new FileCollection( $this->files),
             'voices' =>new FileCollection( $this->voices),
-            'pdfs' =>new FileCollection( $this->pdfs),
-        ];
+
+            ];
     }
 }

@@ -21,7 +21,14 @@ class Homework extends Model
 
     public function allStudents()
     {
-        return $this->hasManyThrough(Student::class, Classroom::class);
+        return $this->hasManyThrough(
+            Student::class,
+            ClassroomHomework::class,
+            'homework_id',       // Foreign key on the classroom_homework table...
+            'classroom_id',      // Foreign key on the students table...
+            'id',                // Local key on the homework table...
+            'classroom_id'       // Local key on the classroom_homework table...
+        );
     }
 
     public function course(){

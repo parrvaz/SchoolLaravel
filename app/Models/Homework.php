@@ -31,6 +31,17 @@ class Homework extends Model
         );
     }
 
+    public function notSubmittedStudents(){
+        $homeworkId = $this->id; // مقدار homework_id فعلی
+
+        return $this->allStudents()
+            ->whereNotIn('students.id', function ($query) use ($homeworkId) {
+                $query->select('student_homework.student_id')
+                    ->from('student_homework')
+                    ->where('student_homework.homework_id', $homeworkId);
+            });
+    }
+
     public function course(){
         return $this->belongsTo(Course::class);
     }

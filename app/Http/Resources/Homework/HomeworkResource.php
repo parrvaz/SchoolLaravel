@@ -32,9 +32,6 @@ class HomeworkResource extends JsonResource
             'isFinal' => (bool) $this->isFinal,
             'link' => $this->link,
             'classrooms' => new ClassroomShortCollection($this->classrooms),
-            'fields' => new FieldShortCollection($this->classrooms->map(function ($classroom) {
-                return $classroom->field;
-            })),
 //            'photos' => new FileCollection($this->photos),
 //            'pdfs' =>new FileCollection( $this->pdfs),
             'files' =>new FileCollection( $this->files),

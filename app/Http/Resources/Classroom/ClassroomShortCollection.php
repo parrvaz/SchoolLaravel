@@ -19,6 +19,8 @@ class ClassroomShortCollection extends ResourceCollection
             return[
                 'id'=>$item->id,
                 'title'=>$item->title,
+                'field_id'=>$item->field_id,
+                'field'=>$item->field->title,
             ];
         })->toArray();
     }

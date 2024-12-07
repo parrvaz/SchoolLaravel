@@ -31,7 +31,7 @@ class HomeworkStoreValidation extends FormRequest
             'classrooms.*'=>'required|exists:classrooms,id',
 
             'voices'=>'nullable|array',
-            'voices.*' => 'required|mimes:mp3,wav,ogg|max:10240',
+            'voices.*' => 'required|mimes:mp3,wav,ogg,webm|max:10240',
 
 //            'photos'=>'nullable|array',
 //            'photos.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',

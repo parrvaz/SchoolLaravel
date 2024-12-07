@@ -21,7 +21,7 @@ class StudentHomeworkCollection extends ResourceCollection
             $stdHomework = $item->studentHomework(auth()->user()->modelHasRole->idInRole)->first();
             $status = "notSubmitted";
             $score = null;
-            if ($stdHomework!=null){
+            if ($stdHomework!=null && $stdHomework->updated_at != null){
                 $days = $stdHomework->updated_at->diffInDays($item->date) ?? 0;
                 $status = $days > -1 ? "okSubmitted" : (int) $days * -1;
                 $score = $stdHomework->score;

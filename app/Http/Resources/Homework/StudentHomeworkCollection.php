@@ -22,7 +22,7 @@ class StudentHomeworkCollection extends ResourceCollection
             $status = "notSubmitted";
             $score = null;
             if ($stdHomework!=null){
-                $days = $stdHomework->updated_at->diffInDays($item->date);
+                $days = $stdHomework->updated_at->diffInDays($item->date) ?? 0;
                 $status = $days > -1 ? "okSubmitted" : (int) $days * -1;
                 $score = $stdHomework->score;
             }

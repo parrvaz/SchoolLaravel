@@ -20,11 +20,9 @@ class StudentHomeworkCollection extends ResourceCollection
         return $this->collection->map(function ($item){
             $stdHomework = $item->studentHomework(auth()->user()->modelHasRole->idInRole)->first();
             $status = "notSubmitted";
-            $score = null;
             if ($stdHomework!=null && $stdHomework->updated_at != null){
                 $days = $stdHomework->updated_at->diffInDays($item->date) ?? 0;
                 $status = $days > -1 ? "okSubmitted" : (int) $days * -1;
-                $score = $stdHomework->score;
             }
             return[
                 'id' =>$item->id,
@@ -35,7 +33,7 @@ class StudentHomeworkCollection extends ResourceCollection
                 'date' => self::gToJ($item->date),
 
                 'studentHomework_id'=> $stdHomework->id ?? null,
-                'score'=> $score,
+                'score'=> $stdHomework->score ?? null,
                 'status'=> $status,
 
             ];

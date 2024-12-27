@@ -185,6 +185,34 @@ trait ReportTrait
         return $result;
     }
 
+    public function makeAbsentHeaderRows($items,$students,$startRow){
+        $headers = collect();
+        if($items==null){
+            $row = collect(["نام","نام خانوادگی","کلاس"]);
+            $headers->add($row);
+
+
+            foreach ($students as $key=>$student){
+                $row = collect();
+
+                $std = Student::find($key);
+
+                $row->add( $std->firstName);
+                $row->add( $std->lastName);
+                $row->add( $std->classroom->title);
+                $headers->add($row);
+            }
+
+            $items = $headers;
+        }
+
+
+
+            return $items;
+
+    }
+
+
     public function makeCardHeaderRows($items,$students){
         if($items!=null){
             ($items[0])->add("درس");
@@ -192,7 +220,7 @@ trait ReportTrait
             ($items[2])->add("تاریخ پایان");
 
 
-            for ($i=6;$i< count($items) ; $i++)
+            for ($i=5;$i< count($items) ; $i++)
                 ($items[$i])->add(null);
 
             return $items;
@@ -260,17 +288,14 @@ trait ReportTrait
         $headers->add($row);
 
         $row = collect(["نام","نام خانوادگی","کلاس"]);
+        foreach ($exams as $exam){
+            $row->add("");
+        }
         $headers->add($row);
 
 
         return $headers;
 
-//        $headers->add((new Collection(["","","درس"]))->merge($exams->pluck("title"))) ;
-//        $headers->add((new Collection(["","","تاریخ"]))->merge($exams->pluck("date"))) ;
-//        $headers->add((new Collection(["","","حداکثر نمره"]))->merge($exams->pluck("totalScore"))) ;
-//        $headers->add((new Collection(["","","نمره مورد انتظار"]))->merge($exams->pluck("expected"))) ;
-//        $headers->add((new Collection(["","","نوع آزمون"]))->merge($exams->pluck("type"))) ;
-//        return $headers;
     }
 
     public function makeItemsForExcel($exams, $students)
@@ -292,6 +317,26 @@ trait ReportTrait
             $items->add($row);
         }
 
+        return $items;
+    }
+
+    public function makeItemsCardExcel($items,$students,$result,$startStd){
+        $items = $this->makeCardHeaderRows($items,$students);
+
+        foreach ($result["courses"] as $course){
+            ($items[0])->add($course->title);
+            ($items[1])->add("***");
+            ($items[2])->add("***");
+            ($items[$startStd -1])->add("");
+            $i= $startStd;
+            foreach ($students as $key=>$student){
+                $e = $result["students"][$key] ?? null;
+
+                $score = $e != null ? $e["scores"]->where("course_id",$course->id)->first()->score ?? null : null;
+                ($items[$i])->add( $score === 0 ? "0" : $score ) ;
+                $i++;
+            }
+        }
         return $items;
     }
 

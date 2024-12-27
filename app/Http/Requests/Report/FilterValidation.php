@@ -38,6 +38,9 @@ class FilterValidation extends FormRequest
             'card'=>'nullable|boolean',
             'absent'=>'nullable|boolean',
             'detail'=>'nullable|boolean',
+            'absentNumber'=>'nullable|boolean',
+            'absentTotal'=>'nullable|boolean',
+            'absentPercent'=>'nullable|boolean',
 
 
 

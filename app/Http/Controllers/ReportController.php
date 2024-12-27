@@ -42,6 +42,7 @@ class ReportController extends Controller
 
     public function card(Request $request,FilterValidation $validation){
         $result = $this->cardMtd($request,$validation);
+        return $result["students"];
         if (!$validation->isSeparate)
             return new CardResource($result);
         else
@@ -57,10 +58,40 @@ class ReportController extends Controller
         $courseNames = Course::whereIn("id",$result["courses"])->get();
         $result["courses"] = $courseNames;
         return Excel::download(new CardExport($result), "کارنامه".".xlsx");
+    }
+
+    public function cardPdf(Request $request,FilterValidation $validation){
+        $result = $this->cardMtd($request,$validation);
 
 
+        if (!$validation["isSeparate"]){
+            $header = collect([
+                'title' => 'کارنامه ماهانه',
+                'school' => 'مدرسه احمدی روشن',
+                'month' => 'مهر',
+                'grade' => 'دهم',
+                'year' => '۱۴۰۳ - ۱۴۰۴',
+                'studentName' => 'کل',
+                'average' => $result["average"],
+            ]);
+
+            return $this->pdfStuff('cardAll',$header,$result["studentExam"]);
+        }else{
+            $header = collect([
+                'title' => 'کارنامه ماهانه',
+                'school' => 'مدرسه احمدی روشن',
+                'month' => 'مهر',
+                'grade' => 'دهم',
+                'year' => '۱۴۰۳ - ۱۴۰۴',
+//                'studentName' => 'کل',
+//                'average' => $result["average"],
+            ]);
+
+            return $this->pdfStuff('cardSeparate',$header,$result["students"]);
+        }
 
     }
+
     public function progress(Request $request,FilterValidation $validation){
         $exams= Exam::query()
             ->where("exams.user_grade_id", $request->userGrade->id)

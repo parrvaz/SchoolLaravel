@@ -5,12 +5,16 @@ namespace App\Traits;
 use App\AccountingItem;
 use App\Models\ModelHasRole;
 use App\Models\UserGrade;
+use App\OlPrice;
 use App\Repositories\AccountingItemRepository;
 use App\Services\AccountService;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 use Morilog\Jalali\CalendarUtils;
 use Morilog\Jalali\Jalalian;
+use niklasravnsborg\LaravelPdf\PdfWrapper;
 use function PHPUnit\Framework\isNull;
 
 trait ServiceTrait
@@ -111,6 +115,25 @@ trait ServiceTrait
 
     public function zeroChar($number){
         return $number == 0 ? '0' : $number;
+    }
+
+
+    public function pdfStuff($viewName, $header, $items, $name = null, $exception = null, $orientation = 'P')
+    {
+        //delete old items in report directory
+        $file = new Filesystem;
+        $file->cleanDirectory(public_path('reports'));
+
+        $pdf = new PdfWrapper();
+        $time = Carbon::now()->timestamp;
+        $filePath = "reports/";
+        $pdf->loadView($viewName, compact(['items', 'header', 'exception']), [], [
+            'mode' => 'utf-8',
+            'orientation' => $orientation,
+        ])->save($filePath . ($name ?? $viewName) . "-{$time}." . 'pdf');
+
+        return response()->download(public_path("reports/" . ($name ?? $viewName) . "-{$time}.pdf"));
+
     }
 
 

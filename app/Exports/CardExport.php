@@ -22,8 +22,8 @@ class CardExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
 
     public function __construct($items)
     {
-        $this->students = collect($items['students']);
-        $this->courses = $items['courses'];
+        $this->students = collect($items['students'] ?? []);
+        $this->courses = $items['courses'] ?? [];
     }
     public function collection()
     {

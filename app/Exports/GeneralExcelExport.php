@@ -26,18 +26,6 @@ class GeneralExcelExport implements FromCollection,WithMapping, ShouldAutoSize, 
     {
        return $this->items;
     }
-
-//    public function headings(): array
-//    {
-//        return [
-//            'نام',
-//            'نام خانوادگی',
-//            'کلاس',
-//            'نمره',
-//            'بازخورد',
-//        ];
-//    }
-
     public function map($row): array
     {
 
@@ -71,19 +59,6 @@ class GeneralExcelExport implements FromCollection,WithMapping, ShouldAutoSize, 
                     'color' => array('rgb' => '#ff0000')
                 ));
 
-//                $cellRange = 'C1:E1';
-//
-//                $event->sheet->styleCells(
-//                    $cellRange,
-//                    [
-//
-//                        'fill' => [
-//                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-//                            'color' => ['argb' => 'BB66d979']
-//                        ]
-//
-//                    ]
-//                );
             },
         ];
     }

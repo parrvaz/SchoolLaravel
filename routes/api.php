@@ -7,6 +7,7 @@ use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseGradeController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\HomeworkController;
 use App\Http\Controllers\MenuItemController;
@@ -232,6 +233,11 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:assistant')->get('/generalExcel', [ReportController::class, 'generalExcel']);
 
         });
+
+        Route::prefix("excel")->group(function () {
+            Route::middleware('role:assistant')->get('/general', [ExcelController::class, 'general']);
+        });
+
 
 
 

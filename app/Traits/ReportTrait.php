@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Http\Requests\Report\FilterValidation;
 use App\Models\Absent;
+use App\Models\Exam;
 use App\Models\Student;
 use App\Models\StudentExam;
 use Illuminate\Support\Facades\DB;
@@ -245,11 +246,39 @@ trait ReportTrait
             $row->add( $std->lastName);
             $row->add( $std->classroom->title);
             foreach ($exams as $exam){
-                $row->add( $student->where("exam_id",$exam->id)->first()->score ?? "" );
+                $score = $student->where("exam_id",$exam->id)->first()->score ?? null;
+                $row->add( $score === 0 ? '0' : $score ) ;
             }
             $items->add($row);
         }
 
         return $items;
+    }
+
+    public function allExamsScores($request,$validation){
+        $exams= Exam::query()
+            ->where("exams.user_grade_id", $request->userGrade->id)
+            ->where("exams.status",1);
+
+        $exams = $this->filterByDate($exams,$validation->startDate,$validation->endDate);
+        $exams = $this->globalFilterWhereIn($exams,"id",$validation->exams);
+        $exams =$exams
+            ->orderBy("exams.course_id")
+            ->orderBy("date")
+            ->get();
+
+        $students = StudentExam::query()->
+        whereHas('exam', function ($query)use($request) {
+            return $query->where('user_grade_id', $request->userGrade->id);
+        });
+        $students = $this->globalFilterRelationWhereIn($students,"classroom_id",$validation->classrooms,"exam");
+        $students = $this->globalFilterWhereIn($students,"student_exam.student_id",$validation->students);
+        $students =$students
+            ->orderBy("student_id")
+            ->get()
+            ->groupBy("student_id")
+        ;
+
+        return [$exams,$students];
     }
 }

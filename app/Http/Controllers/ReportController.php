@@ -42,7 +42,6 @@ class ReportController extends Controller
 
     public function card(Request $request,FilterValidation $validation){
         $result = $this->cardMtd($request,$validation);
-        return $result["students"];
         if (!$validation->isSeparate)
             return new CardResource($result);
         else

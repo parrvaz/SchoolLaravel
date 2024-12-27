@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\StudentExam;
 use Illuminate\Support\Facades\DB;
 use phpseclib3\Math\BigInteger\Engines\GMP\DefaultEngine;
+use function PHPUnit\Framework\isFalse;
 
 trait ReportTrait
 {
@@ -184,7 +185,46 @@ trait ReportTrait
         return $result;
     }
 
-    public function makeHeaderRows($exams)
+    public function makeCardHeaderRows($items,$students){
+        if($items!=null){
+            ($items[0])->add("درس");
+            ($items[1])->add("تاریخ شروع");
+            ($items[2])->add("تاریخ پایان");
+
+
+            for ($i=6;$i< count($items) ; $i++)
+                ($items[$i])->add(null);
+
+            return $items;
+        }
+        else{
+            $headers =collect();
+            $row = collect(["","","درس"]);
+            $headers->add($row);
+            $row = collect(["","","تاریخ شروع"]);
+            $headers->add($row);
+            $row = collect(["","","تاریخ پایان"]);
+            $headers->add($row);
+            $row = collect(["نام","نام خانوادگی","کلاس"]);
+            $headers->add($row);
+
+            foreach ($students as $key=>$student){
+                $row = collect();
+
+                $std = Student::find($key);
+
+                $row->add( $std->firstName);
+                $row->add( $std->lastName);
+                $row->add( $std->classroom->title);
+                $headers->add($row);
+            }
+
+            return $headers;
+        }
+
+    }
+
+    public function makeDetailHeaderRows($exams)
     {
         $headers =collect();
 
@@ -235,7 +275,7 @@ trait ReportTrait
 
     public function makeItemsForExcel($exams, $students)
     {
-        $items = $this->makeHeaderRows($exams);
+        $items = $this->makeDetailHeaderRows($exams);
 
         foreach ($students as $key=>$student){
             $row = collect();

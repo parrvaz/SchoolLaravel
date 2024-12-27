@@ -31,10 +31,16 @@ class FilterValidation extends FormRequest
             'exams.*'=>'nullable|exists:exams,id',
             'title'=>'nullable|string|max:100',
 
-
             'date'=>['nullable', new JalaliDateValidation()],
             'startDate'=>['nullable', new JalaliDateValidation()],
             'endDate'=>['nullable', new JalaliDateValidation()],
+
+            'card'=>'nullable|boolean',
+            'absent'=>'nullable|boolean',
+            'detail'=>'nullable|boolean',
+
+
+
         ];
     }
 }

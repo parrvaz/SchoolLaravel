@@ -44,37 +44,36 @@
             margin-header: 1cm;
             margin-footer: 1cm;
             margin-bottom: 2.25cm;
-            margin-top: 4.4cm;
-            header: otherpages;
             footer: page-footer;
         }
 
-        @page :first {
-            header: firstpage;
-            margin-top: 4.4cm;
-        }
     </style>
 </head>
 <body>
 
 @foreach($items as $key=> $item)
-    @php echo $item["average"] @endphp
-<htmlpageheader name="firstpage" style="display:none">
-    <div class="" style="padding: 0.9rem ; width: 100%; border-radius: 5px ; border: 2px solid black;">
+
+<htmlpagefooter name="page-footer">
+    <div style="padding: 0.4rem ; width: 100% ; border-top: 2px solid black">
+        <div style="font-weight: bold; width: 55%; float: right; text-align: left;">www.pishkar.ir</div>
+    </div>
+</htmlpagefooter>
+
+    <div class="" style="padding: 0.9rem ; width: 100%; border-radius: 5px ; border: 2px solid black; margin-bottom: 2rem">
         <div
             style="font-weight: bold; text-align: center ; width: 100%">{{$header['title']}} {{$header['school']}}  </div>
-                <div style="width: 30%; text-align: left ; float: left">
-                    <span>سال تحصیلی:</span>
-                    <span>{{$header["year"]}}</span>
-                </div>
-                <div style="width: 40%; text-align: center ; float: left">
-                     <span> پایه:</span>
-                        <span>{{$header['grade'] }}</span>
-                </div>
-                <div style="width: 30%; text-align: right ; float: right">
-                    <span> زمان:</span>
-                    <span>{{$header['month'] }}</span>
-                </div>
+        <div style="width: 30%; text-align: left ; float: left">
+            <span>سال تحصیلی:</span>
+            <span>{{$header["year"]}}</span>
+        </div>
+        <div style="width: 40%; text-align: center ; float: left">
+            <span> پایه:</span>
+            <span>{{$header['grade'] }}</span>
+        </div>
+        <div style="width: 30%; text-align: right ; float: right">
+            <span> زمان:</span>
+            <span>{{$header['month'] }}</span>
+        </div>
 
 
         <div style="width: 48%; text-align: left ; float: left">
@@ -83,18 +82,10 @@
         </div>
         <div style="width: 48%; text-align: right ; float: right">
             <span> نام دانش آموز:</span>
-            <span> {{\App\Models\Student::find($key)->name}}</span>
+            <span> {{$item["scores"][0]["student"]["name"]}}</span>
         </div>
 
     </div>
-</htmlpageheader>
-
-<sethtmlpageheader name="firstpage" value="on" show-this-page="1"/>
-<htmlpagefooter name="page-footer">
-    <div style="padding: 0.4rem ; width: 100% ; border-top: 2px solid black">
-        <div style="font-weight: bold; width: 55%; float: right; text-align: left;">www.pishkar.ir</div>
-    </div>
-</htmlpagefooter>
 
 <table width="100%" rotate="0" style="text-align: center ; direction: rtl;">
     <thead>

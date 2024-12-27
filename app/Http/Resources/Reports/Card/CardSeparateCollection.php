@@ -20,7 +20,7 @@ class CardSeparateCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return $this->collection->map(function ($item,$key){
-            $std = Student::find($key);
+            $std = $item['scores'][0]['student'];
             return[
                 'student_id'=>$std->id,
                 'name'=>$std->name,

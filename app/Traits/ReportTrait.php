@@ -137,6 +137,7 @@ trait ReportTrait
                 $result['studentExam'] = $studentExam;
             }
         }else{
+            $studentExam = $studentExam->with(['student']);
             $studentExam = $studentExam->groupBy(
                 "exams.course_id",
                 "course_fields.factor",

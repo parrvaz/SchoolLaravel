@@ -45,7 +45,7 @@ class CardExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
 
     public function map($row): array
     {
-        $std = Student::find($row['scores']->first()->student_id);
+        $std = $row['scores'][0]["student"];
         $scores = $row['scores'];
         $result =[];
         $result[]= $std->firstName;

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use DateTimeZone;
-use Illuminate\Http\Request;
 
 class SMSController extends Controller
 {
@@ -23,7 +22,7 @@ class SMSController extends Controller
         $url = $url."&"."Mobiles=".$phones;
 
         $json = file_get_contents($url);
-        echo $json;
+//        echo $json;
 
 //$result = json_decode($json);
     }

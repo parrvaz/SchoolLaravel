@@ -312,7 +312,7 @@ trait ReportTrait
             $row->add( $std->classroom->title);
             foreach ($exams as $exam){
                 $score = $student->where("exam_id",$exam->id)->first()->score ?? null;
-                $row->add( $score === 0 ? '0' : $score ) ;
+                $row->add( $score === 0 ? "0" : $score ) ;
             }
             $items->add($row);
         }

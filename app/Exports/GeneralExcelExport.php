@@ -29,7 +29,7 @@ class GeneralExcelExport implements FromCollection,WithMapping, ShouldAutoSize, 
     public function map($row): array
     {
 
-        return $row->toArray();
+        return $this->zeroChar($row->toArray());
     }
 
     public function styles(Worksheet $sheet)

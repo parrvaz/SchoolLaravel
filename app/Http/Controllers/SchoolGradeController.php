@@ -42,8 +42,6 @@ class SchoolGradeController extends Controller
     }
 
     public function show(){
-
-
         return new SchoolGradeCollection($this->getGrades());
     }
 

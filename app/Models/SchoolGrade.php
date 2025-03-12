@@ -10,8 +10,13 @@ class SchoolGrade extends Model
     use HasFactory;
     protected $guarded=[];
 
+
+    public function school(){
+        return $this->belongsTo(School::class);
+    }
+
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->hasOneThrough(User::class, School::class,'id','user_id','school_id','id');
     }
 
     public function classrooms(){

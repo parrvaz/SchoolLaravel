@@ -32,14 +32,14 @@ class PermissionMiddleware
             return $this->error("permissionForUser",403);
         }
 
-        $userGrade =$request->userGrade;
+        $schoolGrade =$request->schoolGrade;
         $user = auth('api')->user();
         $userRole = $user->getRoleNames()->first();
 
         // todo check packages
 
         //is owner grade
-        if( $userGrade->user_id == $user->id || $userRole == "assistant" || $role=="general")
+        if( $schoolGrade->school->user_id == $user->id || $userRole == "assistant" || $role=="general")
         {
               return $next($request);
 

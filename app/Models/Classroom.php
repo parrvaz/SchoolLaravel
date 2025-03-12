@@ -15,7 +15,7 @@ class Classroom extends Model
     }
 
     public function userGrade(){
-        return $this->belongsTo(UserGrade::class);
+        return $this->belongsTo(SchoolGrade::class);
     }
 
     public function field(){

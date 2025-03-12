@@ -12,7 +12,7 @@ use App\Models\ModelHasRole;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
-use App\Models\UserGrade;
+use App\Models\SchoolGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;

@@ -8,7 +8,7 @@ use App\Http\Resources\Classroom\ClassroomResource;
 use App\Http\Resources\Grade\ExamCreateCollection;
 use App\Http\Resources\Grade\ExamCreateResource;
 use App\Models\Classroom;
-use App\Models\UserGrade;
+use App\Models\SchoolGrade;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller

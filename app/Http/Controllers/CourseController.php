@@ -12,7 +12,7 @@ use App\Http\Resources\Grade\ExamCreateResource;
 use App\Models\ClassCourseTeacher;
 use App\Models\Course;
 use App\Models\CourseGrade;
-use App\Models\UserGrade;
+use App\Models\SchoolGrade;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller

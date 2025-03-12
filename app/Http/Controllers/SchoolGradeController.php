@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Grades\UserGradesValidation;
 use App\Http\Resources\Grade\UserGradeCollection;
 use App\Http\Resources\Grade\UserGradeResource;
-use App\Models\UserGrade;
+use App\Models\SchoolGrade;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
-class UserGradeController extends Controller
+class SchoolGradeController extends Controller
 {
 
     public function store(UserGradesValidation $validation){
-        $grade = UserGrade::create([
-            'user_id'=>auth()->user()->id,
+        $grade = SchoolGrade::create([
+            'school_id'=>auth()->user()->school->id,
             'grade_id'=>$validation->grade_id,
             'title'=>$validation->title,
             'code'=> Str::random(30),
@@ -22,7 +22,7 @@ class UserGradeController extends Controller
         return new UserGradeResource($grade);
     }
 
-    public function update(UserGrade $userGrade,UserGradesValidation $validation){
+    public function update(SchoolGrade $userGrade, UserGradesValidation $validation){
         $userGrade->update([
             'grade_id'=>$validation->grade_id,
             'title'=>$validation->title,
@@ -47,8 +47,8 @@ class UserGradeController extends Controller
         return new UserGradeCollection($this->getGrades());
     }
 
-    public function delete(UserGrade $userGrade){
-        $userGrade->delete();
+    public function delete(SchoolGrade $schoolGrade){
+        $schoolGrade->delete();
         return $this->successMessage();
     }
 
@@ -65,15 +65,15 @@ class UserGradeController extends Controller
             case config("constant.roles.assistant"):
             case config("constant.roles.teacher"):
                 $teacher = $user->teacher;
-                $grades = UserGrade::where('user_id',$teacher->user_id)->get();
+                $grades = SchoolGrade::where('user_id',$teacher->user_id)->get();
                 break;
             case config("constant.roles.manager"):
-                $grades = UserGrade::where('user_id',auth()->user()->id)->get();
+                $grades = SchoolGrade::where('user_id',auth()->user()->id)->get();
                 break;
             case config("constant.roles.student"):
             case config("constant.roles.parent"):
                 $classroom = $user->student->classroom;
-                $grades = UserGrade::where('id',$classroom->user_grade_id)->get();
+                $grades = SchoolGrade::where('id',$classroom->user_grade_id)->get();
                 break;
         }
 

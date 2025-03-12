@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use App\AccountingItem;
 use App\Models\ModelHasRole;
-use App\Models\UserGrade;
+use App\Models\SchoolGrade;
 use App\OlPrice;
 use App\Repositories\AccountingItemRepository;
 use App\Services\AccountService;

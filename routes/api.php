@@ -24,7 +24,7 @@ use App\Http\Controllers\PlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GradeController;
-use App\Http\Controllers\UserGradeController;
+use App\Http\Controllers\SchoolGradeController;
 
 //Route::get('/user', function (Request $request) {
 //    return $request->user();
@@ -51,25 +51,24 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix("schools")->group(function () {
         Route::post('/store', [SchoolController::class, 'store']);
         Route::get('/show', [SchoolController::class, 'show']);
-
     });
 
 
 
     //UserGrades Api
     Route::prefix("grades")->group(function () {
-        Route::post('/store', [UserGradeController::class, 'store']);
-        Route::post('/update/{user_grade}', [UserGradeController::class, 'update']);
-        Route::get('/show', [UserGradeController::class, 'show']);
-        Route::post('/delete/{user_grade}', [UserGradeController::class, 'delete']);
+        Route::post('/store', [SchoolGradeController::class, 'store']);
+        Route::post('/update/{user_grade}', [SchoolGradeController::class, 'update']);
+        Route::get('/show', [SchoolGradeController::class, 'show']);
+        Route::post('/delete/{user_grade}', [SchoolGradeController::class, 'delete']);
         Route::get('/items', [MenuItemController::class, 'show']);
 
     });
 
     Route::prefix('{userGrade}')->middleware("findUserGrade")->group(function () {
 
-        Route::middleware('role:manager')->post('/update', [UserGradeController::class, 'updateCode']);
-        Route::middleware('role:manager')->post('/delete', [UserGradeController::class, 'deleteCode']);
+        Route::middleware('role:manager')->post('/update', [SchoolGradeController::class, 'updateCode']);
+        Route::middleware('role:manager')->post('/delete', [SchoolGradeController::class, 'deleteCode']);
 
         Route::middleware('role:general')->get('/dashboard', [GradeController::class, 'dashboard']);
 

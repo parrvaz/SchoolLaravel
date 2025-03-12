@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\UserGrade;
+use App\Models\SchoolGrade;
 use App\Traits\MessageTrait;
 use Closure;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class FindUserGradeMiddleware
     {
         try{
             $code = $request->userGrade;
-            $userGrade =UserGrade::whereCode($code)->first();
+            $userGrade =SchoolGrade::whereCode($code)->first();
             if ($userGrade==null)
                 return $this->error();
             $request->userGrade=$userGrade;

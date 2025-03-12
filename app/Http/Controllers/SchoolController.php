@@ -6,43 +6,51 @@ use App\Http\Requests\School\SchoolValidation;
 use App\Http\Resources\School\SchoolResource;
 use App\Models\School;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SchoolController extends Controller
 {
-    public function store(SchoolValidation $validation){
-        $user = auth()->user();
-        if ($user->role != config("constant.roles.manager"))
-            return $this->error("permissionForUser",403);
+    public function store(Request $request,SchoolValidation $validation){
+        return DB::transaction(function () use($request,$validation) {
 
-        $school = $user->school;
-        if ($school != null){
-            $school->update([
-                "title"=>$validation->title,
-                "gender"=>$validation->gender,
-                "phone"=>$validation->phone,
-                "logo"=>$validation->logo,
-                "postalCode"=>$validation->postalCode,
-                "bankAccount"=>$validation->bankAccount,
-                "website"=>$validation->website,
-                "socialMedia"=>$validation->socialMedia,
-            ]);
-        }else{
-            School::create([
-                "user_id"=> $user->id,
-                "title"=>$validation->title,
-                "gender"=>$validation->gender,
-                "phone"=>$validation->phone,
-                "logo"=>$validation->logo,
-                "location"=>$validation->location,
-                "postalCode"=>$validation->postalCode,
-                "bankAccount"=>$validation->bankAccount,
-                "website"=>$validation->website,
-                "socialMedia"=>$validation->socialMedia,
-            ]);
-        }
+            $user = auth()->user();
+            if ($user->role != config("constant.roles.manager"))
+                return $this->error("permissionForUser", 403);
+
+            $gender = $validation->gender == 'male' ? 0 : ($validation->gender == 'female' ? 1 : null);
+
+            $school = $user->school;
+            $photoPath = $this->saveSingleFile($request,"schools/images","logo");
+
+            if ($school != null) {
+                $school->update([
+                    "title" => $validation->title,
+                    "gender" => $gender,
+                    "phone" => $validation->phone,
+                    "logo" => $photoPath,
+                    "postalCode" => $validation->postalCode,
+                    "bankAccount" => $validation->bankAccount,
+                    "website" => $validation->website,
+                    "socialMedia" => $validation->socialMedia,
+                ]);
+            } else {
+                School::create([
+                    "user_id" => $user->id,
+                    "title" => $validation->title,
+                    "gender" => $gender,
+                    "phone" => $validation->phone,
+                    "logo" => $photoPath,
+                    "location" => $validation->location,
+                    "postalCode" => $validation->postalCode,
+                    "bankAccount" => $validation->bankAccount,
+                    "website" => $validation->website,
+                    "socialMedia" => $validation->socialMedia,
+                ]);
+            }
 
 
-        return $this->successMessage();
+            return $this->successMessage();
+        });
     }
 
     public function show(){

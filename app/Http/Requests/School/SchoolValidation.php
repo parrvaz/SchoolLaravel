@@ -17,7 +17,7 @@ class SchoolValidation extends FormRequest
     {
         return [
             'title'=>'required|string|min:1|max:50',
-            'gender'=>'nullable|bool',
+            'gender'=>'nullable|in:male,female',
             'phone'=>'nullable|string|min:1|max:50',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'location' => 'nullable|string|min:1|max:50',

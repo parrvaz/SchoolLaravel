@@ -35,6 +35,10 @@ class AuthenticationController extends Controller
                 "idInRole"=>$user->id
             ]);
 
+            $user->school()->create([
+                "title"=> "مدرسه " . $user->name
+            ]);
+
             return response()->json([
                 'user' => $user,
                 'token' => $user->createToken('passportToken')->accessToken

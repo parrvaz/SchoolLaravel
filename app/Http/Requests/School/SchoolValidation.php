@@ -20,7 +20,11 @@ class SchoolValidation extends FormRequest
             'gender'=>'nullable|bool',
             'phone'=>'nullable|string|min:1|max:50',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'location' => 'nullable|string',
+            'location' => 'nullable|string|min:1|max:50',
+            'postalCode' => 'nullable|string|min:1|max:50',
+            'bankAccount' => 'nullable|string|min:1|max:50',
+            'website' => 'nullable|string|min:1|max:50',
+            'socialMedia' => 'nullable|string|min:1|max:50',
         ];
     }
 }

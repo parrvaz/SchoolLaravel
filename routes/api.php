@@ -14,6 +14,7 @@ use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SMSController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentHomeworkController;
@@ -44,6 +45,14 @@ Route::middleware('auth:api')->group(function () {
 
 
     Route::post('/operation', [GradeController::class, 'operation']);
+
+
+    //School Api
+    Route::prefix("schools")->group(function () {
+        Route::post('/store', [SchoolController::class, 'store']);
+        Route::get('/show', [SchoolController::class, 'show']);
+
+    });
 
 
 

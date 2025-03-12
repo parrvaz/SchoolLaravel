@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class FindUserGradeMiddleware
+class FindSchoolGradeMiddleware
 {
     use MessageTrait;
     /**
@@ -19,11 +19,11 @@ class FindUserGradeMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         try{
-            $code = $request->userGrade;
-            $userGrade =SchoolGrade::whereCode($code)->first();
-            if ($userGrade==null)
+            $code = $request->schoolGrade;
+            $schoolGrade =SchoolGrade::whereCode($code)->first();
+            if ($schoolGrade==null)
                 return $this->error();
-            $request->userGrade=$userGrade;
+            $request->schoolGrade=$schoolGrade;
             return $next($request);
         }catch (\Exception $exception){
             return $this->error();

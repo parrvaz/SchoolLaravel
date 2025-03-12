@@ -5,7 +5,7 @@ namespace App\Http\Resources\Grade;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class UserGradeCollection extends ResourceCollection
+class SchoolGradeCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

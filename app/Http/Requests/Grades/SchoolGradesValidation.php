@@ -4,7 +4,7 @@ namespace App\Http\Requests\Grades;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserGradesValidation extends FormRequest
+class SchoolGradesValidation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

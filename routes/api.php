@@ -65,7 +65,7 @@ Route::middleware('auth:api')->group(function () {
 
     });
 
-    Route::prefix('{userGrade}')->middleware("findUserGrade")->group(function () {
+    Route::prefix('{schoolGrade}')->middleware("findSchoolGrade")->group(function () {
 
         Route::middleware('role:manager')->post('/update', [SchoolGradeController::class, 'updateCode']);
         Route::middleware('role:manager')->post('/delete', [SchoolGradeController::class, 'deleteCode']);

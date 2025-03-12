@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Grades\UserGradesValidation;
-use App\Http\Resources\Grade\UserGradeCollection;
-use App\Http\Resources\Grade\UserGradeResource;
+use App\Http\Requests\Grades\SchoolGradesValidation;
+use App\Http\Resources\Grade\SchoolGradeCollection;
+use App\Http\Resources\Grade\SchoolGradeResource;
 use App\Models\SchoolGrade;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -12,39 +12,39 @@ use Illuminate\Http\Request;
 class SchoolGradeController extends Controller
 {
 
-    public function store(UserGradesValidation $validation){
+    public function store(SchoolGradesValidation $validation){
         $grade = SchoolGrade::create([
             'school_id'=>auth()->user()->school->id,
             'grade_id'=>$validation->grade_id,
             'title'=>$validation->title,
             'code'=> Str::random(30),
         ]);
-        return new UserGradeResource($grade);
+        return new SchoolGradeResource($grade);
     }
 
-    public function update(SchoolGrade $userGrade, UserGradesValidation $validation){
-        $userGrade->update([
+    public function update(SchoolGrade $schoolGrade, SchoolGradesValidation $validation){
+        $schoolGrade->update([
             'grade_id'=>$validation->grade_id,
             'title'=>$validation->title,
         ]);
 
-        return new UserGradeResource($userGrade);
+        return new SchoolGradeResource($schoolGrade);
     }
 
-    public function updateCode( Request $request,UserGradesValidation $validation){
+    public function updateCode(Request $request, SchoolGradesValidation $validation){
 
-        $request->userGrade->update([
-            'grade_id'=>$validation->grade_id ?? $request->userGrade->grade_id,
-            'title'=>$validation->title ?? $request->userGrade->title,
+        $request->schoolGrade->update([
+            'grade_id'=>$validation->grade_id ?? $request->schoolGrade->grade_id,
+            'title'=>$validation->title ?? $request->schoolGrade->title,
         ]);
 
-        return new UserGradeResource($request->userGrade);
+        return new SchoolGradeResource($request->schoolGrade);
     }
 
     public function show(){
 
 
-        return new UserGradeCollection($this->getGrades());
+        return new SchoolGradeCollection($this->getGrades());
     }
 
     public function delete(SchoolGrade $schoolGrade){
@@ -53,7 +53,7 @@ class SchoolGradeController extends Controller
     }
 
     public function deleteCode( Request $request){
-        $request->userGrade->delete();
+        $request->schoolGrade->delete();
         return $this->successMessage();
     }
 
@@ -61,6 +61,7 @@ class SchoolGradeController extends Controller
         $grades = [];
         $user =  auth()->user();
         $role =$user->role;
+        $school=$user->school;
         switch ($role){
             case config("constant.roles.assistant"):
             case config("constant.roles.teacher"):
@@ -68,7 +69,7 @@ class SchoolGradeController extends Controller
                 $grades = SchoolGrade::where('user_id',$teacher->user_id)->get();
                 break;
             case config("constant.roles.manager"):
-                $grades = SchoolGrade::where('user_id',auth()->user()->id)->get();
+                $grades = SchoolGrade::where('school_id',$school->id)->get();
                 break;
             case config("constant.roles.student"):
             case config("constant.roles.parent"):

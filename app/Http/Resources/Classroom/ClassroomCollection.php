@@ -21,7 +21,7 @@ class ClassroomCollection extends ResourceCollection
                 'title'=>$item->title,
                 'number'=>$item->number,
                 'floor'=>$item->floor,
-                'user_grade_id'=>$item->user_grade_id,
+                'user_grade_id'=>$item->school_grade_id,
                 'field_id'=>$item->field_id,
                 'field'=>$item->fieldTitle,
             ];

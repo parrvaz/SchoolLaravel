@@ -72,7 +72,7 @@ class SchoolGradeController extends Controller
             case config("constant.roles.student"):
             case config("constant.roles.parent"):
                 $classroom = $user->student->classroom;
-                $grades = SchoolGrade::where('id',$classroom->user_grade_id)->get();
+                $grades = SchoolGrade::where('id',$classroom->school_grade_id)->get();
                 break;
         }
 

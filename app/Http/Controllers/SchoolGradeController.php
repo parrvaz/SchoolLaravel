@@ -64,7 +64,7 @@ class SchoolGradeController extends Controller
             case config("constant.roles.assistant"):
             case config("constant.roles.teacher"):
                 $teacher = $user->teacher;
-                $grades = SchoolGrade::where('user_id',$teacher->user_id)->get();
+                $grades = SchoolGrade::where('school_id',$teacher->school_id)->get();
                 break;
             case config("constant.roles.manager"):
                 $grades = SchoolGrade::where('school_id',$school->id)->get();

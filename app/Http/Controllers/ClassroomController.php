@@ -22,7 +22,7 @@ class ClassroomController extends Controller
             'title'=>$validation->title,
             'number'=>$validation->number,
             'floor'=>$validation->floor,
-            'user_grade_id'=>$request->userGrade->id,
+            'school_grade_id'=>$request->schoolGrade->id,
             'field_id'=>$validation->field_id,
         ]);
 
@@ -39,7 +39,7 @@ class ClassroomController extends Controller
         switch (auth()->user()->role){
             case config("constant.roles.assistant"):
             case config("constant.roles.manager"):
-                $classrooms =$request->userGrade->classrooms()->get();
+                $classrooms =$request->schoolGrade->classrooms()->get();
                 break;
 
             case config("constant.roles.teacher"):
@@ -51,7 +51,7 @@ class ClassroomController extends Controller
         return new ClassroomCollection($classrooms);
     }
 
-    public function showSingle($userGrade,Classroom $classroom)
+    public function showSingle($schoolGrade,Classroom $classroom)
     {
         return new ClassroomResource($classroom);
     }
@@ -59,7 +59,7 @@ class ClassroomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ClassroomValidation $validation,$userGrade, Classroom $classroom)
+    public function update(ClassroomValidation $validation,$schoolGrade, Classroom $classroom)
     {
         $classroom->update([
             'title'=>$validation->title,
@@ -74,7 +74,7 @@ class ClassroomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete($userGrade,Classroom $classroom)
+    public function delete($schoolGrade,Classroom $classroom)
     {
         if ($classroom->students->count() > 0)
             return $this->error("hasStudent");
@@ -84,6 +84,6 @@ class ClassroomController extends Controller
     }
 
     public function list(Request $request){
-        return new ExamCreateResource($request->userGrade);
+        return new ExamCreateResource($request->schoolGrade);
     }
 }

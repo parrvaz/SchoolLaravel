@@ -19,7 +19,7 @@ class ClassroomResource extends JsonResource
             'title'=>$this->title,
             'number'=>$this->number,
             'floor'=>$this->floor,
-            'user_grade_id'=>$this->user_grade_id,
+            'user_grade_id'=>$this->school_grade_id,
             'field_id'=>$this->field_id,
         ];
     }

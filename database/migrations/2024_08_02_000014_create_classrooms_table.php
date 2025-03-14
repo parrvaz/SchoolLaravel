@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->integer("number")->nullable();
             $table->integer("floor")->nullable();
-            $table->foreignId("user_grade_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("school_grade_id")->constrained()->cascadeOnDelete();
             $table->foreignId("field_id")->constrained();
             $table->timestamps();
         });

@@ -19,7 +19,7 @@ class PlanController extends Controller
         return DB::transaction(function () use($request,$validation) {
 
             $plan = Plan::create([
-                'user_grade_id' => $request->userGrade->id,
+                'school_grade_id' => $request->schoolGrade->id,
                 'classroom_id' => $validation->classroom_id ?? null,
                 'title' => $validation->title,
             ]);
@@ -30,7 +30,7 @@ class PlanController extends Controller
         });
     }
 
-    public function update(PlanValidation $validation,$userGrade, Plan $planModel){
+    public function update(PlanValidation $validation,$schoolGrade, Plan $planModel){
         return DB::transaction(function () use($planModel,$validation) {
 
             $planModel->update([
@@ -72,16 +72,16 @@ class PlanController extends Controller
     }
 
     public function show(Request $request){
-        return new PlanCollection($request->userGrade->plans()->get());
+        return new PlanCollection($request->schoolGrade->plans()->get());
     }
 
-    public function showSingle($userGrade,Plan $plan){
+    public function showSingle($schoolGrade,Plan $plan){
         return new PlanResource($plan);
     }
 
 
 
-    public function delete($userGrade,Plan $plan){
+    public function delete($schoolGrade,Plan $plan){
         $plan->delete();
         return $this->successMessage();
     }
@@ -116,7 +116,7 @@ class PlanController extends Controller
     private function duplicate($planId,$validation,$request){
         $plan = Plan::find($planId);
         $newPlan = Plan::create([
-            'user_grade_id' => $request->userGrade->id,
+            'school_grade_id' => $request->schoolGrade->id,
             'title' => $validation['title'],
             'classroom_id' => $validation['classroom_id'],
         ]);
@@ -138,7 +138,7 @@ class PlanController extends Controller
 
     private function deletePlans(Request $request ,$validation)
     {
-        $oldIds =  Plan::where("user_grade_id",$request->userGrade->id)->pluck("id")->toArray();
+        $oldIds =  Plan::where("school_grade_id",$request->schoolGrade->id)->pluck("id")->toArray();
         $newIds = array_unique(Arr::pluck($validation->data,"id" ));
         $delteIds = array_values( array_diff_key($oldIds,$newIds));
 

@@ -19,7 +19,7 @@ class ExamController extends Controller
 
        return DB::transaction(function () use($request,$validation) {
            $exam = Exam::create([
-               'user_grade_id' => $request->userGrade->id,
+               'school_grade_id' => $request->schoolGrade->id,
                'classroom_id' => $validation->classroom_id,
                'date' =>self::jToG($validation->date),
                'course_id' => $validation->course_id,
@@ -59,21 +59,21 @@ class ExamController extends Controller
        switch ($role){
            case config("constant.roles.student"):
            case config("constant.roles.parent"):
-                $exams= $request->userGrade->exams()
+                $exams= $request->schoolGrade->exams()
                     ->where("classroom_id",$user->student->classroom_id)
                     ->orderBy("updated_at","desc")
                     ->get();
                break;
            case config("constant.roles.assistant"):
            case config("constant.roles.manager"):
-               $exams= $request->userGrade->exams()
+               $exams= $request->schoolGrade->exams()
                    ->orderBy("updated_at","desc")
                    ->get();
                 break;
            case config("constant.roles.teacher"):
                $teacher = $user->teacher;
                $classCourse = $teacher->classCourses;
-               $exams= $request->userGrade->exams()
+               $exams= $request->schoolGrade->exams()
                    ->whereIn("classroom_id",$classCourse->pluck("classroom_id"))
                    ->whereIn("course_id",$classCourse->pluck("course_id"))
                    ->orderBy("updated_at","desc")
@@ -84,11 +84,11 @@ class ExamController extends Controller
 
    }
 
-   public function showSingle($userGrade,Exam $exam){
+   public function showSingle($schoolGrade,Exam $exam){
        return new ExamResource($exam);
    }
 
-   public function excel(Request $request,$userGrade,Exam $exam){
+   public function excel(Request $request,$schoolGrade,Exam $exam){
 
        $students = $this->calculateRank($exam);
        $name =self::gToJDash($exam->date). "-"."آزمون ". $exam->course->title.'-'."کلاس ".$exam->classroom->number.".xlsx" ;
@@ -101,7 +101,7 @@ class ExamController extends Controller
       return new ScoreCollection(StudentExam::where("student_id",$student->id)->get());
    }
 
-   public function update(ExamStoreValidation $validation, $userGrade, Exam $exam){
+   public function update(ExamStoreValidation $validation, $schoolGrade, Exam $exam){
        return DB::transaction(function () use($exam,$validation) {
 
            //delete old items
@@ -141,7 +141,7 @@ class ExamController extends Controller
        });
    }
 
-   public function delete($userGrade,Exam $exam){
+   public function delete($schoolGrade,Exam $exam){
        return DB::transaction(function () use($exam) {
 
            $this->deleteExamContents($exam);

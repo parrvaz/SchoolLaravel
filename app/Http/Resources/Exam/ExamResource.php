@@ -21,7 +21,7 @@ class ExamResource extends JsonResource
     {
         return [
             'id' =>$this->id,
-            'user_grade_id' => $this->id,
+            'user_grade_id' => $this->school_grade_id,
             'classroom_id' => $this->classroom_id,
             'classroom' => $item->classroomTitle?? Classroom::find($this->classroom_id)->title,
             'date' =>  self::gToJ($this->date),

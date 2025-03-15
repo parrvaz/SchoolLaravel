@@ -21,7 +21,7 @@ class ExamCollection extends ResourceCollection
         return ['data'=>$this->collection->map(function ($item){
             return[
                 'id' =>$item->id,
-                'user_grade_id' => $item->id,
+                'user_grade_id' => $item->school_grade_id,
                 'classroom_id' => $item->classroom_id,
                 'classroom' => $item->classroomTitle?? Classroom::find($item->classroom_id)->title,
                 'date' => self::gToJ( $item->date),

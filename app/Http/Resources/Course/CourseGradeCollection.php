@@ -18,7 +18,7 @@ class CourseGradeCollection extends ResourceCollection
             return[
                 'id'=> $item->id,
                 'name'=> $item->name,
-                'user_grade_id'=> $item->user_grade_id,
+                'user_grade_id'=> $item->school_grade_id,
 
             ];
         })];

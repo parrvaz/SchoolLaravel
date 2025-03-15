@@ -20,8 +20,8 @@ class CourseGradeController extends Controller
        $course = Course::create([
             "name"=>$validated['name'],
             "title"=>$validated['name'],
-            "grade_id"=> $request->userGrade->grade_id ,
-            "user_grade_id"=> $request->userGrade->id,
+            "grade_id"=> $request->schoolGrade->grade_id ,
+            "school_grade_id"=> $request->schoolGrade->id,
         ]);
 
 
@@ -32,8 +32,8 @@ class CourseGradeController extends Controller
         return $this->successMessage();
     }
 
-    public function update(Request $request,$userGrade,Course $course){
-        if ($course->user_grade_id == $request->userGrade->id){
+    public function update(Request $request,$schoolGrade,Course $course){
+        if ($course->school_grade_id == $request->schoolGrade->id){
 
         $validated = $request->validate([
             'name' => 'required|min:1|max:255',
@@ -50,11 +50,11 @@ class CourseGradeController extends Controller
     }
 
     public function show(Request $request){
-        return new CourseGradeCollection(Course::where("user_grade_id",$request->userGrade->id)->get());
+        return new CourseGradeCollection(Course::where("school_grade_id",$request->schoolGrade->id)->get());
     }
 
-    public function delete(Request $request,$userGrade,Course $course){
-        if ($course->user_grade_id == $request->userGrade->id){
+    public function delete(Request $request,$schoolGrade,Course $course){
+        if ($course->school_grade_id == $request->schoolGrade->id){
             $course->schedules()->delete();
             $course->classTeachers()->delete();
             $course->delete();

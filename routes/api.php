@@ -70,7 +70,6 @@ Route::middleware('auth:api')->group(function () {
         Route::middleware('role:manager')->post('/update', [SchoolGradeController::class, 'updateCode']);
         Route::middleware('role:manager')->post('/delete', [SchoolGradeController::class, 'deleteCode']);
 
-        Route::middleware('role:general')->get('/dashboard', [GradeController::class, 'dashboard']);
 
         //Field Api
         Route::prefix("fields")->group(function () {

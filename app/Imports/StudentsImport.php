@@ -54,7 +54,7 @@ class StudentsImport implements OnEachRow, WithStartRow, WithValidation
             return;
         }
 
-        $classNum = Classroom::where("user_grade_id", $this->request->userGrade->id)
+        $classNum = Classroom::where("school_grade_id", $this->request->schoolGrade->id)
             ->where("number", $row[3])->first()->id ?? null;
         if ($classNum==null){
             $this->errors[$index] = "{$row[0]} {$row[1]}: شماره کلاس در لیست کلاس ها موجود نیست ";

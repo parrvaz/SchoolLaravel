@@ -53,7 +53,7 @@ Route::middleware('auth:api')->group(function () {
 
 
 
-    //UserGrades Api
+    //SchoolGrades Api
     Route::prefix("grades")->group(function () {
         Route::post('/store', [SchoolGradeController::class, 'store']);
         Route::post('/update/{user_grade}', [SchoolGradeController::class, 'update']);

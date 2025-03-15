@@ -25,7 +25,7 @@ trait ReportTrait
     }
 
     public function absentMtd($request,$validation){
-        $classroomsIds = $validation->classrooms ?? $request->userGrade->classrooms()->pluck("id");
+        $classroomsIds = $validation->classrooms ?? $request->schoolGrade->classrooms()->pluck("id");
 
         $allAbs = Absent::query();
         $allAbs = self::filterByDate($allAbs,$validation->startDate,$validation->endDate);
@@ -104,7 +104,7 @@ trait ReportTrait
             })
 
             ->where("exams.status",1)
-            ->where("exams.user_grade_id",$request->userGrade->id)
+            ->where("exams.school_grade_id",$request->schoolGrade->id)
         ;
 
 
@@ -342,7 +342,7 @@ trait ReportTrait
 
     public function allExamsScores($request,$validation){
         $exams= Exam::query()
-            ->where("exams.user_grade_id", $request->userGrade->id)
+            ->where("exams.school_grade_id", $request->schoolGrade->id)
             ->where("exams.status",1);
 
         $exams = $this->filterByDate($exams,$validation->startDate,$validation->endDate);
@@ -354,7 +354,7 @@ trait ReportTrait
 
         $students = StudentExam::query()->
         whereHas('exam', function ($query)use($request) {
-            return $query->where('user_grade_id', $request->userGrade->id);
+            return $query->where('school_grade_id', $request->schoolGrade->id);
         });
         $students = $this->globalFilterRelationWhereIn($students,"classroom_id",$validation->classrooms,"exam");
         $students = $this->globalFilterWhereIn($students,"student_exam.student_id",$validation->students);

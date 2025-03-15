@@ -14,7 +14,7 @@ class Classroom extends Model
         return $this->hasMany(Student::class);
     }
 
-    public function userGrade(){
+    public function schoolGrade(){
         return $this->belongsTo(SchoolGrade::class);
     }
 

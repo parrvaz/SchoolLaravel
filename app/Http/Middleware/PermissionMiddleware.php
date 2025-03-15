@@ -43,7 +43,7 @@ class PermissionMiddleware
         {
               return $next($request);
 
-//            if ($userGrade->is_active == 1 || $request->isMethod('get'))
+//            if ($schoolGrade->is_active == 1 || $request->isMethod('get'))
 //            {
 //                return $next($request);
 //            }

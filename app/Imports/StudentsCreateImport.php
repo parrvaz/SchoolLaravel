@@ -34,7 +34,7 @@ class StudentsCreateImport implements OnEachRow, WithStartRow
         $row = $row->toArray();
         $phone =  Str::length($row[4]) == 10 ? "0" . $row[4] : $row[4];
         $fatherPhone =  Str::length($row[5]) == 10 ? "0" . $row[5] : $row[5];
-        $classNum = Classroom::where("user_grade_id", $this->request->userGrade->id)
+        $classNum = Classroom::where("school_grade_id", $this->request->schoolGrade->id)
             ->where("number", $row[3])->first()->id ?? null;
 
 

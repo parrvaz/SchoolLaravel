@@ -47,7 +47,7 @@ class AbsentController extends Controller
         });
     }
 
-    public function update(AbsentStoreValidation $validation,$userGrade,Absent $absent){
+    public function update(AbsentStoreValidation $validation,$schoolGrade,Absent $absent){
         return DB::transaction(function () use($absent,$validation) {
 
             $absent->students()->detach();
@@ -88,11 +88,11 @@ class AbsentController extends Controller
     public function show(Request $request,FilterValidation $validation){
         $date = self::jToG($validation->date);
 
-        $allAbsents = Absent::whereIn("classroom_id",$request->userGrade->classrooms->pluck("id"))
+        $allAbsents = Absent::whereIn("classroom_id",$request->schoolGrade->classrooms->pluck("id"))
             ->where("date", $date)->get();
         $allAbsents = $allAbsents->groupBy('classroom_id');
 
-        $allBells = Bell::where("user_id",$request->userGrade->user_id)->orderBy('order')->get();
+        $allBells = Bell::where("school_id",$request->schoolGrade->school_id)->orderBy('order')->get();
 
         $data = [];
 
@@ -165,7 +165,7 @@ class AbsentController extends Controller
     }
 
 
-    public function delete($userGrade,Absent $absent){
+    public function delete($schoolGrade,Absent $absent){
         return DB::transaction(function () use($absent) {
 
             $absent->students()->detach();

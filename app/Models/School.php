@@ -15,6 +15,10 @@ class School extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function bells(){
+        return $this->hasMany(Bell::class);
+    }
+
     public function grades(){
         return $this->hasMany(SchoolGrade::class);
     }

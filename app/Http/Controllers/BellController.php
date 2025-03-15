@@ -13,13 +13,13 @@ class BellController extends Controller
     public function store(Request $request,BellStoreValidation $validation){
 
 
-        if (auth()->user()->bells()->count() > 0)
+        if ($request->schoolGrade->school->bells()->count() > 0)
             return $this->error("storeBefore");
 
         $items=[];
         foreach ($validation->list as $item){
             $items[] = [
-                'user_id' =>auth()->user()->id,
+                'school_id' =>$request->schoolGrade->school_id,
                 'order' => $item['order'],
                 'startTime' =>$item['startTime'],
                 'endTime' => $item['endTime'],
@@ -30,7 +30,7 @@ class BellController extends Controller
         return $this->successMessage();
     }
 
-    public function update(Request $request, BellStoreValidation $validation,$userGrade){
+    public function update(Request $request, BellStoreValidation $validation,$schoolGrade){
 
         return DB::transaction(function () use($validation,$request) {
 
@@ -45,7 +45,7 @@ class BellController extends Controller
                     ]);
                 } else {
                     Bell::create([
-                        'user_id' => auth()->user()->id,
+                        'school_id' => $request->schoolGrade->school_id,
                         'order' => $item['order'],
                         'startTime' => $item['startTime'],
                         'endTime' => $item['endTime'],
@@ -53,17 +53,17 @@ class BellController extends Controller
                 }
             }
 
-            return (new BellCollection($request->userGrade->user->bells))
+            return (new BellCollection($request->schoolGrade->school->bells))
                 ->additional(['message' => "با موفقیت تغییر کرد"]);
         });
 
     }
 
     public function show(Request $request){
-        return new BellCollection($request->userGrade->user->bells);
+        return new BellCollection($request->schoolGrade->school->bells);
     }
 
-    public function delete(Request $request,$userGrade,Bell $bell){
+    public function delete(Request $request,$schoolGrade,Bell $bell){
 
         if ($bell->absents()->count() > 0)
             return $this->error("hasAbsent");
@@ -72,7 +72,7 @@ class BellController extends Controller
             return $this->error("hasSchedule");
 
         $bell->delete();
-        return (new BellCollection($request->userGrade->user->bells))
+        return (new BellCollection($request->schoolGrade->school->bells))
             ->additional(['message' => "با موفقیت حذف شد"]);
     }
 }

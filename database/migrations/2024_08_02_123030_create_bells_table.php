@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bells', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained()->cascadeOnDelete();
+            $table->foreignId("school_id")->constrained()->cascadeOnDelete();
             $table->tinyInteger("order");
             $table->time("startTime");
             $table->time("endTime")->nullable();

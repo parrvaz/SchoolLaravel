@@ -23,7 +23,6 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\PlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GradeController;
 use App\Http\Controllers\SchoolGradeController;
 
 //Route::get('/user', function (Request $request) {
@@ -44,7 +43,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/studyPlanStore', [StudyController::class, 'studyPlanStore']);
 
 
-    Route::post('/operation', [GradeController::class, 'operation']);
 
 
     //School Api

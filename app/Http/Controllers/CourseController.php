@@ -25,7 +25,7 @@ class CourseController extends Controller
    public function store(Request $request, CourseValidation $validation){
        //delete all
        ClassCourseTeacher::whereHas('classroom', function($query) use($request) {
-           return $query->where('user_grade_id', $request->userGrade->id);})->delete();
+           return $query->where('school_grade_id', $request->schoolGrade->id);})->delete();
 
        //create new
         ClassCourseTeacher::insert($validation->validated()['list']);
@@ -34,7 +34,7 @@ class CourseController extends Controller
    }
 
    public function show(Request $request){
-       $grade_id = $request->userGrade->grade_id;
+       $grade_id = $request->schoolGrade->grade_id;
        $user =  auth()->user();
        $role =$user->role;
        $courses = [];
@@ -43,43 +43,43 @@ class CourseController extends Controller
            case config("constant.roles.parent"):
            case config("constant.roles.assistant"):
            case config("constant.roles.manager"):
-               $courses= Course::where('grade_id',$request->userGrade->grade_id)
+               $courses= Course::where('grade_id',$request->schoolGrade->grade_id)
                    ->where(function ($query) use ($request) {
-                       $query->where('user_grade_id', $request->userGrade->id)
-                           ->orWhere('user_grade_id',null);
+                       $query->where('school_grade_id', $request->schoolGrade->id)
+                           ->orWhere('school_grade_id',null);
                    })
                    ->rightJoin('course_fields', 'courses.id', '=', 'course_fields.course_id')
-                   ->select("courses.id","courses.id as course_id","name","user_grade_id","field_id")
+                   ->select("courses.id","courses.id as course_id","name","school_grade_id","field_id")
                ->get();
                break;
            case config("constant.roles.teacher"):
                $teacher = $user->teacher;
                $classCourse = $teacher->classCourses;
-               $courses= Course::where('grade_id',$request->userGrade->grade_id)
+               $courses= Course::where('grade_id',$request->schoolGrade->grade_id)
                    ->whereIn("courses.id", $classCourse->pluck("course_id"))
                    ->where(function ($query) use ($request) {
-                       $query->where('user_grade_id', $request->userGrade->id)
-                           ->orWhere('user_grade_id',null);
+                       $query->where('school_grade_id', $request->schoolGrade->id)
+                           ->orWhere('school_grade_id',null);
                    })
                    ->rightJoin('course_fields', 'courses.id', '=', 'course_fields.course_id')
-                   ->select("courses.id","courses.id as course_id","name","user_grade_id","field_id")
+                   ->select("courses.id","courses.id as course_id","name","school_grade_id","field_id")
                    ->get();
                break;
        }
        return new CourseCollection($courses);
    }
 
-   public function showSingle($userGrade,Course $course){
+   public function showSingle($schoolGrade,Course $course){
     return new CourseResource($course);
    }
 
    public function showClassroom(Request $request){
        return new CourseClassroomCollection( ClassCourseTeacher::whereHas('classroom', function($query) use($request) {
-           return $query->where('user_grade_id', $request->userGrade->id);})->get());
+           return $query->where('school_grade_id', $request->schoolGrade->id);})->get());
    }
 
    public function assignCreate(Request $request){
-       return new AssignCreateResource($request->userGrade);
+       return new AssignCreateResource($request->schoolGrade);
 
    }
 }

@@ -108,11 +108,11 @@ class StudentController extends Controller
     public function show(Request $request)
     {
         return new StudentCollection( Student::whereHas('classroom', function($query) use($request) {
-            return $query->where('user_grade_id', $request->userGrade->id);
+            return $query->where('school_grade_id', $request->schoolGrade->id);
         })->orderBy("classroom_id")->orderBy("lastName")->get());
     }
 
-    public function showSingle( $userGrade,Student $student)
+    public function showSingle( $schoolGrade,Student $student)
     {
 
         return new StudentResource($student);
@@ -121,7 +121,7 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StudentUpdateValidation $validation,$userGrade, Student $student)
+    public function update(StudentUpdateValidation $validation,$schoolGrade, Student $student)
     {
         return DB::transaction(function () use($validation,$student) {
 
@@ -179,7 +179,7 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete($userGrade,Student $student)
+    public function delete($schoolGradeschoolGrade,Student $student)
     {
         User::where("phone",$student->phone)->delete();
         User::where("phone",$student->fatherPhone)->delete();

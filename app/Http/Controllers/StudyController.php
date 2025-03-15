@@ -28,17 +28,17 @@ class StudyController extends Controller
         return $this->storeMtd($validation,$student);
     }
 
-    public function delete($userGrade,Study $study){
+    public function delete($schoolGrade,Study $study){
         $study->delete();
         return $this->successMessage();
     }
 
 
-    public function showStudent($userGrade,Student $student){
+    public function showStudent($schoolGrade,Student $student){
         return $this->showMtd($student);
     }
 
-    public function storeStudent(StudyStoreValidation $validation,$userGrade,Student $student){
+    public function storeStudent(StudyStoreValidation $validation,$schoolGrade,Student $student){
         return $this->storeMtd($validation,$student);
     }
 

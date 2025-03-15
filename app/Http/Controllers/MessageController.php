@@ -10,7 +10,6 @@ use App\Models\MessageRecipient;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Musonza\Chat\Facades\ChatFacade as Chat;
 
 class MessageController extends Controller
 {
@@ -72,7 +71,7 @@ class MessageController extends Controller
         return new InboxCollection($inbox);
     }
 
-    public function markAsRead($userGrade ,MessageRecipient $messageRecipient)
+    public function markAsRead($schoolGrade ,MessageRecipient $messageRecipient)
     {
         if ($messageRecipient) {
             $messageRecipient->update([

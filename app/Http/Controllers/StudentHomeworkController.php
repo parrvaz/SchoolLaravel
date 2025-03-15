@@ -36,7 +36,7 @@ class StudentHomeworkController extends Controller
         });
     }
 
-    public function setZero($userGrade,Homework $homework){
+    public function setZero($schoolGrade,Homework $homework){
         return DB::transaction(function () use($homework) {
             $studentIds = $homework->students()->pluck("student_id")->toArray();
             $classroomIds = $homework->classrooms()->pluck("classrooms.id");
@@ -63,7 +63,7 @@ class StudentHomeworkController extends Controller
     }
 
 
-    public function update(Request $request,StudentHomeworkUpdateValidation $validation,$userGrade,StudentHomework $studentHomework){
+    public function update(Request $request,StudentHomeworkUpdateValidation $validation,$schoolGrade,StudentHomework $studentHomework){
         if ($studentHomework->score != null)
             return $this->error("permissionForUser",403);
 
@@ -78,7 +78,7 @@ class StudentHomeworkController extends Controller
         });
     }
 
-    public function delete($userGrade,StudentHomework $studentHomework){
+    public function delete($schoolGrade,StudentHomework $studentHomework){
         if ($studentHomework->score != null)
             return $this->error("permissionForUser",403);
 
@@ -96,7 +96,7 @@ class StudentHomeworkController extends Controller
             return new StudentHomeworkCollection($homework);
     }
 
-    public function showSingle($userGrade,Homework $homework){
+    public function showSingle($schoolGrade,Homework $homework){
         return new StudentHomeworkResource($homework);
     }
 

@@ -93,7 +93,7 @@ class ReportController extends Controller
 
     public function progress(Request $request,FilterValidation $validation){
         $exams= Exam::query()
-            ->where("exams.user_grade_id", $request->userGrade->id)
+            ->where("exams.school_grade_id", $request->schoolGrade->id)
             ->where("exams.status",1)
             ->join("student_exam","exams.id","student_exam.exam_id")
             ->join("classrooms","classrooms.id","exams.classroom_id")
@@ -124,7 +124,7 @@ class ReportController extends Controller
         if($validation->students != null){
             $classroomsIds = Student::whereIn("id",$validation->students)->pluck("classroom_id");
             $classExam =  Exam::query()
-                ->where("exams.user_grade_id", $request->userGrade->id)
+                ->where("exams.school_grade_id", $request->schoolGrade->id)
                 ->where("exams.status",1)
                 ->join("student_exam","exams.id","student_exam.exam_id")
                 ->join("classrooms","classrooms.id","exams.classroom_id")
@@ -188,34 +188,6 @@ class ReportController extends Controller
 
 
 
-
-
-
-
-        $exams = Student::query()
-            ->whereHas('classroom', function($query) use($request) {
-                return $query->where('user_grade_id', $request->userGrade->id);
-            })
-            ->rightJoin('student_exam',"students.id","student_exam.student_id" )
-            ->join("exams","student_exam.exam_id","exams.id")
-            ->where("exams.status",1)
-
-        ;
-
-
-        $this->generalFilter($exams, $validation);
-        $exams = $exams->groupBy("student_id","course_id")
-            ->select("student_id"
-                ,"course_id"
-                ,DB::raw("count(*) as count")
-            );
-
-
-        $exams = $exams->get()->groupBy("course_id");
-
-
-        return $exams;
-
        return new NumberExamsReportCollection($exams);
 
     }
@@ -223,7 +195,7 @@ class ReportController extends Controller
 
 
     public function generalExcel(Request $request,FilterValidation $validation){
-        $exams= Exam::where("exams.user_grade_id", $request->userGrade->id)
+        $exams= Exam::where("exams.school_grade_id", $request->schoolGrade->id)
             ->where("exams.status",1)
             ->orderBy("exams.course_id")
             ->orderBy("date")
@@ -231,7 +203,7 @@ class ReportController extends Controller
 
         $students = StudentExam::
             whereHas('exam', function ($query)use($request) {
-                return $query->where('user_grade_id', $request->userGrade->id);
+                return $query->where('school_grade_id', $request->schoolGrade->id);
             })
             ->orderBy("student_id")
             ->get()

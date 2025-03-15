@@ -36,7 +36,7 @@ class HomeworkController extends Controller
         });
     }
 
-    public function scoreStore(ScoreStoreValidation $validation,$userGrade,StudentHomework $studentHomework){
+    public function scoreStore(ScoreStoreValidation $validation,$schoolGrade,StudentHomework $studentHomework){
         return DB::transaction(function () use($studentHomework,$validation) {
             $studentHomework->timestamps = false;
             $studentHomework->score = $validation->score;
@@ -47,7 +47,7 @@ class HomeworkController extends Controller
         });
     }
 
-    public function setFinal($userGrade,Homework $homework){
+    public function setFinal($schoolGrade,Homework $homework){
         return DB::transaction(function () use($homework) {
             $homework->timestamps = false;
             $homework->isFinal = !$homework->isFinal;
@@ -70,20 +70,20 @@ class HomeworkController extends Controller
             $homework = $this->globalFilterRelationWhereIn($homework,"classrooms.id",$classrooms,"classrooms");
             $homework = $this->globalFilterWhereIn($homework,"course_id",$courses);
         }else{
-            $homework = $this->globalFilterRelation($homework,"user_grade_id",$request->userGrade->id,"classrooms");
+            $homework = $this->globalFilterRelation($homework,"school_grade_id",$request->schoolGrade->id,"classrooms");
         }
         $homework = $homework->get();
 
         return new HomeworkCollection($homework);
     }
 
-    public function showSingle($userGrade, Homework $homework){
+    public function showSingle($schoolGrade, Homework $homework){
 
 
         return new HomeworkResource($homework);
     }
 
-    public function update(Request $request,HomeworkStoreValidation $validation,$userGrade,Homework $homework){
+    public function update(Request $request,HomeworkStoreValidation $validation,$schoolGrade,Homework $homework){
         return DB::transaction(function () use($request,$validation,$homework) {
 
             $homework->classrooms()->detach();
@@ -105,7 +105,7 @@ class HomeworkController extends Controller
         });
     }
 
-    public function delete($userGrade,Homework $homework){
+    public function delete($schoolGrade,Homework $homework){
         return DB::transaction(function () use($homework) {
             $homework->classrooms()->detach();
             $this->deleteGroupFile($homework->allFiles()->pluck("file"));
@@ -118,11 +118,11 @@ class HomeworkController extends Controller
     }
 
 
-    public function showStudent($userGrade, Homework $homework){
+    public function showStudent($schoolGrade, Homework $homework){
         return new ScoreHomeworkCollection($homework->students);
     }
 
-    public function showScore($userGrade, Homework $homework){
+    public function showScore($schoolGrade, Homework $homework){
         return new ScoreHomeworkResource($homework);
     }
 

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
-    public function store(ScheduleStoreValidation $validation,$userGrade,Classroom $classroom){
+    public function store(ScheduleStoreValidation $validation,$schoolGrade,Classroom $classroom){
         if ($classroom == null)
             return $this->error();
 
@@ -24,7 +24,7 @@ class ScheduleController extends Controller
 
             $classroom->schedules()->delete();
 
-            $bells = $classroom->userGrade->user->bells->pluck("id","order");
+            $bells = $classroom->schoolGrade->school->bells->pluck("id","order");
 
             $items = [];
             foreach ($validation->schedule as $key=> $item) {
@@ -62,7 +62,7 @@ class ScheduleController extends Controller
             return response()->json(['data' =>['schedule' => $formattedSchedule]]);
 
         }else{
-            $classrooms = $request->userGrade->classrooms;
+            $classrooms = $request->schoolGrade->classrooms;
 
             $data = [];
             foreach ($classrooms as $classroom){
@@ -80,14 +80,14 @@ class ScheduleController extends Controller
     }
 
 
-    public function showSingle( $userGrade,Classroom $classroom){
+    public function showSingle( $schoolGrade,Classroom $classroom){
         $schedules = $classroom->schedules;
         $formattedSchedule = $this->createSchedule($schedules);
         // بازگرداندن نتیجه به فرمت مورد نظر
         return response()->json(['schedule' => $formattedSchedule]);
     }
 
-    public function delete($userGrade,Classroom $classroom){
+    public function delete($schoolGrade,Classroom $classroom){
         $classroom->schedules()->delete();
         return $this->successMessage();
     }

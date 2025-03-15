@@ -32,7 +32,7 @@ class TeacherController extends Controller
             'nationalId'=>$validation->nationalId,
             'degree'=>$validation->degree,
             'personalId'=>$validation->personalId,
-            'user_id'=>$request->userGrade->user_id,
+            'user_id'=>$request->schoolGrade->school_id,
             'phone'=>$validation->phone,
             'isAssistant'=>$validation->isAssistant,
         ]);
@@ -64,10 +64,10 @@ class TeacherController extends Controller
      */
     public function show(Request $request)
     {
-        return new TeacherCollection($request->userGrade->teachers()->orderBy("lastName")->get());
+        return new TeacherCollection($request->schoolGrade->teachers()->orderBy("lastName")->get());
     }
 
-    public function showSingle($userGrade,Teacher $teacher)
+    public function showSingle($schoolGrade,Teacher $teacher)
     {
         return new TeacherResource($teacher);
     }
@@ -75,7 +75,7 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TeacherUpdateValidation $validation,$userGrade, Teacher $teacher)
+    public function update(TeacherUpdateValidation $validation,$schoolGrade, Teacher $teacher)
     {
         return DB::transaction(function () use($teacher,$validation) {
 
@@ -129,7 +129,7 @@ class TeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete($userGrade,Teacher $teacher)
+    public function delete($schoolGrade,Teacher $teacher)
     {
         return DB::transaction(function () use($teacher) {
             if ($teacher->user->absents->count() > 0 ){

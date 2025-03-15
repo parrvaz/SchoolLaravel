@@ -22,7 +22,7 @@ class TeacherResource extends JsonResource
             'degree'=>$this->degree,
             'personalId'=>$this->personalId,
             'phone'=>$this->phone,
-            'user_grade_id'=>$this->user_grade_id,
+            'user_grade_id'=>$this->school_grade_id,
             'isAssistant'=> (bool) $this->isAssistant,
             "user_id"=> $this->user->id
 

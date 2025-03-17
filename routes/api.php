@@ -106,6 +106,9 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:general')->get('/show', [TeacherController::class, 'show']);
             Route::middleware('role:assistant')->get('/show/{teacher}', [TeacherController::class, 'showSingle']);
             Route::middleware('role:assistant')->post('/delete/{teacher}', [TeacherController::class, 'delete']);
+
+            Route::middleware('role:assistant')->post('/add', [TeacherController::class, 'add']);
+
         });
 
         //Course Api

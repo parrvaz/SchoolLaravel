@@ -200,6 +200,7 @@ return array(
         "job_raste"=>"رسته شغلی",
         "bank"=>"نام بانک",
         "product_id"=>"شماره محصول",
+        "nationalId"=>"کد ملی",
         "account_number"=>"شماره حساب",
         "work_place"=>"محل خدمت",
         "work_place_status"=>"وضعیت محل خدمت",

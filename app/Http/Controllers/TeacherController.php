@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Student\StudentValidation;
+use App\Http\Requests\Teacher\TeacherAddValidation;
 use App\Http\Requests\Teacher\TeacherUpdateValidation;
 use App\Http\Requests\Teacher\TeacherValidation;
 use App\Http\Resources\Student\StudentCollection;
@@ -142,5 +143,11 @@ class TeacherController extends Controller
             $teacher->delete();
             return $this->successMessage();
         });
+    }
+
+    public function add(TeacherAddValidation $validation){
+        $teacher = Teacher::where("nationalId",$validation->nationalId)->first();
+
+        return $teacher;
     }
 }

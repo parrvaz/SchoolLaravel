@@ -18,11 +18,25 @@ class TeacherValidation extends FormRequest
         return [
             'firstName'=>'required|string|min:1|max:50',
             'lastName'=>'required|string|min:1|max:50',
-            'nationalId'=>'required|digits:10',
+            'nationalId'=>'required|digits:10|unique:teachers',
             'degree'=>'nullable|string|min:1|max:50',
             'personalId'=>'nullable|string',
             'phone'=>'required|digits:11|unique:teachers|unique:users',
             'isAssistant'=>'required|boolean'
         ];
+    }
+
+    public function messages(): array
+
+    {
+
+        return [
+
+            'nationalId.unique' => 'اطلاعات دبیر با این شماره ملی توسط موسسه دیگری ثبت شده است. شما میتوانید از قسمت اضافه کردن دبیر ایشان را به لیست خود اضافه کنید',
+
+            'phone.unique' =>  'اطلاعات کاربر با این شماره تلفن توسط موسسه دیگری ثبت شده است. شما میتوانید از قسمت اضافه کردن دبیر ایشان را به لیست خود اضافه کنید',
+
+        ];
+
     }
 }

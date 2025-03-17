@@ -47,7 +47,7 @@ Route::middleware('auth:api')->group(function () {
 
     //School Api
     Route::prefix("schools")->group(function () {
-        Route::post('/store', [SchoolController::class, 'store']);
+        Route::post('/update', [SchoolController::class, 'update']);
         Route::get('/show', [SchoolController::class, 'show']);
     });
 

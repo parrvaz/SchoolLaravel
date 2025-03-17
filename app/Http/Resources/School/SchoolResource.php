@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\School;
 
+use App\Http\Resources\Grade\SchoolGradeCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,6 +27,10 @@ class SchoolResource extends JsonResource
             'bankAccount' => $this->bankAccount,
             'website' => $this->website,
             'socialMedia' => $this->socialMedia,
+
+            'grades' => new SchoolGradeCollection($this->grades),
+
+
         ];
     }
 }

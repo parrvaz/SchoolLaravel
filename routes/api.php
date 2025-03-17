@@ -49,6 +49,9 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix("schools")->group(function () {
         Route::post('/update', [SchoolController::class, 'update']);
         Route::get('/show', [SchoolController::class, 'show']);
+
+        Route::post('/store', [SchoolController::class, 'store']);
+
     });
 
 

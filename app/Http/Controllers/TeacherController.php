@@ -54,7 +54,11 @@ class TeacherController extends Controller
         }
         $user->modelHasRole()->update(["idInRole"=>$teacher->id ]);
 
+        //add teacher to school
+        $request->schoolGrade->school->teachers()->attach($teacher);
+
         return new TeacherResource($teacher);
+
         });
 
     }
@@ -130,24 +134,27 @@ class TeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete($schoolGrade,Teacher $teacher)
+    public function delete(Request $request,$schoolGrade,Teacher $teacher)
     {
-        return DB::transaction(function () use($teacher) {
+        return DB::transaction(function () use($teacher,$request) {
             if ($teacher->user->absents->count() > 0 ){
                 return $this->error("hasAbsent");
+            }else{
+                $teacher->classCoursesSchool($request->schoolGrade)->delete();
+                $request->schoolGrade->school->teachers()->detach($teacher);
             }
 
-            User::where("phone", $teacher->phone)->delete();
-            ModelHasRole::where("idInRole", $teacher->id)->delete();
-            $teacher->classCourses()->delete();
-            $teacher->delete();
+//            User::where("phone", $teacher->phone)->delete();
+//            ModelHasRole::where("idInRole", $teacher->id)->delete();
+//            $teacher->delete();
             return $this->successMessage();
         });
     }
 
-    public function add(TeacherAddValidation $validation){
+    public function add(Request $request,TeacherAddValidation $validation){
         $teacher = Teacher::where("nationalId",$validation->nationalId)->first();
-
-        return $teacher;
+        //add teacher to school
+       $request->schoolGrade->school->teachers()->attach($teacher);
+       return $this->successMessage();
     }
 }

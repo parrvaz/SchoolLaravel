@@ -22,4 +22,8 @@ class School extends Model
     public function grades(){
         return $this->hasMany(SchoolGrade::class);
     }
+
+    public function teachers(){
+        return $this->belongsToMany(Teacher::class);
+    }
 }

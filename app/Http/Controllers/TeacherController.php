@@ -26,6 +26,23 @@ class TeacherController extends Controller
     public function store(Request $request,TeacherValidation $validation)
     {
         return DB::transaction(function () use($request,$validation) {
+            $school_id=$request->schoolGrade->school_id;
+
+            //check if teacher exist before
+            $tch = Teacher::where("nationalId",$validation->nationalId)->first();
+            if ($tch!=null){
+                $school =  $tch->school->where("id", $school_id)->first();//check teacher already in list
+                if ($school== null)
+                    return $this->add($request, $tch);
+                else
+                    return $this->error('wasAdd');
+            }
+            $usr = User::where("phone",$validation->phone)->first();
+            if ($usr!=null){
+                return $this->error('phoneTaken');
+            }
+
+
 
         $teacher = Teacher::create([
             'firstName'=>$validation->firstName,
@@ -33,7 +50,7 @@ class TeacherController extends Controller
             'nationalId'=>$validation->nationalId,
             'degree'=>$validation->degree,
             'personalId'=>$validation->personalId,
-            'school_id'=>$request->schoolGrade->school_id,
+            'school_id'=>$school_id,
             'phone'=>$validation->phone,
             'isAssistant'=>$validation->isAssistant,
         ]);
@@ -83,6 +100,9 @@ class TeacherController extends Controller
     public function update(TeacherUpdateValidation $validation,$schoolGrade, Teacher $teacher)
     {
         return DB::transaction(function () use($teacher,$validation) {
+            //check owner of teacher
+
+
 
             //change role if is changed
             if ($validation->isAssistant != $teacher->isAssistant) {
@@ -151,10 +171,10 @@ class TeacherController extends Controller
         });
     }
 
-    public function add(Request $request,TeacherAddValidation $validation){
-        $teacher = Teacher::where("nationalId",$validation->nationalId)->first();
+    public function add(Request $request, $teacher){
         //add teacher to school
-       $request->schoolGrade->school->teachers()->attach($teacher);
-       return $this->successMessage();
+        $request->schoolGrade->school->teachers()->attach($teacher);
+        return $this->warningMessage();
+
     }
 }

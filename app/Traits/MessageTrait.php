@@ -21,6 +21,13 @@ trait MessageTrait
         ], $status);
     }
 
+    public function warningMessage($type="wasExists"){
+        return response()->json([
+            'message' => Lang::get('responses.warning.'.$type),
+            'status' => 'success',
+        ], 200);
+    }
+
     public function throwExp($type="permissionForUser",$status=403): \Illuminate\Http\JsonResponse
     {
         abort($status, Lang::get('responses.error.'.$type));

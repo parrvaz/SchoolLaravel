@@ -21,6 +21,10 @@ class Teacher extends Model
         return $this->hasOneThrough(User::class, ModelHasRole::class,'idInRole','id','id','model_id');
     }
 
+    public function school(){
+        return $this->belongsToMany(School::class);
+    }
+
     public function classCourses(){
         return $this->hasMany(ClassCourseTeacher::class);
     }

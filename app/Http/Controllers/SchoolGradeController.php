@@ -62,9 +62,13 @@ class SchoolGradeController extends Controller
         $school=$user->school;
         switch ($role){
             case config("constant.roles.assistant"):
-            case config("constant.roles.teacher"):
                 $teacher = $user->teacher;
                 $grades = SchoolGrade::where('school_id',$teacher->school_id)->get();
+                break;
+            case config("constant.roles.teacher"):
+                $teacher = $user->teacher;
+                $schoolGradeIds =  $teacher->classrooms->pluck("school_grade_id")->unique()->values();
+                $grades = SchoolGrade::whereIn("id",$schoolGradeIds)->get();
                 break;
             case config("constant.roles.manager"):
                 $grades = SchoolGrade::where('school_id',$school->id)->get();

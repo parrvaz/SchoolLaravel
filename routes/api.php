@@ -37,7 +37,7 @@ Route::post('log', [AuthenticationController::class, 'log'])->name('log');
 
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [AuthenticationController::class, 'user']);
-    Route::post('changePassword', [AuthenticationController::class, 'changePassword']);
+    Route::post('user/changePassword', [AuthenticationController::class, 'changePassword']);
     Route::post('user/update', [UserController::class, 'update']);
     Route::post('/studyPlanStore', [StudyController::class, 'studyPlanStore']);
 

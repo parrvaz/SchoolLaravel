@@ -26,7 +26,7 @@ class UserResource extends JsonResource
             'role'=>$this->getRoleNames()->first(),
             'role_id'=>$this->modelHasRole->idInRole ?? null,
             'hasChanged'=>(bool) $this->hasChanged ?? false,
-            'grades'=> new SchoolGrade((new SchoolGradeController())->getGrades()->toArray()),
+            'grades'=> new SchoolGradeCollection((new SchoolGradeController())->getGrades()),
         ];
     }
 }

@@ -14,15 +14,16 @@ class SchoolGradeCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return ['data'=>$this->collection->map(function ($item){
+        return $this->collection->map(function ($item){
             return[
                 'id'=> $item->id,
                 'title'=> $item->title,
+                'fullName'=>  $item->title .' '. $item->school->title,
                 'grade_id'=> $item->grade_id,
                 'expiration'=> $item->deadline,
                 'isActive'=> $item->isActive,
                 'code'=> $item->code,
             ];
-        })];
+        })->toArray();
     }
 }

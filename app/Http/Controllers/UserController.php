@@ -3,27 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\UserUpdateValidation;
+use App\Http\Resources\Teacher\TeacherResource;
 use App\Models\SchoolGrade;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function update(UserUpdateValidation $validation){
-        $user =  auth()->user();
-        $role =$user->role;
-        switch ($role){
-            case config("constant.roles.assistant"):
-            case config("constant.roles.teacher"):
-                $teacher = $user->teacher;
 
+        $teacher = auth()->user()->teacher;
 
-
-
-                break;
-            case config("constant.roles.manager"):
-//                $grades = SchoolGrade::where('school_id',$school->id)->get();
-                break;
+        //change phone if is changed
+        if ($validation->phone != $teacher->phone) {
+            $teacher->user->update([
+                'phone'=>$validation->phone
+            ]);
         }
+
+        //update other values
+        $teacher->update([
+            'firstName' => $validation->firstName,
+            'lastName' => $validation->lastName,
+            'nationalId' => $validation->nationalId,
+            'degree' => $validation->degree,
+            'personalId' => $validation->personalId,
+            'isAssistant' => $validation->isAssistant,
+            'phone' => $validation->phone,
+        ]);
 
         return $this->successMessage();
     }

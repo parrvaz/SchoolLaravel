@@ -120,35 +120,7 @@ class TeacherController extends Controller
             }
 
 
-            //change phone if is changed
-            if ($validation->phone != $teacher->phone) {
-                $teacher->user->update([
-                    'phone'=>$validation->phone
-                ]);
-            }
 
-
-            //change password if is changed
-            if ($validation->nationalId != $teacher->nationalId) {
-                $teacher->user->update([
-                    'password' => bcrypt($validation->nationalId)
-                ]);
-            }
-
-
-            //update other values
-            $teacher->update([
-                'firstName' => $validation->firstName,
-                'lastName' => $validation->lastName,
-                'nationalId' => $validation->nationalId,
-                'degree' => $validation->degree,
-                'personalId' => $validation->personalId,
-                'isAssistant' => $validation->isAssistant,
-                'phone' => $validation->phone,
-            ]);
-
-
-            return new TeacherResource($teacher);
         });
     }
 

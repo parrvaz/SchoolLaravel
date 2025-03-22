@@ -24,7 +24,8 @@ class SchoolGrade extends Model
     }
 
     public function teachers(){
-        return $this->hasManyThrough(Teacher::class, School::class,'id','school_id','id','id');
+//        return $this->hasManyThrough(Teacher::class, School::class,'id','school_id','id','id');
+        return $this->school->teachers();
     }
 
     public function exams(){

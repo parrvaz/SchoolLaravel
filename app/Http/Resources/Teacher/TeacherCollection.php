@@ -24,7 +24,6 @@ class TeacherCollection extends ResourceCollection
                 'degree'=>$item->degree,
                 'personalId'=>$item->personalId,
                 'phone'=>$item->phone,
-                'user_grade_id'=>$item->school_grade_id,
                 'isAssistant'=> (bool) $item->isAssistant,
                 "user_id"=> $item->user->id ?? null
 

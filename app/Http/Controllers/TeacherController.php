@@ -91,9 +91,12 @@ class TeacherController extends Controller
         return new TeacherCollection($request->schoolGrade->teachers()->orderBy("lastName")->get());
     }
 
-    public function showSingle($schoolGrade,Teacher $teacher)
+    public function showSingle(Request $request, $schoolGrade,Teacher $teacher)
     {
-        return new TeacherResource($teacher);
+        if ( in_array( $request->schoolGrade->school_id, $teacher->school->pluck("id")->toArray()) )
+            return new TeacherResource($teacher);
+        else
+            return $this->error("permissionForUser",403);
     }
 
     /**

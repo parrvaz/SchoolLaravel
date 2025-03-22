@@ -21,6 +21,7 @@ use App\Http\Controllers\StudentHomeworkController;
 use App\Http\Controllers\StudyController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SchoolGradeController;
@@ -37,21 +38,14 @@ Route::post('log', [AuthenticationController::class, 'log'])->name('log');
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [AuthenticationController::class, 'user']);
     Route::post('changePassword', [AuthenticationController::class, 'changePassword']);
-    Route::post('user/update', [AuthenticationController::class, 'update']);
-
-
+    Route::post('user/update', [UserController::class, 'update']);
     Route::post('/studyPlanStore', [StudyController::class, 'studyPlanStore']);
-
-
-
 
     //School Api
     Route::prefix("schools")->group(function () {
         Route::post('/update', [SchoolController::class, 'update']);
         Route::get('/show', [SchoolController::class, 'show']);
-
         Route::post('/store', [SchoolController::class, 'store']);
-
     });
 
 
@@ -108,7 +102,6 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:assistant')->post('/delete/{teacher}', [TeacherController::class, 'delete']);
 
 //            Route::middleware('role:teacher')->get('/classes', [TeacherController::class, 'showSchoolGradeOfTeacher']);
-
 //            Route::middleware('role:assistant')->post('/add', [TeacherController::class, 'add']);
 
         });

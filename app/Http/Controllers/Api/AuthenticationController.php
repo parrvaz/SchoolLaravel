@@ -101,16 +101,6 @@ class AuthenticationController extends Controller
 
     }
 
-    public function update(){
-        $user = auth()->user();
-
-
-
-//        $user->update([
-//            "name"=>
-//        ]);
-    }
-
     public function log(){
         throwException();
     }

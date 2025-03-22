@@ -6,12 +6,14 @@ use App\Http\Requests\Student\StudentValidation;
 use App\Http\Requests\Teacher\TeacherAddValidation;
 use App\Http\Requests\Teacher\TeacherUpdateValidation;
 use App\Http\Requests\Teacher\TeacherValidation;
+use App\Http\Resources\Grade\SchoolGradeCollection;
 use App\Http\Resources\Student\StudentCollection;
 use App\Http\Resources\Student\StudentResource;
 use App\Http\Resources\Teacher\TeacherCollection;
 use App\Http\Resources\Teacher\TeacherResource;
 use App\Models\ModelHasRole;
 use App\Models\Role;
+use App\Models\SchoolGrade;
 use App\Models\Teacher;
 use App\Models\User;
 use Database\Factories\TeacherFactory;
@@ -97,13 +99,9 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TeacherUpdateValidation $validation,$schoolGrade, Teacher $teacher)
+    public function update(Request $request,TeacherUpdateValidation $validation,$schoolGrade, Teacher $teacher)
     {
         return DB::transaction(function () use($teacher,$validation) {
-            //check owner of teacher
-
-
-
             //change role if is changed
             if ($validation->isAssistant != $teacher->isAssistant) {
                 $userId= $teacher->user->id;
@@ -171,10 +169,20 @@ class TeacherController extends Controller
         });
     }
 
-    public function add(Request $request, $teacher){
+    public function showSchoolGradeOfTeacher(){
+        $teacher = auth()->user()->teacher;
+        $schoolGradeIds =  $teacher->classrooms->pluck("school_grade_id")->unique()->values();
+
+        return new SchoolGradeCollection(SchoolGrade::whereIn("id",$schoolGradeIds)->get());
+    }
+
+
+    private function add(Request $request, $teacher){
         //add teacher to school
         $request->schoolGrade->school->teachers()->attach($teacher);
         return $this->warningMessage();
 
     }
+
+
 }

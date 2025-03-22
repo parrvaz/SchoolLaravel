@@ -29,6 +29,7 @@ class Teacher extends Model
         return $this->hasMany(ClassCourseTeacher::class);
     }
 
+
     public function classCoursesSchool(SchoolGrade $schoolGrade){
         return $this->hasMany(ClassCourseTeacher::class)->whereIn("classroom_id",$schoolGrade->classrooms->pluck("id"));
     }

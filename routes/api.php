@@ -102,12 +102,14 @@ Route::middleware('auth:api')->group(function () {
         //Teachers Api
         Route::prefix("teachers")->group(function () {
             Route::middleware('role:assistant')->post('/store', [TeacherController::class, 'store']);
-            Route::middleware('role:assistant')->post('/update/{teacher}', [TeacherController::class, 'update']);
+//            Route::middleware('role:assistant')->post('/update/{teacher}', [TeacherController::class, 'update']);
             Route::middleware('role:general')->get('/show', [TeacherController::class, 'show']);
             Route::middleware('role:assistant')->get('/show/{teacher}', [TeacherController::class, 'showSingle']);
             Route::middleware('role:assistant')->post('/delete/{teacher}', [TeacherController::class, 'delete']);
 
-            Route::middleware('role:assistant')->post('/add', [TeacherController::class, 'add']);
+            Route::middleware('role:teacher')->get('/classes', [TeacherController::class, 'showSchoolGradeOfTeacher']);
+
+//            Route::middleware('role:assistant')->post('/add', [TeacherController::class, 'add']);
 
         });
 

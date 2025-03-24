@@ -25,13 +25,12 @@ class UserUpdateValidation extends FormRequest
     {
         return [
             'name'=>'nullable|string|min:1|max:50',
+            'phone'=>'nullable|digits:11|unique:users,phone,'.auth()->user()->id,
             'firstName'=>'nullable|string|min:1|max:50',
             'lastName'=>'nullable|string|min:1|max:50',
             'nationalId'=>'nullable|digits:10',
             'degree'=>'nullable|string|min:1|max:50',
             'personalId'=>'nullable|string',
-            'phone'=>'nullable|digits:11|unique:users,phone,'.auth()->user()->id,
-            'isAssistant'=>'nullable|boolean',
         ];
     }
 }

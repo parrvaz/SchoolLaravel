@@ -82,6 +82,14 @@ class TeacherController extends Controller
 
     }
 
+    public function setAssistant(Request $request,$schoolGrade,Teacher $teacher){
+        $teacher->update([
+            "isAssistant"=> !$teacher->isAssistant
+        ]);
+
+        return $this->successMessage();
+    }
+
 
     /**
      * Display the specified resource.

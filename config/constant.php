@@ -41,6 +41,7 @@ return [
 
     "SMS"=>[
         "token"=>"14EC1755C1D996705342B07BDA108BE66E67F8BF",
+        "otpLength"=>4
 //        "url"=>"14EC1755C1D996705342B07BDA108BE66E67F8BF",
     ],
 

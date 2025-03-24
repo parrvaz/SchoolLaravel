@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\SMSController;
 use App\Http\Requests\User\UserLoginValidation;
 use App\Http\Requests\User\UserRegisterValidation;
 use App\Http\Resources\Auth\UserResource;
@@ -26,8 +27,13 @@ class AuthenticationController extends Controller
 
         $formData['password'] = bcrypt($request->password);
 
-        return DB::transaction(function () use($request,$formData) {
+        //otp create
+        $otp = rand(1000, 9999);
+        $formData['remember_token']= $otp;
+
+        return DB::transaction(function () use($request,$formData,$otp) {
             $user = User::create($formData);
+
             $user->modelHasRole()->create([
                 "model_id"=>$user->id,
                 "role_id"=> config("constant.roles.manager"),
@@ -39,9 +45,12 @@ class AuthenticationController extends Controller
                 "title"=> "مدرسه " . $user->name
             ]);
 
+            (new SMSController)->sendOtp($otp,$request->phone);
+
             return response()->json([
                 'user' => $user,
-                'token' => $user->createToken('passportToken')->accessToken
+                'token' => $user->createToken('passportToken')->accessToken,
+                'message' => 'کد تأیید ارسال شد.'
             ], 200);
 
         });

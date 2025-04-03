@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\SMSController;
+use App\Http\Requests\User\UserLoginByCodeValidation;
 use App\Http\Requests\User\UserLoginValidation;
 use App\Http\Requests\User\UserRegisterValidation;
 use App\Http\Resources\Auth\UserResource;
@@ -49,7 +50,7 @@ class AuthenticationController extends Controller
 
             return response()->json([
                 'user' => $user,
-                'token' => $user->createToken('passportToken')->accessToken,
+//                'token' => $user->createToken('passportToken')->accessToken,
                 'message' => 'کد تأیید ارسال شد.'
             ], 200);
 
@@ -93,6 +94,30 @@ class AuthenticationController extends Controller
             ]);
 
             return $this->successMessage();
+        });
+    }
+
+    public function loginByCode(UserLoginByCodeValidation $validation){
+        $user =  User::where("phone",$validation->phone)->first();
+        if ($user == null)
+            return $this->error("wrongPhone");
+        return DB::transaction(function () use($validation,$user) {
+
+            if ($user->remember_token != null && $validation["code"] == $user->remember_token) {
+                $user->update([
+                    "remember_token" => null
+                ]);
+                Auth::login($user);
+
+                $token = $user->createToken('passportToken')->accessToken;
+
+                return response()->json([
+                    'user' => new UserResource ( $user),
+                    'token' => $token
+                ], 200);
+
+            } else
+                return $this->error("wrongCode");
         });
     }
 

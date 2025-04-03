@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\SMSController;
+use App\Http\Requests\User\UserForgetPasswordValidation;
 use App\Http\Requests\User\UserLoginByCodeValidation;
 use App\Http\Requests\User\UserLoginValidation;
 use App\Http\Requests\User\UserRegisterValidation;
@@ -78,25 +79,6 @@ class AuthenticationController extends Controller
         return $this->error("unauthorised",401);
     }
 
-    public function changePassword(Request $request){
-
-        $validated = $request->validate([
-            'password' => 'required|string|min:8',
-        ]);
-        $user = auth()->user();
-        if ($user->hasChanged)
-            return $this->error("permissionForUser",403);
-        return DB::transaction(function () use($validated,$user) {
-
-            $user->update([
-                "password" => bcrypt($validated['password']),
-                "hasChanged"=>true,
-            ]);
-
-            return $this->successMessage();
-        });
-    }
-
     public function loginByCode(UserLoginByCodeValidation $validation){
         $user =  User::where("phone",$validation->phone)->first();
         if ($user == null)
@@ -118,6 +100,39 @@ class AuthenticationController extends Controller
 
             } else
                 return $this->error("wrongCode");
+        });
+    }
+
+
+    public function changePassword(Request $request){
+
+        $validated = $request->validate([
+            'password' => 'required|string|min:8',
+        ]);
+        $user = auth()->user();
+        if ($user->hasChanged)
+            return $this->error("permissionForUser",403);
+        return DB::transaction(function () use($validated,$user) {
+
+            $user->update([
+                "password" => bcrypt($validated['password']),
+                "hasChanged"=>true,
+            ]);
+
+            return $this->successMessage();
+        });
+    }
+
+    public function forgetPassword(UserForgetPasswordValidation $validation){
+
+        return DB::transaction(function () use($validation) {
+            $otp = rand(1000, 9999);
+            $user = User::where("phone",$validation->phone)->first();
+            $user->update(["remember_token"=>$otp]);
+            (new SMSController)->sendOtp($otp,$validation->phone);
+            return response()->json([
+                'message' => 'کد تأیید ارسال شد.'
+            ], 200);
         });
     }
 

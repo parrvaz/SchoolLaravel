@@ -167,6 +167,7 @@ class TeacherController extends Controller
     private function add(Request $request, $teacher){
         //add teacher to school
         $request->schoolGrade->school->teachers()->attach($teacher);
+        (new SMSController())->UserAddInList($teacher->user);
         return $this->warningMessage();
 
     }

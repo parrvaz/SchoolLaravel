@@ -49,7 +49,7 @@ class SMSController extends Controller
         $roleName = config("constant.roleName.".$user->role) ;
         $schoolName = $user->roleOfUser->school->last()->title;
 
-        $message= "شما به عنوان ".$roleName."به مدرسه ". $schoolName. "اضافه شدید.";
+        $message= "شما به عنوان ".$roleName." به مدرسه ". $schoolName. " اضافه شدید.";
         $this->sendMessage($message, $user->phone);
     }
 }

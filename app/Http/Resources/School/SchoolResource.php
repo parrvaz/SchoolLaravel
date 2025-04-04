@@ -19,6 +19,7 @@ class SchoolResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'title' => $this->title,
+            'wallet' => $this->wallet,
             'logo' => $this->logo ? url('storage/' . $this->logo) : null,
             'location' => $this->location,
             'phone' => $this->phone,

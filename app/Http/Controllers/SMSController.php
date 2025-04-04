@@ -58,4 +58,21 @@ class SMSController extends Controller
         $message = "شما از لیست مدرسه ".$school." حذف شدید.";
         $this->sendMessage($message,$phone);
     }
+
+    public static function calculateMessagePrice($message,$phones){
+        $url = "https://portal.amootsms.com/rest/CalculateMessagePrice";
+
+        $url = $url."?"."Token=".urlencode(config("constant.SMS.token"));
+        $SMSMessageText = urlencode($message);
+        $url = $url."&"."SMSMessageText=".$SMSMessageText ;
+
+        $url = $url."&"."LineNumber=public";
+        $url = $url."&"."Mobiles=".$phones;
+
+        $json = file_get_contents($url);
+        $result = json_decode($json);
+        return $result;
+//echo $result->Status;
+
+    }
 }

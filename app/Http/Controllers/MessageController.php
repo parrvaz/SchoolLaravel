@@ -48,12 +48,16 @@ class MessageController extends Controller
                 }
 
             if ($type==2){
+
+                if ($request->schoolGrade->school->wallet < - 100000)
+                    return $this->error("emptyWallet");
                 $usersPhone = User::whereIn("id",$validation->recipients)->pluck("phone");
                 $phones = "";
                 foreach ($usersPhone as $phone)
                     $phones = $phones . $phone . ",";
                 $phones = substr_replace($phones, '', -1);
                 (new SMSController())->sendMessage($validation->body,$phones);
+                SchoolController::decreaseFromWallet($request,SMSController::calculateMessagePrice($validation->body,$phones));
             }
 
 
@@ -93,4 +97,6 @@ class MessageController extends Controller
 
         return new MessageCollection($sentMessages);
     }
+
+
 }

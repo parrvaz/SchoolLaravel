@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 class SchoolController extends Controller
 {
     public function testt(){
-        $user = User::find(111);
+        return SMSController::calculateMessagePrice("سلام بر شما","09383851960");
     }
 
 
@@ -86,5 +86,10 @@ class SchoolController extends Controller
 
             return new SchoolResource($school);
         });
+    }
+
+    public static function decreaseFromWallet( $request,$price){
+        $school =  $request->schoolGrade->school;
+        $school->update(["wallet"=>$school->wallet - $price]);
     }
 }

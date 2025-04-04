@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->string("title");
+            $table->bigInteger("wallet")->default(2000000);
             $table->string('logo')->nullable();
             $table->string("location")->nullable();
             $table->string("phone")->nullable();

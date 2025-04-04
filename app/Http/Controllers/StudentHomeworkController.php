@@ -36,31 +36,7 @@ class StudentHomeworkController extends Controller
         });
     }
 
-    public function setZero($schoolGrade,Homework $homework){
-        return DB::transaction(function () use($homework) {
-            $studentIds = $homework->students()->pluck("student_id")->toArray();
-            $classroomIds = $homework->classrooms()->pluck("classrooms.id");
 
-            $allStdInClass = Student::whereIn("classroom_id",$classroomIds)->pluck("id")->toArray();
-
-            $diffStudents = array_diff($allStdInClass,$studentIds);
-
-
-            $items = [];
-            foreach ($diffStudents as $std){
-                $items[] = [
-                    "student_id"=> $std ,
-                    'homework_id'=>$homework->id,
-                    'score'=>0,
-                    'scaledScore'=>0,
-                    'solution'=>null,
-                    'note'=>null,
-                ];
-            }
-            StudentHomework::insert($items);
-            return $this->successMessage();
-        });
-    }
 
 
     public function update(Request $request,StudentHomeworkUpdateValidation $validation,$schoolGrade,StudentHomework $studentHomework){

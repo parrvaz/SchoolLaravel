@@ -209,7 +209,7 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:teacher')->get('/score/{homework}', [HomeworkController::class, 'showStudent']);
             Route::middleware('role:teacher')->get('/scoreList/{homework}', [HomeworkController::class, 'showScore']);
             Route::middleware('role:teacher')->post('/setFinal/{homework}', [HomeworkController::class, 'setFinal']);
-            Route::middleware('role:teacher')->post('/setZero/{homework}', [StudentHomeworkController::class, 'setZero']);
+            Route::middleware('role:teacher')->post('/setZero/{homework}', [HomeworkController::class, 'setZero']);
 
 
             Route::prefix("student")->group(function () {

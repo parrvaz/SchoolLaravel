@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RoleDelete;
 use App\Events\UserCreate;
 use App\Http\Requests\Student\StudentUpdateValidation;
 use App\Http\Requests\Student\StudentValidation;
@@ -125,21 +126,22 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StudentUpdateValidation $validation,$schoolGrade, Student $student)
+    public function update(Request $request,StudentUpdateValidation $validation,$schoolGrade, Student $student)
     {
-        return DB::transaction(function () use($validation,$student) {
+        return DB::transaction(function () use($validation,$student,$request) {
 
             //change phone if is changed
             if ($validation->phone != $student->phone) {
+                RoleDelete::dispatch($student->phone,$request->schoolGrade->school->title);
                 $student->user->update([
                     'phone' => $validation->phone
                 ]);
-
                 UserCreate::dispatch($student->user);
             }
 
             //change father phone if is changed
             if ($validation->fatherPhone != $student->fatherPhone) {
+                RoleDelete::dispatch($student->fatherPhone,$request->schoolGrade->school->title);
                 $student->parentUser->update([
                     'phone' => $validation->fatherPhone
                 ]);
@@ -187,13 +189,20 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete($schoolGradeschoolGrade,Student $student)
+    public function delete(Request $request, $schoolGrade,Student $student)
     {
-        User::where("phone",$student->phone)->delete();
-        User::where("phone",$student->fatherPhone)->delete();
-        ModelHasRole::where("idInRole",$student->id)->delete();
-       $student->delete();
-       return $this->successMessage();
+        return DB::transaction(function () use($student,$request) {
+
+            User::where("phone", $student->phone)->delete();
+            User::where("phone", $student->fatherPhone)->delete();
+            ModelHasRole::where("idInRole", $student->id)->delete();
+//            RoleDelete::dispatch($student->phone,$request->schoolGrade->school->title);
+            RoleDelete::dispatch($student->fatherPhone,$request->schoolGrade->school->title);
+
+            $student->delete();
+
+            return $this->successMessage();
+        });
     }
 
     public function sampleExcel(){

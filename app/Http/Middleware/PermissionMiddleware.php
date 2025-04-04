@@ -33,6 +33,7 @@ class PermissionMiddleware
         }
 
         $schoolGrade =$request->schoolGrade;
+
         $user = auth('api')->user();
         $userRole = $user->getRoleNames()->first();
 

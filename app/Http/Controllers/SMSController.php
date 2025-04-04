@@ -52,4 +52,10 @@ class SMSController extends Controller
         $message= "شما به عنوان ".$roleName." به مدرسه ". $schoolName. " اضافه شدید.";
         $this->sendMessage($message, $user->phone);
     }
+
+
+    public function UserDeleteFromList($phone,$school){
+        $message = "شما از لیست مدرسه ".$school." حذف شدید.";
+        $this->sendMessage($message,$phone);
+    }
 }

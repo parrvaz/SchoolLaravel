@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RoleDelete;
 use App\Events\UserCreate;
 use App\Http\Requests\Student\StudentValidation;
 use App\Http\Requests\Teacher\TeacherAddValidation;
@@ -80,7 +81,7 @@ class TeacherController extends Controller
         UserCreate::dispatch($user);
 
 
-            return new TeacherResource($teacher);
+        return new TeacherResource($teacher);
 
         });
 
@@ -147,6 +148,8 @@ class TeacherController extends Controller
             }else{
                 $teacher->classCoursesSchool($request->schoolGrade)->delete();
                 $request->schoolGrade->school->teachers()->detach($teacher);
+                RoleDelete::dispatch($teacher->phone,$request->schoolGrade->school->title);
+
             }
 
 //            User::where("phone", $teacher->phone)->delete();

@@ -7,12 +7,18 @@ use App\Http\Requests\School\SchoolValidation;
 use App\Http\Resources\School\SchoolResource;
 use App\Models\School;
 use App\Models\SchoolGrade;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class SchoolController extends Controller
 {
+    public function testt(){
+        $user = User::find(111);
+    }
+
+
     public function update(Request $request,SchoolValidation $validation){
         return DB::transaction(function () use($request,$validation) {
 

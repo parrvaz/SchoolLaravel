@@ -4,6 +4,7 @@ namespace App\Imports;
 
 namespace App\Imports;
 
+use App\Events\UserCreate;
 use App\Models\Classroom;
 use App\Models\Student;
 use App\Models\User;
@@ -62,6 +63,9 @@ class StudentsCreateImport implements OnEachRow, WithStartRow
             $user->assignRole('student');
             $user->modelHasRole()->update(["idInRole" => $student->id]);
 
+        UserCreate::dispatch($user);
+
+
             $parentUser = User::create([
                 "name"     => "ولی " . $student->firstName . " " . $student->lastName,
                 "phone"    => $student->fatherPhone,
@@ -69,6 +73,8 @@ class StudentsCreateImport implements OnEachRow, WithStartRow
             ]);
             $parentUser->assignRole('parent');
             $parentUser->modelHasRole()->update(["idInRole" => $student->id]);
+
+        UserCreate::dispatch($parentUser);
 
     }
 

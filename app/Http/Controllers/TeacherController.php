@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserCreate;
 use App\Http\Requests\Student\StudentValidation;
 use App\Http\Requests\Teacher\TeacherAddValidation;
 use App\Http\Requests\Teacher\TeacherUpdateValidation;
@@ -76,7 +77,10 @@ class TeacherController extends Controller
         //add teacher to school
         $request->schoolGrade->school->teachers()->attach($teacher);
 
-        return new TeacherResource($teacher);
+        UserCreate::dispatch($user);
+
+
+            return new TeacherResource($teacher);
 
         });
 

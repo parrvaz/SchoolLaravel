@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserCreate;
 use App\Http\Requests\Student\StudentUpdateValidation;
 use App\Http\Requests\Student\StudentValidation;
 use App\Http\Resources\Student\StudentCollection;
@@ -62,8 +63,10 @@ class StudentController extends Controller
         $user->assignRole('student');
         $user->modelHasRole()->update(["idInRole"=>$student->id ]);
 
+        UserCreate::dispatch($user);
 
-        //create parent user
+
+            //create parent user
             $user = User::create([
                 "name"=> "ولی ". $student->firstName." ".$student->lastName,
                 "phone"=>$student->fatherPhone,
@@ -73,6 +76,7 @@ class StudentController extends Controller
             $user->assignRole('parent');
             $user->modelHasRole()->update(["idInRole"=>$student->id ]);
 
+         UserCreate::dispatch($user);
 
 
             return $this->successMessage();
@@ -130,6 +134,8 @@ class StudentController extends Controller
                 $student->user->update([
                     'phone' => $validation->phone
                 ]);
+
+                UserCreate::dispatch($student->user);
             }
 
             //change father phone if is changed
@@ -137,6 +143,8 @@ class StudentController extends Controller
                 $student->parentUser->update([
                     'phone' => $validation->fatherPhone
                 ]);
+                UserCreate::dispatch($student->parentUser);
+
             }
 
             //change password if is changed

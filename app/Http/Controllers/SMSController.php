@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use DateTime;
 use DateTimeZone;
-use Illuminate\Http\Request;
 
 class SMSController extends Controller
 {
@@ -33,43 +31,25 @@ class SMSController extends Controller
         $json = file_get_contents($url);
     }
 
-    // ✅ 2. تأیید کد OTP و ثبت نام یا ورود
-    public function verifyOtp(Request $request)
-    {
-        // اعتبارسنجی ورودی‌ها
-        $validator = Validator::make($request->all(), [
-            'phone' => 'required|digits:11',
-            'otp' => 'required|digits:6',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
 
-        // پیدا کردن کاربر بر اساس شماره تلفن و کد OTP
-        $user = User::where('phone', $request->phone)->where('otp', $request->otp)->first();
+    public function UserInformationSms($user){
+        $message = "اطلاعات کاربری شما در سامانه پیکت"."\n"
+            ."نام کاربری: ". $user->phone."\n"
+            . "رمز عبور: ".$user->roleOfUser->nationalId
+            . "\n\n"
+            . "در اولین فرصت نسبت به تغییر رمز خود اقدام نمایید"."\n"
+            . "لینک ورود"."\n"
+            . env("APP_URL")."/api/login";
 
-        if (!$user) {
-            return response()->json(['error' => 'کد وارد شده نادرست است.'], 401);
-        }
-
-        // پاک کردن OTP بعد از تأیید موفق
-        $user->update(['otp' => null]);
-
-        // 📌 ورود و ایجاد توکن
-        Auth::login($user);
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['message' => 'ورود موفقیت‌آمیز بود', 'token' => $token], 200);
+        $this->sendMessage($message,$user->phone);
     }
 
-    // ✅ 3. متد ارسال پیامک (بسته به سرویس پیامکی خود تغییر دهید)
-    private function sendSms($phone, $message)
-    {
-        Http::post('https://smsapi.example.com/send', [
-            'to' => $phone,
-            'message' => $message,
-            'api_key' => 'YOUR_API_KEY',
-        ]);
+    public function UserAddInList($user){
+        $roleName = config("constant.roleName.".$user->role) ;
+        $schoolName = $user->roleOfUser->school->last()->title;
+
+        $message= "شما به عنوان ".$roleName."به مدرسه ". $schoolName. "اضافه شدید.";
+        $this->sendMessage($message, $user->phone);
     }
 }

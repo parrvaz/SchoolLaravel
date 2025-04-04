@@ -33,8 +33,10 @@ use App\Http\Controllers\SchoolGradeController;
 Route::post('register', [AuthenticationController::class, 'register'])->name('register');
 Route::post('login', [AuthenticationController::class, 'login'])->name('login');
 Route::post('loginByCode', [AuthenticationController::class, 'loginByCode'])->name('loginByCode');
-Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:api');
-Route::post('/forgetPassword', [AuthenticationController::class, 'forgetPassword']);
+Route::post('logout', [AuthenticationController::class, 'logout'])->middleware('auth:api');
+Route::post('forgetPassword', [AuthenticationController::class, 'forgetPassword']);
+
+Route::get('test', [SchoolController::class, 'testt']);
 Route::post('log', [AuthenticationController::class, 'log'])->name('log');
 
 Route::middleware('auth:api')->group(function () {

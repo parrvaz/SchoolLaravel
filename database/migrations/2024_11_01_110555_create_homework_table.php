@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('homework', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('school_grade_id')->constrained()->cascadeOnDelete();
             $table->foreignId('course_id')->constrained()->noActionOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->date("date")->nullable();
             $table->text("title")->nullable();
             $table->text("description")->nullable();
@@ -62,6 +63,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('student_homework');
+        Schema::dropIfExists('file_homework');
         Schema::dropIfExists('classroom_homework');
         Schema::dropIfExists('homework');
     }

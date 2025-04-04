@@ -12,6 +12,7 @@ use App\Models\FileHomework;
 use App\Models\Homework;
 use App\Models\Student;
 use App\Models\StudentHomework;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,6 +21,7 @@ class HomeworkController extends Controller
     public function store(Request $request,HomeworkStoreValidation $validation){
         return DB::transaction(function () use($request,$validation) {
             $homework  = Homework::create([
+                "school_grade_id"=>$request->schoolGrade->id,
                 "user_id"=>auth()->user()->id,
                 'course_id'=>$validation->course_id,
                 'expected'=>$validation->expected,
@@ -61,7 +63,8 @@ class HomeworkController extends Controller
 
 
     public function show(Request $request){
-        $homework = Homework::query();
+
+        $homework = Homework::query()->where("school_grade_id",$request->schoolGrade->id);
 
         if (auth()->user()->role == config("constant.roles.teacher")){
             $teacher = auth()->user()->teacher;
@@ -69,23 +72,24 @@ class HomeworkController extends Controller
             $courses = $teacher->courses->pluck("id")->unique();
             $homework = $this->globalFilterRelationWhereIn($homework,"classrooms.id",$classrooms,"classrooms");
             $homework = $this->globalFilterWhereIn($homework,"course_id",$courses);
-        }else{
-            $homework = $this->globalFilterRelation($homework,"school_grade_id",$request->schoolGrade->id,"classrooms");
         }
         $homework = $homework->get();
 
         return new HomeworkCollection($homework);
     }
 
-    public function showSingle($schoolGrade, Homework $homework){
-
-
+    public function showSingle(Request $request,$schoolGrade, Homework $homework){
+        if (!$this->checkAccess($request,$homework))
+            return $this->error("permissionForUser",403);
         return new HomeworkResource($homework);
-    }
+}
 
     public function update(Request $request,HomeworkStoreValidation $validation,$schoolGrade,Homework $homework){
-        return DB::transaction(function () use($request,$validation,$homework) {
 
+        if (auth()->user()->role == config("constant.roles.teacher") && $homework->user_id != auth()->user()->id )
+            return $this->error("permissionForUser",403);
+
+        return DB::transaction(function () use($request,$validation,$homework) {
             $homework->classrooms()->detach();
             $this->deleteGroupFile($homework->allFiles()->pluck("file"));
             $homework->allFiles()->delete();
@@ -106,11 +110,13 @@ class HomeworkController extends Controller
     }
 
     public function delete($schoolGrade,Homework $homework){
+        if (auth()->user()->role == config("constant.roles.teacher") && $homework->user_id != auth()->user()->id )
+            return $this->error("permissionForUser",403);
+
         return DB::transaction(function () use($homework) {
             $homework->classrooms()->detach();
             $this->deleteGroupFile($homework->allFiles()->pluck("file"));
             $homework->allFiles()->delete();
-            //todo scores
             $homework->delete();
 
             return $this->successMessage();
@@ -118,11 +124,15 @@ class HomeworkController extends Controller
     }
 
 
-    public function showStudent($schoolGrade, Homework $homework){
+    public function showStudent(Request $request,$schoolGrade, Homework $homework){
+        if (!$this->checkAccess($request,$homework))
+            return $this->error("permissionForUser",403);
         return new ScoreHomeworkCollection($homework->students);
     }
 
-    public function showScore($schoolGrade, Homework $homework){
+    public function showScore(Request $request,$schoolGrade, Homework $homework){
+       if (!$this->checkAccess($request,$homework))
+           return $this->error("permissionForUser",403);
         return new ScoreHomeworkResource($homework);
     }
 
@@ -155,5 +165,22 @@ class HomeworkController extends Controller
         return $files;
     }
 
+
+    private function checkAccess($request,$homework){
+        if ($homework->school_grade_id != $request->schoolGrade->id)
+            return 0;
+
+        $user = auth()->user();
+        if ($user->role == config("constant.roles.teacher"))
+        {
+            if ( !in_array(  $homework->course_id,$user->teacher->courses->pluck("id")->toArray() ))
+                return 0;
+
+            $common = array_intersect($homework->classrooms->pluck("id")->toArray(), $user->teacher->classrooms->pluck("id")->toArray());
+            if (empty($common))
+                return 0;
+        }
+        return 1;
+    }
 
 }

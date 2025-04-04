@@ -64,7 +64,7 @@ class StudentHomeworkController extends Controller
 
 
     public function update(Request $request,StudentHomeworkUpdateValidation $validation,$schoolGrade,StudentHomework $studentHomework){
-        if ($studentHomework->score != null)
+        if ($studentHomework->score != null || $studentHomework->student_id != auth()->user()->modelHasRole->idInRole)
             return $this->error("permissionForUser",403);
 
         return DB::transaction(function () use($request,$validation,$studentHomework) {
@@ -79,7 +79,7 @@ class StudentHomeworkController extends Controller
     }
 
     public function delete($schoolGrade,StudentHomework $studentHomework){
-        if ($studentHomework->score != null)
+        if ($studentHomework->score != null || $studentHomework->student_id != auth()->user()->modelHasRole->idInRole)
             return $this->error("permissionForUser",403);
 
         return DB::transaction(function () use($studentHomework) {
@@ -97,6 +97,9 @@ class StudentHomeworkController extends Controller
     }
 
     public function showSingle($schoolGrade,Homework $homework){
+
+        if (!in_array(auth()->user()->student->classroom_id, array_intersect($homework->classrooms->pluck("id")->toArray())))
+            return $this->error("permissionForUser",403);
         return new StudentHomeworkResource($homework);
     }
 

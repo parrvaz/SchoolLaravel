@@ -47,7 +47,11 @@ class SMSController extends Controller
 
     public function UserAddInList($user){
         $roleName = config("constant.roleName.".$user->role) ;
-        $schoolName = $user->roleOfUser->school->last()->title;
+        $schoolName = request()->schoolGrade->school->title;
+
+        //todo
+//        if ($user->role == config("constant.roleName.parent"))
+//            $roleName = $roleName." ". $user-> ;
 
         $message= "شما به عنوان ".$roleName." به مدرسه ". $schoolName. " اضافه شدید.";
         $this->sendMessage($message, $user->phone);

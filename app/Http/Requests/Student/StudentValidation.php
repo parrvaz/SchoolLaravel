@@ -22,7 +22,7 @@ class StudentValidation extends FormRequest
             'nationalId'=>'required|digits:10',
             'classroom_id' => 'required|exists:classrooms,id',
             'phone'=>'required|digits:11|unique:students|unique:users',
-            'fatherPhone'=>'required|digits:11|unique:students,fatherPhone|unique:users,phone',
+            'fatherPhone'=>'required|digits:11',
             'motherPhone'=>'nullable|digits:11',
             'birthday'=>['nullable', new JalaliDateValidation()],
             'address'=>'nullable|string|min:1|max:100',

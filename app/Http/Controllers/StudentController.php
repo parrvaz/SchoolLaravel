@@ -29,8 +29,11 @@ class StudentController extends Controller
     {
         if ($validation->phone == $validation->fatherPhone)
             return $this->error("fatherPhone");
+        $fatherAccount = User::where("phone",$validation->fatherPhone)->first();
+        if ( $fatherAccount!= null &&  $fatherAccount->role != config("constant.roles.parent") )
+            return $this->error("fatherPhoneTaken");
 
-        return DB::transaction(function () use($request,$validation) {
+        return DB::transaction(function () use($request,$validation,$fatherAccount) {
 
             $photoPath = $this->saveSingleFile($request,"students/images");
 
@@ -66,7 +69,7 @@ class StudentController extends Controller
 
         UserCreate::dispatch($user);
 
-
+        if ($fatherAccount == null){
             //create parent user
             $user = User::create([
                 "name"=> "ولی ". $student->firstName." ".$student->lastName,
@@ -76,8 +79,8 @@ class StudentController extends Controller
             //assign role
             $user->assignRole('parent');
             $user->modelHasRole()->update(["idInRole"=>$student->id ]);
-
-         UserCreate::dispatch($user);
+            UserCreate::dispatch($user);
+        }
 
 
             return $this->successMessage();

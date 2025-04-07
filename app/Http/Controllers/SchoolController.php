@@ -15,7 +15,8 @@ use Illuminate\Support\Str;
 class SchoolController extends Controller
 {
     public function testt(){
-        return SMSController::calculateMessagePrice("سلام بر شما","09383851960");
+        $user = User::find(426);
+      return  $students = $user->students;
     }
 
 

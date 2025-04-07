@@ -6,8 +6,10 @@ use App\Http\Requests\Grades\SchoolGradesValidation;
 use App\Http\Resources\Grade\SchoolGradeCollection;
 use App\Http\Resources\Grade\SchoolGradeResource;
 use App\Models\SchoolGrade;
+use App\Models\Student;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use mysql_xdevapi\Collection;
 
 class SchoolGradeController extends Controller
 {
@@ -74,10 +76,18 @@ class SchoolGradeController extends Controller
                 $grades = SchoolGrade::where('school_id',$school->id)->get();
                 break;
             case config("constant.roles.student"):
-            case config("constant.roles.parent"):
                 $classroom = $user->student->classroom;
                 $grades = SchoolGrade::where('id',$classroom->school_grade_id)->get();
                 break;
+            case config("constant.roles.parent"):
+                $students = $user->students;
+                $schoolGrades=collect();
+                foreach ($students as $student){
+                    $schoolGrades->add($student->classroom->schoolGrade);
+                }
+                $grades = $schoolGrades;
+                break;
+
         }
 
         return $grades;

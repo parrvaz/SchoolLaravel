@@ -73,6 +73,10 @@ class User extends Authenticatable
         return $this->hasOneThrough(Student::class, ModelHasRole::class,'model_id','id','id','idInRole');
     }
 
+    public function students(){
+        return $this->hasMany(Student::class,"fatherPhone","phone");
+    }
+
     public function roleOfUser(){
         switch ($this->role){
             case config("constant.roles.assistant"):

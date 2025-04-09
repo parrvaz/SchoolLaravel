@@ -12,6 +12,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "maatwebsite/excel": "^3.1",
+        "markrogoyski/math-php": "^2.11",
         "microsoft/microsoft-graph": "^2.12",
         "morilog/jalali": "^3.4",
         "niklasravnsborg/laravel-pdf": "^4.1",

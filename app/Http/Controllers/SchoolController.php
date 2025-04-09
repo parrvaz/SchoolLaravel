@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\School\SchoolStoreValidation;
 use App\Http\Requests\School\SchoolValidation;
 use App\Http\Resources\School\SchoolResource;
+use App\Models\Exam;
 use App\Models\School;
 use App\Models\SchoolGrade;
 use App\Models\User;
@@ -15,8 +16,13 @@ use Illuminate\Support\Str;
 class SchoolController extends Controller
 {
     public function testt(){
-        $user = User::find(426);
-      return  $students = $user->students;
+       $exams = Exam::all();
+      return  DB::transaction(function () use($exams) {
+            foreach ($exams as $exam) {
+                (new CalculateIndicatorsController())->calculateAverageBalance2($exam);
+            }
+            return 5;
+        });
     }
 
 

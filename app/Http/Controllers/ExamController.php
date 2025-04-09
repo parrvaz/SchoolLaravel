@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ExamFinaled;
+use App\Events\UserCreate;
 use App\Exports\ExamExport;
 use App\Http\Requests\Exam\ExamStoreValidation;
 use App\Http\Resources\Exam\ExamCollection;
@@ -50,6 +52,8 @@ class ExamController extends Controller
                $exam->students()->createMany($students);
            }
 
+           if ($validation->isFinal)
+               ExamFinaled::dispatch($exam);
 
            return $this->successMessage();
        });
@@ -106,6 +110,7 @@ class ExamController extends Controller
 
    public function update(ExamStoreValidation $validation, $schoolGrade, Exam $exam){
        return DB::transaction(function () use($exam,$validation) {
+           $isFinale = $validation->isFinal && !$exam->isFinal;
 
            //delete old items
            $this->deleteExamContents($exam);
@@ -145,6 +150,10 @@ class ExamController extends Controller
                }
                $exam->students()->createMany($students);
            }
+
+
+           if ($isFinale)
+               ExamFinaled::dispatch($exam);
 
            return $this->successMessage();
        });

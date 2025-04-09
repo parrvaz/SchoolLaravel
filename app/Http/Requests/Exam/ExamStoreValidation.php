@@ -20,8 +20,8 @@ class ExamStoreValidation extends FormRequest
             'date'=>['required', new JalaliDateValidation()],
             'course_id'=>'required|exists:courses,id',
             'classroom_id'=>'nullable|exists:classrooms,id',
-            'expected'=>'nullable|numeric|min:0|max:100',
-            'totalScore'=>'nullable|numeric|min:0|max:100',
+            'expected'=>'nullable|numeric|min:1|max:100',
+            'totalScore'=>'nullable|numeric|min:1|max:100',
             'isFinal'=>'nullable|boolean',
             'type'=>'nullable|in:1,2,3,4',//1:katbi 2:shafahi 3:testi 4:homework
             'isGeneral'=>'nullable|boolean',

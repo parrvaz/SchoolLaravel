@@ -16,10 +16,10 @@ use Illuminate\Support\Str;
 class SchoolController extends Controller
 {
     public function testt(){
-       $exams = Exam::all();
+       $exams = Exam::where("status",1)->get();
       return  DB::transaction(function () use($exams) {
             foreach ($exams as $exam) {
-                (new CalculateIndicatorsController())->calculateAverageBalance2($exam);
+                (new CalculateIndicatorsController())->calculateExam($exam);
             }
             return 5;
         });

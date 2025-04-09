@@ -32,7 +32,7 @@ class ExamStoreValidation extends FormRequest
             'classrooms'=>'nullable|array',
             'classrooms.*'=>'required|exists:classrooms,id',
 
-            'students'=>'nullable|array',
+            'students'=> request()->isFinal ?   'required|array|min:1' :'nullable|array' ,
             'students.*.student_id'=>'required|exists:students,id',
             'students.*.score'=>'required|numeric|min:0|max:100',
         ];

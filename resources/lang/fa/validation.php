@@ -131,6 +131,7 @@ return array(
         "hour" => "ساعت",
         "minute" => "دقیقه",
         "second" => "ثانیه",
+        "students" => "دانش آموزان",
         "title" => "عنوان",
         "rent"=>"مبلغ اجاره",
         "text" => "متن",

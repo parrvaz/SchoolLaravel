@@ -110,7 +110,7 @@ class ExamController extends Controller
 
    public function update(ExamStoreValidation $validation, $schoolGrade, Exam $exam){
        return DB::transaction(function () use($exam,$validation) {
-           $isFinale = $validation->isFinal && !$exam->isFinal;
+           $isFinale = $validation->isFinal && !$exam->status;
 
            //delete old items
            $this->deleteExamContents($exam);

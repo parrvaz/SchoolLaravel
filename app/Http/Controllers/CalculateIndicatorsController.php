@@ -29,8 +29,6 @@ class CalculateIndicatorsController extends Controller
     public function calculateBalance1($exam){
         $studentExams = $exam->students;
         $scoresArray =$studentExams->pluck("scaledScore")->toArray();
-        if (count($scoresArray)==0)
-            return;
         $stdDev =  Descriptive::standardDeviation($scoresArray);
         if ($stdDev==0)
             return;
@@ -60,9 +58,6 @@ class CalculateIndicatorsController extends Controller
 
     public function calculateBalance2($exam){
         $studentExams = $exam->students;
-        $scoresArray =$studentExams->pluck("score")->toArray();
-        if (count($scoresArray)==0)
-            return;
         $totalScore = $exam->totalScore;
         $expected = $exam->expected;
         if ($totalScore==0 || $expected==0)
@@ -73,7 +68,7 @@ class CalculateIndicatorsController extends Controller
 
         foreach ($studentExams as $stdExam) {
             $id =  $stdExam->id;
-            $balance = $this->formulaBalance2($stdExam->scaledScore,$totalScore,$expected);
+            $balance = $this->formulaBalance2($stdExam->score,$totalScore,$expected);
             $cases .= "WHEN $id THEN $balance ";
             $ids[] = $id;
         }
@@ -91,8 +86,6 @@ class CalculateIndicatorsController extends Controller
 
     public function calculateAverageBalance1($exam): void
     {
-        if ($exam->students->count()==0)
-            return;
         $exam->update([
             "balance1"=> $exam->students->sum("balance1") / $exam->students->count()
         ]);
@@ -100,8 +93,6 @@ class CalculateIndicatorsController extends Controller
 
     public function calculateAverageBalance2($exam): void
     {
-        if ($exam->students->count()==0)
-            return;
         $exam->update([
             "balance2"=> $exam->students->sum("balance2") / $exam->students->count()
         ]);

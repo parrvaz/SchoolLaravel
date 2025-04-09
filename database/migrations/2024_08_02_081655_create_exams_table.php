@@ -22,6 +22,10 @@ return new class extends Migration
             $table->boolean("status")->default(0);
             $table->boolean("isGeneral")->default(0);
             $table->tinyInteger("type")->default(1);//1:katbi 2:shafahi 3:testi
+            $table->float("average")->nullable();
+            $table->unsignedInteger("balance1")->nullable();
+            $table->unsignedInteger("balance2")->nullable();
+            $table->boolean("modified")->default(0);
             $table->timestamps();
         });
 
@@ -32,12 +36,21 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('classroom_exam', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId("exam_id")->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger("classroom_id");
+            $table->timestamps();
+        });
+
         Schema::create('student_exam', function (Blueprint $table) {
             $table->id();
             $table->foreignId("student_id")->constrained()->cascadeOnDelete();
             $table->foreignId("exam_id")->constrained()->cascadeOnDelete();
             $table->float("score")->default(0);
             $table->float("scaledScore")->default(0);
+            $table->unsignedInteger("balance1")->nullable();
+            $table->unsignedInteger("balance2")->nullable();
             $table->timestamps();
         });
     }
@@ -48,6 +61,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('student_exam');
+        Schema::dropIfExists('classroom_exam');
         Schema::dropIfExists('content_exam');
         Schema::dropIfExists('exams');
     }

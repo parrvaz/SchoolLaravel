@@ -19,7 +19,8 @@ class SchoolController extends Controller
        $exams = Exam::where("status",1)->get();
       return  DB::transaction(function () use($exams) {
             foreach ($exams as $exam) {
-                (new CalculateIndicatorsController())->calculateExam($exam);
+                (new CalculateIndicatorsController())->calculateAverageBalance1($exam);
+                (new CalculateIndicatorsController())->calculateAverageBalance2($exam);
             }
             return 5;
         });

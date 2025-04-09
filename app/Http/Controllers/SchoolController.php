@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Report\AnalysisValidation;
 use App\Http\Requests\School\SchoolStoreValidation;
 use App\Http\Requests\School\SchoolValidation;
 use App\Http\Resources\School\SchoolResource;
 use App\Models\Exam;
 use App\Models\School;
 use App\Models\SchoolGrade;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,15 +17,9 @@ use Illuminate\Support\Str;
 
 class SchoolController extends Controller
 {
-    public function testt(){
-       $exams = Exam::where("status",1)->get();
-      return  DB::transaction(function () use($exams) {
-            foreach ($exams as $exam) {
-                (new CalculateIndicatorsController())->calculateAverageBalance1($exam);
-                (new CalculateIndicatorsController())->calculateAverageBalance2($exam);
-            }
-            return 5;
-        });
+    public function testt(AnalysisValidation $validation){
+        request()->schoolGrade = SchoolGrade::find(1);
+       return (new CalculateIndicatorsController())->getRegression($validation);
     }
 
 

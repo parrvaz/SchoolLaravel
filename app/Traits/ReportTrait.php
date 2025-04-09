@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Http\Requests\Report\AnalysisValidation;
 use App\Http\Requests\Report\FilterValidation;
 use App\Models\Absent;
 use App\Models\Exam;
@@ -22,6 +23,13 @@ trait ReportTrait
         $exams = $this->globalFilterWhereIn($exams, "exams.id", $validation->exams);
 
         $exams = $this->filterByDate($exams, $validation->startDate, $validation->endDate);
+    }
+
+    public function generalFilterAnalysis(\Illuminate\Database\Eloquent\Builder $exams, AnalysisValidation $validation): void
+    {
+        $exams = $this->globalFilterWhereIn($exams, "classroom_exam.classroom_id", $validation->classrooms);
+        $exams = $this->globalFilterWhereIn($exams, "exams.course_id", $validation->courses);
+        $exams = $this->globalFilterWhereIn($exams, "student_exam.student_id", $validation->students);
     }
 
     public function absentMtd($request,$validation){

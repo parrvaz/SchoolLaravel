@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Report\AnalysisValidation;
+use App\Http\Requests\Report\FilterValidation;
+use App\Http\Resources\Reports\Progress\ProgressCollection;
+use App\Models\Exam;
+use App\Models\Student;
 use App\Models\StudentExam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MathPHP\Statistics\Descriptive;
+use MathPHP\Statistics\Regression\Linear;
 
 class CalculateIndicatorsController extends Controller
 {
@@ -22,13 +28,71 @@ class CalculateIndicatorsController extends Controller
 
     }
 
-    public function calculateAverage($exam){
+
+    public function getRegression(AnalysisValidation $validation){
+        $exams  = $this->getPoints($validation);
+        $formattedData = [];
+        foreach ($exams as $exam) {
+            $dayOfYear=   self::GetDayOfYear($exam->date);
+            $formattedData[] = [$dayOfYear, $exam['balance1']];
+        }
+        return $formattedData;
+        $m = $this->regression($formattedData);
+        return $m;
+    }
+
+
+
+
+
+
+
+    //******************************** PRIVATE FUNCTIONS *****************************************
+    private function regression($data){
+        $regression = new Linear($data);
+        return $regression->getParameters()["m"];
+
+    }
+    private function getPoints(AnalysisValidation $validation){
+        $exams= Exam::query()
+            ->where("exams.school_grade_id", request()->schoolGrade->id)
+            ->where("exams.status",1)
+            ->join("student_exam","exams.id","student_exam.exam_id")
+            ->join("classroom_exam", "classroom_exam.exam_id", "exams.id")
+            ->join("classrooms","classrooms.id","classroom_exam.classroom_id")
+            ->leftJoin('course_fields', function ($join) {
+                $join->on('course_fields.course_id', '=', 'exams.course_id')
+                    ->where(function ($query) {
+                        $query->whereColumn('course_fields.field_id', 'classrooms.field_id')
+                            ->orWhereNull('course_fields.field_id');
+                    });
+            })
+        ;
+
+        $this->generalFilterAnalysis($exams, $validation);
+        $exams =  $exams->orderBy("date")
+            ->groupBy("exams.date")
+            ->select(
+                "exams.date",
+                DB::raw("MIN(exams.id) as id"),
+                DB::raw("ROUND(AVG(student_exam.balance1)) as balance1"),
+                DB::raw("ROUND(AVG(student_exam.balance2)) as balance2"),
+                DB::raw("ROUND(AVG(scaledScore))"),
+                DB::raw("GROUP_CONCAT(DISTINCT exams.course_id) as course_ids") // اضافه کردن course_ids
+
+            );
+        $exams= $exams->get();
+
+        return $exams;
+
+    }
+    private function calculateAverage($exam){
         $exam->update([
             "average"=> $exam->students->sum("scaledScore") / $exam->students->count()
         ]);
     }
 
-    public function calculateBalance1($exam){
+    private function calculateBalance1($exam){
         $studentExams = $exam->students;
         $scoresArray =$studentExams->pluck("scaledScore")->toArray();
         $stdDev =  Descriptive::standardDeviation($scoresArray);
@@ -58,7 +122,7 @@ class CalculateIndicatorsController extends Controller
         ");
     }
 
-    public function calculateBalance2($exam){
+    private function calculateBalance2($exam){
         $studentExams = $exam->students;
         $totalScore = $exam->totalScore;
         $expected = $exam->expected;
@@ -86,7 +150,7 @@ class CalculateIndicatorsController extends Controller
         ");
     }
 
-    public function calculateAverageBalance1($exam): void
+    private function calculateAverageBalance1($exam): void
     {
         $avg = StudentExam::where('exam_id', $exam->id)->avg('balance1');
         $exam->update([
@@ -94,18 +158,13 @@ class CalculateIndicatorsController extends Controller
         ]);
     }
 
-    public function calculateAverageBalance2($exam): void
+    private function calculateAverageBalance2($exam): void
     {
         $avg = StudentExam::where('exam_id', $exam->id)->avg('balance2');
         $exam->update([
             "balance2"=> $avg
         ]);
     }
-
-    public function regression(){
-
-    }
-
 
     private function formulaBalance1($score,$average,$dev){
        return ((($score-$average)/$dev) *1000)+ 5000;

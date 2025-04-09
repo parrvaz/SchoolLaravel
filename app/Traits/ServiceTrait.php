@@ -48,6 +48,16 @@ trait ServiceTrait
         else return $date;
     }
 
+    public static function GetDayOfYear($date){
+        $gregorianDate = new \Carbon\Carbon($date);
+        $jalaliDate = Jalalian::fromCarbon($gregorianDate);
+
+        // استخراج شماره روز در سال شمسی
+        $dayOfYear = $jalaliDate->format('z');  // این فرمت شماره روز در سال را می‌دهد
+
+        return $dayOfYear;
+    }
+
 
     public function saveGroupFile($request,$prePath,$name){
         $paths = [];

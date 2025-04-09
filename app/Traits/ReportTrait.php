@@ -16,7 +16,7 @@ trait ReportTrait
     public function generalFilter(\Illuminate\Database\Eloquent\Builder $exams, FilterValidation $validation): void
     {
         $exams = $this->globalFilterWhereIn($exams, "exams.type", $validation->types);
-        $exams = $this->globalFilterWhereIn($exams, "exams.classroom_id", $validation->classrooms);
+        $exams = $this->globalFilterWhereIn($exams, "classroom_exam.classroom_id", $validation->classrooms);
         $exams = $this->globalFilterWhereIn($exams, "exams.course_id", $validation->courses);
         $exams = $this->globalFilterWhereIn($exams, "student_exam.student_id", $validation->students);
         $exams = $this->globalFilterWhereIn($exams, "exams.id", $validation->exams);
@@ -94,7 +94,8 @@ trait ReportTrait
 
         $studentExam = StudentExam::query()
             ->join("exams","exams.id","student_exam.exam_id")
-            ->join("classrooms","classrooms.id","exams.classroom_id")
+            ->join("classroom_exam", "classroom_exam.exam_id", "exams.id")
+            ->join("classrooms","classrooms.id","classroom_exam.classroom_id")
             ->leftJoin('course_fields', function ($join) {
                 $join->on('course_fields.course_id', '=', 'exams.course_id')
                     ->where(function ($query) {
@@ -109,7 +110,7 @@ trait ReportTrait
 
 
         $studentExam = $this->globalFilterWhereIn($studentExam,"exams.type",$validation->types);
-        $studentExam = $this->globalFilterWhereIn($studentExam,"exams.classroom_id",$validation->classrooms);
+        $studentExam = $this->globalFilterWhereIn($studentExam,"classroom_exam.classroom_id",$validation->classrooms);
         $studentExam = $this->globalFilterWhereIn($studentExam,"exams.course_id",$validation->courses);
         $studentExam = $this->globalFilterWhereIn($studentExam,"exams.id",$validation->exams);
         $studentExam = $this->globalFilterWhereIn($studentExam,"student_exam.student_id",$validation->students);

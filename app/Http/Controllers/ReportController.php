@@ -96,7 +96,8 @@ class ReportController extends Controller
             ->where("exams.school_grade_id", $request->schoolGrade->id)
             ->where("exams.status",1)
             ->join("student_exam","exams.id","student_exam.exam_id")
-            ->join("classrooms","classrooms.id","exams.classroom_id")
+            ->join("classroom_exam", "classroom_exam.exam_id", "exams.id")
+            ->join("classrooms","classrooms.id","classroom_exam.classroom_id")
             ->leftJoin('course_fields', function ($join) {
                 $join->on('course_fields.course_id', '=', 'exams.course_id')
                     ->where(function ($query) {
@@ -127,7 +128,8 @@ class ReportController extends Controller
                 ->where("exams.school_grade_id", $request->schoolGrade->id)
                 ->where("exams.status",1)
                 ->join("student_exam","exams.id","student_exam.exam_id")
-                ->join("classrooms","classrooms.id","exams.classroom_id")
+                ->join("classroom_exam", "classroom_exam.exam_id", "exams.id")
+                ->join("classrooms","classrooms.id","classroom_exam.classroom_id")
                 ->leftJoin('course_fields', function ($join) {
                     $join->on('course_fields.course_id', '=', 'exams.course_id')
                         ->where(function ($query) {

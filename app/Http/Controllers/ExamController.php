@@ -31,7 +31,10 @@ class ExamController extends Controller
            ]);
 
            $exam->contents()->attach($validation->contents);
+           $exam->classrooms()->attach($validation->classrooms);
 
+           //todo delete this later
+           $exam->classrooms()->attach($validation->classroom_id);
 
 
            if ($validation["students"]){
@@ -106,6 +109,7 @@ class ExamController extends Controller
 
            //delete old items
            $this->deleteExamContents($exam);
+           $this->deleteExamClassrooms($exam);
            $this->deleteExamStudents($exam);
 
            //update exam main data
@@ -122,6 +126,11 @@ class ExamController extends Controller
 
            //create content items
            $exam->contents()->attach($validation->contents);
+           $exam->classrooms()->attach($validation->classrooms);
+
+           //todo delete this later
+           $exam->classrooms()->attach($validation->classroom_id);
+
 
            //create student items
            if ($validation["students"]){
@@ -145,6 +154,7 @@ class ExamController extends Controller
        return DB::transaction(function () use($exam) {
 
            $this->deleteExamContents($exam);
+           $this->deleteExamClassrooms($exam);
            $this->deleteExamStudents($exam);
            $exam->delete();
            return $this->successMessage();
@@ -154,6 +164,11 @@ class ExamController extends Controller
     private function deleteExamContents(Exam $exam)
     {
         $exam->contents()->detach();
+    }
+
+    private function deleteExamClassrooms(Exam $exam)
+    {
+        $exam->classrooms()->detach();
     }
 
     private function deleteExamStudents(Exam $exam)

@@ -22,6 +22,10 @@ class Exam extends Model
         return $this->belongsTo(Classroom::class);
     }
 
+    public function classrooms(){
+        return $this->belongsToMany(Classroom::class);
+    }
+
     public function getClassroomTitleAttribute(){
         return $this->classroom->title;
     }

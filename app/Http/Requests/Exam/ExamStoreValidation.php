@@ -19,7 +19,7 @@ class ExamStoreValidation extends FormRequest
         return [
             'date'=>['required', new JalaliDateValidation()],
             'course_id'=>'required|exists:courses,id',
-            'classroom_id'=>'required|exists:classrooms,id',
+            'classroom_id'=>'nullable|exists:classrooms,id',
             'expected'=>'nullable|numeric|min:0|max:100',
             'totalScore'=>'nullable|numeric|min:0|max:100',
             'isFinal'=>'nullable|boolean',
@@ -28,6 +28,9 @@ class ExamStoreValidation extends FormRequest
 
             'contents'=>'nullable|array',
             'contents.*'=>'required|exists:contents,id',
+
+            'classrooms'=>'nullable|array',
+            'classrooms.*'=>'required|exists:classrooms,id',
 
             'students'=>'nullable|array',
             'students.*.student_id'=>'required|exists:students,id',

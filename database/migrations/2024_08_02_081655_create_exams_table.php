@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_grade_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('classroom_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('classroom_id')->nullable()->constrained()->cascadeOnDelete();
             $table->date("date");
             $table->foreignId("course_id")->constrained()->cascadeOnDelete();
             $table->integer("expected")->default(0);

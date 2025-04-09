@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StudentExam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MathPHP\Statistics\Descriptive;
@@ -87,15 +88,17 @@ class CalculateIndicatorsController extends Controller
 
     public function calculateAverageBalance1($exam): void
     {
+        $avg = StudentExam::where('exam_id', $exam->id)->avg('balance1');
         $exam->update([
-            "balance1"=> $exam->students->sum("balance1") / $exam->students->count()
+            "balance1"=> $avg
         ]);
     }
 
     public function calculateAverageBalance2($exam): void
     {
+        $avg = StudentExam::where('exam_id', $exam->id)->avg('balance2');
         $exam->update([
-            "balance2"=> $exam->students->sum("balance2") / $exam->students->count()
+            "balance2"=> $avg
         ]);
     }
 

@@ -15,6 +15,7 @@ class CalculateIndicatorsController extends Controller
             $this->calculateAverage($exam);
             $this->calculateBalance1($exam);
             $this->calculateBalance2($exam);
+            DB::commit();
             $this->calculateAverageBalance1($exam);
             $this->calculateAverageBalance2($exam);
         });

@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Exam;
 
+use App\Http\Resources\Classroom\ClassroomCollection;
+use App\Http\Resources\Classroom\ClassroomShortCollection;
 use App\Models\Classroom;
 use App\Models\Course;
 use App\Traits\ServiceTrait;
@@ -22,8 +24,8 @@ class ExamCollection extends ResourceCollection
             return[
                 'id' =>$item->id,
                 'user_grade_id' => $item->school_grade_id,
-                'classroom_id' => $item->classroom_id,
-                'classroom' => $item->classroomTitle?? Classroom::find($item->classroom_id)->title,
+                'classroom_id' => $item->classroom_id ?? null,
+                'classroom' => $item->classroomTitle?? Classroom::find($item->classroom_id)->title ?? null,
                 'date' => self::gToJ( $item->date),
                 'modifiedDate' => self::gToJ( $item->updated_at),
                 'course_id' => $item->course_id,
@@ -34,6 +36,7 @@ class ExamCollection extends ResourceCollection
                 'type' => new TypeExamResource( $item) ,
                 'isGeneral' => (bool)$item->isGeneral,
                 'contents'=>new ContentCollection($item->contents),
+                'classrooms'=>new ClassroomShortCollection($item->classrooms),
 
             ];
         })];

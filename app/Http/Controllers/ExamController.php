@@ -94,7 +94,7 @@ class ExamController extends Controller
    public function excel(Request $request,$schoolGrade,Exam $exam){
 
        $students = $this->calculateRank($exam);
-       $name =self::gToJDash($exam->date). "-"."آزمون ". $exam->course->title.'-'."کلاس ".$exam->classroom->number.".xlsx" ;
+       $name =self::gToJDash($exam->date). "-"."آزمون ". $exam->course->title.".xlsx" ;
        return Excel::download(new ExamExport($students), $name);
    }
 

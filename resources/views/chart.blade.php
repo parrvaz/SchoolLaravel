@@ -17,17 +17,12 @@
     const myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {!! json_encode($labels) !!},
+            labels: {!! json_encode($xs) !!},
             datasets: [
-                {
-                    label: 'همه',
-                    data: {!! json_encode($all) !!},
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    tension: 0.3
-                },
+
                 {
                     label: 'منتخب',
-                    data: {!! json_encode($single) !!},
+                    data: {!! json_encode($ys) !!},
                     borderColor: 'rgba(153, 102, 255, 1)',
                     tension: 0.3
                 }

@@ -30,17 +30,12 @@ class CalculateIndicatorsController extends Controller
 
 
     public function getRegression(AnalysisValidation $validation){
-        $exams  = $this->getPoints($validation);
-        $formattedData = new Collection();
-        foreach ($exams as $exam) {
-            $dayOfYear=   self::GetDayOfYear($exam->date);
-            $formattedData->push([$dayOfYear, $exam['balance1']]);
-        }
-        if ( count($formattedData) < 2)
-            $this->throwExp("dataNotEnough","422");
+        $formattedData = $this->getPercentBalances($validation);
         $regression = $this->regression($formattedData);
 
-        return [$formattedData,$regression];
+        $xs = $formattedData->pluck(0)->toArray();
+        $ys = $formattedData->pluck(1)->toArray();
+        return [$xs,$ys,$regression];
     }
 
 
@@ -82,7 +77,6 @@ class CalculateIndicatorsController extends Controller
             })
             ->whereNotNull("student_exam.balance1")
         ;
-
         $this->generalFilterAnalysis($exams, $validation);
         $exams =  $exams->orderBy("date")
             ->groupBy("exams.date")
@@ -97,7 +91,63 @@ class CalculateIndicatorsController extends Controller
             );
         $exams= $exams->get();
 
+        // دوم: محاسبه تعداد کل شرکت‌کنندگان برای هر آزمون
+        $examIds = $exams->pluck('id');
+        $totalParticipants = StudentExam::whereIn('exam_id', $examIds)
+            ->groupBy('exam_id')
+            ->select('exam_id', DB::raw('COUNT(DISTINCT student_id) as count'))
+            ->get()
+            ->keyBy('exam_id');
+
+// ادغام نتایج
+        $exams = $exams->map(function ($exam) use ($totalParticipants) {
+            $exam->count = $totalParticipants[$exam->id]->count ?? 0;
+            return $exam;
+        });
+
         return $exams;
+
+    }
+
+    private function getPercentBalances($validation){
+        $exams  = $this->getPoints($validation);
+        $formattedData = new Collection();
+        foreach ($exams as $exam) {
+            $dayOfYear=   self::GetDayOfYear($exam->date);
+            $formattedData->push([$dayOfYear, $exam['balance1'],$exam['balance2'],$exam["count"]]);
+        }
+        if ( count($formattedData) < 2)
+            $this->throwExp("dataNotEnough","422");
+
+        switch (count($validation["students"] ?? [])){
+            case 0:
+                return $formattedData->map(function ($item){
+                    return[
+                      $item[0],
+                      $item[2]
+                    ];
+                });
+                break;
+            case 1:
+                return $formattedData->map(function ($item){
+                    return[
+                        $item[0],
+                        $item[1]
+                    ];
+                });
+                break;
+            default:
+                $r = count($validation["students"]);
+                return $formattedData->map(function ($item) use($r){
+                    $factor1 = ($item[3] - $r)/$item[3];
+                    $factor2 =  $r/$item[3];
+                return[
+                    $item[0],
+                    ($factor1 * $item[1]) + ($factor2 * $item[2])
+                ];
+            });
+
+        }
 
     }
     private function calculateAverage($exam){

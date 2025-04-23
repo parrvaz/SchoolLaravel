@@ -19,18 +19,10 @@ class SchoolController extends Controller
 {
     public function testt(AnalysisValidation $validation){
         request()->schoolGrade = SchoolGrade::find(1);
-       [$formData,$regression] =  (new CalculateIndicatorsController())->getRegression($validation);
-
-       $labels = $formData->pluck(0)->toArray();
-       $all = $formData->pluck(1)->toArray();
-
-       $validation['students'] = [249];
-//       $validation["courses"] = [6];
-
-        [$formData,$regression] =  (new CalculateIndicatorsController())->getRegression($validation);
-        $single = $formData->pluck(1)->toArray();
-
-        return view('chart', compact('labels', 'all', 'single','regression'));
+       $validation['students'] = [249,220,226,217,219];
+       $validation["courses"] = [6];
+        [$xs,$ys,$regression] =  (new CalculateIndicatorsController())->getRegression($validation);
+        return view('chart', compact('xs', 'ys','regression'));
     }
 
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbsentController;
 use App\Http\Controllers\Api\AuthenticationController;
 use App\Http\Controllers\BellController;
+use App\Http\Controllers\CalculateIndicatorsController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseGradeController;
@@ -245,11 +246,16 @@ Route::middleware('auth:api')->group(function () {
             Route::middleware('role:assistant')->get('/general', [ExcelController::class, 'general']);
         });
 
+        Route::prefix("analysis")->group(function () {
+            Route::middleware('role:assistant')->get('/regression', [CalculateIndicatorsController::class, 'getRegression']);
+
+        });
 
 
 
 
 
-    });
+
+        });
 
 });

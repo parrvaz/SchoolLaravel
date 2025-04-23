@@ -9,9 +9,9 @@ use App\Models\Exam;
 use App\Models\Student;
 use App\Models\StudentExam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use MathPHP\Statistics\Descriptive;
-use MathPHP\Statistics\Regression\Linear;
 
 class CalculateIndicatorsController extends Controller
 {
@@ -31,14 +31,16 @@ class CalculateIndicatorsController extends Controller
 
     public function getRegression(AnalysisValidation $validation){
         $exams  = $this->getPoints($validation);
-        $formattedData = [];
+        $formattedData = new Collection();
         foreach ($exams as $exam) {
             $dayOfYear=   self::GetDayOfYear($exam->date);
-            $formattedData[] = [$dayOfYear, $exam['balance1']];
+            $formattedData->push([$dayOfYear, $exam['balance1']]);
         }
-        return $formattedData;
-        $m = $this->regression($formattedData);
-        return $m;
+        if ( count($formattedData) < 2)
+            $this->throwExp("dataNotEnough","422");
+        $regression = $this->regression($formattedData);
+
+        return [$formattedData,$regression];
     }
 
 
@@ -49,8 +51,19 @@ class CalculateIndicatorsController extends Controller
 
     //******************************** PRIVATE FUNCTIONS *****************************************
     private function regression($data){
-        $regression = new Linear($data);
-        return $regression->getParameters()["m"];
+        $xs = $data->pluck(0);
+        $ys = $data->pluck(1);
+        $avgX=  $xs->average();
+        $avgY=  $ys->average();
+
+        $sumNumerator = 0;
+        $sumDenominator = 0;
+        foreach ($data as $point){
+            $sumNumerator+= ( $point[0] - $avgX )*( $point[1] - $avgY );
+            $sumDenominator+= ( $point[0] - $avgX )*( $point[0] - $avgX );
+        }
+
+        return (float) $sumNumerator / $sumDenominator;
 
     }
     private function getPoints(AnalysisValidation $validation){
@@ -67,6 +80,7 @@ class CalculateIndicatorsController extends Controller
                             ->orWhereNull('course_fields.field_id');
                     });
             })
+            ->whereNotNull("student_exam.balance1")
         ;
 
         $this->generalFilterAnalysis($exams, $validation);

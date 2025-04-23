@@ -21,8 +21,9 @@ class SchoolController extends Controller
         request()->schoolGrade = SchoolGrade::find(1);
        $validation['students'] = [249,220,226,217,219];
        $validation["courses"] = [6];
-        [$xs,$ys,$regression] =  (new CalculateIndicatorsController())->getRegression($validation);
-        return view('chart', compact('xs', 'ys','regression'));
+       $exams =  (new CalculateIndicatorsController())->getGrowthRate($validation);
+       [$xs,$ys,$regression] =  (new CalculateIndicatorsController())->getRegression($validation);
+       return view('chart', compact('xs', 'ys','regression'));
     }
 
 

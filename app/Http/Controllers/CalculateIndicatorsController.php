@@ -38,6 +38,36 @@ class CalculateIndicatorsController extends Controller
         return [$xs,$ys,$regression];
     }
 
+    public function getGrowthRate(AnalysisValidation $validation){
+        $exams  = $this->getPoints($validation)->sortBy("date");
+        $count = $exams->count();
+        $first = $exams->first();
+        $last = $exams->last();
+        $yf = 0;
+        $yl = 0;
+        switch (count($validation["students"] ?? [])){
+            case 0:
+                $yf= $first["balance2"];
+                $yl= $last["balance2"];
+                break;
+            case 1:
+                $yf= $first["balance1"];
+                $yl= $last["balance1"];
+                break;
+            default:
+                $r = count($validation["students"]);
+                $yf = (($first["count"]-$r)/$first["count"] )* $first["balance1"]
+                    + (($r/$first["count"]) * $first["balance2"]);
+                $yl = (($last["count"]-$r)/$last["count"] )* $last["balance1"]
+                    + (($r/$last["count"]) * $last["balance2"]);
+
+        }
+
+        $growthRate = (($yl/$yf) ** (1/($count-1)))-1;
+        return $growthRate;
+    }
+
+
 
 
 

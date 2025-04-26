@@ -67,6 +67,15 @@ class CalculateIndicatorsController extends Controller
         return $growthRate;
     }
 
+    public function averageChanges(AnalysisValidation $validation){
+        $formattedData = $this->getPercentBalances($validation);
+        $sum = 0;
+        for ($i=1;$i<$formattedData->count();$i++){
+            $sum += $formattedData[$i];
+        }
+    }
+
+
 
 
 

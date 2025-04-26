@@ -19,9 +19,10 @@ class SchoolController extends Controller
 {
     public function testt(AnalysisValidation $validation){
         request()->schoolGrade = SchoolGrade::find(1);
-       $validation['students'] = [249,220,226,217,219];
-       $validation["courses"] = [6];
-       $exams =  (new CalculateIndicatorsController())->getGrowthRate($validation);
+       $validation['students'] = [218];
+//       $validation["courses"] = [6];
+       $exams =  (new CalculateIndicatorsController())->averageChanges($validation);
+       return $exams;
        [$xs,$ys,$regression] =  (new CalculateIndicatorsController())->getRegression($validation);
        return view('chart', compact('xs', 'ys','regression'));
     }

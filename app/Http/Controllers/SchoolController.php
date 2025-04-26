@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Report\AnalysisValidation;
 use App\Http\Requests\School\SchoolStoreValidation;
 use App\Http\Requests\School\SchoolValidation;
+use App\Http\Resources\Exam\ContentCollection;
 use App\Http\Resources\School\SchoolResource;
 use App\Models\Exam;
 use App\Models\School;
@@ -18,13 +19,7 @@ use Illuminate\Support\Str;
 class SchoolController extends Controller
 {
     public function testt(AnalysisValidation $validation){
-        request()->schoolGrade = SchoolGrade::find(1);
-       $validation['students'] = [218];
-//       $validation["courses"] = [6];
-       $exams =  (new CalculateIndicatorsController())->averageChanges($validation);
-       return $exams;
-       [$xs,$ys,$regression] =  (new CalculateIndicatorsController())->getRegression($validation);
-       return view('chart', compact('xs', 'ys','regression'));
+
     }
 
 

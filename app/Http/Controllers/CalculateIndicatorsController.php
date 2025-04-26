@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Report\AnalysisValidation;
 use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Reports\Progress\ProgressCollection;
+use App\Models\Course;
 use App\Models\Exam;
+use App\Models\SchoolGrade;
 use App\Models\Student;
 use App\Models\StudentExam;
 use Illuminate\Http\Request;
@@ -28,8 +30,28 @@ class CalculateIndicatorsController extends Controller
 
     }
 
+    public function getAnalysis(AnalysisValidation $validation){
+        request()->schoolGrade = SchoolGrade::find(1);
+        $students=  request()->schoolGrade->students;
+        $courses= Course::where('grade_id',request()->schoolGrade->grade_id)
+            ->where(function ($query)  {
+                $query->where('school_grade_id', request()->schoolGrade->id)
+                    ->orWhere('school_grade_id',null);
+            })
+            ->get();
+        [$xs,$ys,$regression] =  $this->getRegression($validation);
+        $growthRate = $this->getGrowthRate($validation);
+        $averageChanges = $this->averageChanges($validation);
+        $correlationCoefficient = $this->correlationCoefficient($validation);
+        $result = ['regression'=>$regression,'growthRate'=>$growthRate,'cc'=>$correlationCoefficient,"ac"=>$averageChanges ];
+        return view('chart', compact('xs', 'ys','result','students','courses'));
+    }
 
-    public function getRegression(AnalysisValidation $validation){
+
+
+    //******************************** PRIVATE FUNCTIONS *****************************************
+
+    private function getRegression(AnalysisValidation $validation){
         $formattedData = $this->getPercentBalances($validation);
         $regression = $this->regression($formattedData);
 
@@ -38,7 +60,7 @@ class CalculateIndicatorsController extends Controller
         return [$xs,$ys,$regression];
     }
 
-    public function getGrowthRate(AnalysisValidation $validation){
+    private function getGrowthRate(AnalysisValidation $validation){
         $exams  = $this->getPoints($validation)->sortBy("date");
         $count = $exams->count();
         $first = $exams->first();
@@ -67,23 +89,37 @@ class CalculateIndicatorsController extends Controller
         return $growthRate;
     }
 
-    public function averageChanges(AnalysisValidation $validation){
+    private function averageChanges(AnalysisValidation $validation){
         $formattedData = $this->getPercentBalances($validation);
         $sum = 0;
         for ($i=1;$i<$formattedData->count();$i++){
-            $sum += $formattedData[$i];
+            $sum += $formattedData[$i][1];
         }
+
+        return $sum/ ($formattedData->count() - 1);
     }
 
 
+    private function correlationCoefficient(AnalysisValidation $validation){
+        $data = $this->getPercentBalances($validation);
+        $xs = $data->pluck(0);
+        $ys = $data->pluck(1);
+        $avgX=  $xs->average();
+        $avgY=  $ys->average();
 
+        $sumNumerator = 0;
+        $sumDenominatorX = 0;
+        $sumDenominatorY = 0;
+        foreach ($data as $point){
+            $sumNumerator+= ( $point[0] - $avgX )*( $point[1] - $avgY );
+            $sumDenominatorX+= ( $point[0] - $avgX )**2;
+            $sumDenominatorY+= ( $point[1] - $avgY )**2;
+        }
+        $sumDenominator = sqrt($sumDenominatorX) * sqrt($sumDenominatorY);
+        $result = $sumNumerator/$sumDenominator;
+        return $result;
+    }
 
-
-
-
-
-
-    //******************************** PRIVATE FUNCTIONS *****************************************
     private function regression($data){
         $xs = $data->pluck(0);
         $ys = $data->pluck(1);

@@ -40,6 +40,8 @@ Route::post('forgetPassword', [AuthenticationController::class, 'forgetPassword'
 Route::get('test', [SchoolController::class, 'testt']);
 Route::post('log', [AuthenticationController::class, 'log'])->name('log');
 
+Route::get('analysis', [CalculateIndicatorsController::class, 'getAnalysis'])->name('analysis');
+
 Route::middleware('auth:api')->group(function () {
     Route::get('user', [AuthenticationController::class, 'user']);
     Route::post('user/changePassword', [AuthenticationController::class, 'changePassword']);
@@ -247,8 +249,7 @@ Route::middleware('auth:api')->group(function () {
         });
 
         Route::prefix("analysis")->group(function () {
-            Route::middleware('role:assistant')->get('/regression', [CalculateIndicatorsController::class, 'getRegression']);
-
+            Route::middleware('role:assistant')->get('/', [CalculateIndicatorsController::class, 'getAnalysis']);
         });
 
 

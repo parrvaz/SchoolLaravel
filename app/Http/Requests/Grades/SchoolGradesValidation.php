@@ -17,7 +17,7 @@ class SchoolGradesValidation extends FormRequest
     {
         return [
             'grade_id' => 'nullable|exists:grades,id',
-            'title'=>'required|string|min:1|max:50',
+            'purchasedStudents' => 'nullable|integer|min:0|max:9000',
         ];
     }
 }

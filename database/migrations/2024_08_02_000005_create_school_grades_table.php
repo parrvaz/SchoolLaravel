@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId("school_id")->constrained()->cascadeOnDelete();
             $table->foreignId("grade_id")->constrained();
+            $table->integer("purchasedStudents")->default(0);
             $table->string("code")->unique();
-            $table->string("title");
             $table->boolean("isActive")->default(false);
             $table->date("deadline")->nullable();
             $table->timestamps();

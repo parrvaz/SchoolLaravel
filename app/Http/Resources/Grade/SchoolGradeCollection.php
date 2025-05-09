@@ -17,9 +17,10 @@ class SchoolGradeCollection extends ResourceCollection
         return $this->collection->map(function ($item){
             return[
                 'id'=> $item->id,
-                'title'=> $item->title,
-                'fullName'=>  $item->title .' '. $item->school->title,
+                'fullName'=>  'پایه '. $item->grade_id .' '. $item->school->title,
                 'schoolName'=>  $item->school->title,
+                'purchasedStudents' => $item->purchasedStudents,
+                'remainingStudents' => $item->purchasedStudents - $item->students->count(),
                 'logo'=>   $item->school->logo ? url('storage/' . $item->school->logo) : null,
                 'grade_id'=> $item->grade_id,
                 'expiration'=> $item->deadline,

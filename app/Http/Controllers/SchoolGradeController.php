@@ -18,7 +18,7 @@ class SchoolGradeController extends Controller
         $grade = SchoolGrade::create([
             'school_id'=>auth()->user()->school->id,
             'grade_id'=>$validation->grade_id,
-            'title'=>$validation->title,
+            'purchasedStudents'=>$validation->purchasedStudents ?? 0,
             'code'=> Str::random(30),
         ]);
         return new SchoolGradeResource($grade);
@@ -26,8 +26,8 @@ class SchoolGradeController extends Controller
 
     public function update(SchoolGrade $schoolGrade, SchoolGradesValidation $validation){
         $schoolGrade->update([
-            'grade_id'=>$validation->grade_id,
-            'title'=>$validation->title,
+            'grade_id'=>$validation->grade_id ?? $schoolGrade->grade_id,
+            'purchasedStudents'=>$validation->purchasedStudents ?? $schoolGrade->purchasedStudents,
         ]);
 
         return new SchoolGradeResource($schoolGrade);
@@ -37,7 +37,7 @@ class SchoolGradeController extends Controller
 
         $request->schoolGrade->update([
             'grade_id'=>$validation->grade_id ?? $request->schoolGrade->grade_id,
-            'title'=>$validation->title ?? $request->schoolGrade->title,
+            'purchasedStudents'=>$validation->purchasedStudents ?? $request->schoolGrade->purchasedStudents,
         ]);
 
         return new SchoolGradeResource($request->schoolGrade);

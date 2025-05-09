@@ -16,8 +16,9 @@ class SchoolGradeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
             'grade_id' => $this->grade_id,
+            'purchasedStudents' => $this->purchasedStudents,
+            'remainingStudents' => $this->purchasedStudents - $this->students->count(),
             'code' => $this->code,
         ];
     }

@@ -27,6 +27,10 @@ class StudentController extends Controller
      */
     public function store(Request $request,StudentValidation $validation)
     {
+
+        if ($request->schoolGrade->students->count() >= $request->schoolGrade->purchasedStudents)
+            return $this->error("studentNotEnough");
+
         if ($validation->phone == $validation->fatherPhone)
             return $this->error("fatherPhone");
         $fatherAccount = User::where("phone",$validation->fatherPhone)->first();
@@ -93,8 +97,22 @@ class StudentController extends Controller
     public function import(Request $request)
     {
         return DB::transaction(function () use($request) {
+            // خواندن تمام ردیف‌ها از شیت اول
+            $rows = Excel::toArray([], $request->file('file'))[0];
+            // فیلتر کردن ردیف‌های غیرخالی
+            $nonEmptyRows = array_filter($rows, function ($row) {
+                // چک می‌کنیم که حداقل یکی از خانه‌های ردیف پر باشد
+                return collect($row)->filter(fn($cell) => $cell !== null && $cell !== '')->isNotEmpty();
+            });
+            $rowCount = count($nonEmptyRows) - 1;
+            if ($rowCount + $request->schoolGrade->students->count() > $request->schoolGrade->purchasedStudents)
+                return $this->error("studentNotEnough");
+
             $import = new StudentsImport($request);
             Excel::import($import, $request->file('file'));
+
+
+
             $errors = $import->getErrors();
             if (!empty($errors)) {
                 return response()->json([

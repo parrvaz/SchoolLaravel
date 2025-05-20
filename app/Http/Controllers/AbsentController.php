@@ -108,6 +108,8 @@ class AbsentController extends Controller
                         $studentsData[$studentModel->id] = [
                             "student_id" => $studentModel->id,
                             "student" => $studentModel->name,
+                            "firstName" => $studentModel->firstName,
+                            "lastName" => $studentModel->lastName,
                             "fatherPhone" => $studentModel->fatherPhone,
                             "bells" => []
                         ];

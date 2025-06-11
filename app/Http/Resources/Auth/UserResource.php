@@ -23,7 +23,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'phone' => $this->phone,
             'email' => $this->email,
-            'is_admin' => $this->id == 7,
+            'is_admin' => auth()->user()->role == config("constant.roles.admin"),
             'role'=>$this->getRoleNames()->first(),
             'role_id'=>$this->modelHasRole->idInRole ?? null,
             'hasChanged'=>(bool) $this->hasChanged ?? false,

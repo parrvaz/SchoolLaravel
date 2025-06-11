@@ -24,6 +24,18 @@ class SchoolGradeController extends Controller
         return new SchoolGradeResource($grade);
     }
 
+    public function storeAdmin(SchoolGradesValidation $validation){
+        if (auth()->user()->role != config("constant.roles.admin"))
+            return $this->error("permissionForUser",403);
+        $grade = SchoolGrade::create([
+            'school_id'=>$validation->school_id,
+            'grade_id'=>$validation->grade_id,
+            'purchasedStudents'=>$validation->purchasedStudents ?? 0,
+            'code'=> Str::random(30),
+        ]);
+        return new SchoolGradeResource($grade);
+    }
+
     public function update(SchoolGrade $schoolGrade, SchoolGradesValidation $validation){
         $schoolGrade->update([
             'grade_id'=>$validation->grade_id ?? $schoolGrade->grade_id,

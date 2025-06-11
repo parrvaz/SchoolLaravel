@@ -59,7 +59,8 @@ Route::middleware('auth:api')->group(function () {
 
     //SchoolGrades Api
     Route::prefix("grades")->group(function () {
-        Route::post('/store', [SchoolGradeController::class, 'store']);
+//        Route::post('/store', [SchoolGradeController::class, 'store']);
+        Route::post('/storeAdmin', [SchoolGradeController::class, 'storeAdmin']);
         Route::post('/update/{user_grade}', [SchoolGradeController::class, 'update']);
         Route::get('/show', [SchoolGradeController::class, 'show']);
         Route::post('/delete/{user_grade}', [SchoolGradeController::class, 'delete']);

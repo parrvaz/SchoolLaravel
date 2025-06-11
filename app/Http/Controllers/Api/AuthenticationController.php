@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use function PHPUnit\Framework\throwException;
 
 class AuthenticationController extends Controller
@@ -108,19 +109,26 @@ class AuthenticationController extends Controller
 
         $validated = $request->validate([
             'password' => 'required|string|min:8',
+            'oldPassword' => 'required|string|min:6',
         ]);
         $user = auth()->user();
-        if ($user->hasChanged)
-            return $this->error("permissionForUser",403);
-        return DB::transaction(function () use($validated,$user) {
 
-            $user->update([
-                "password" => bcrypt($validated['password']),
-                "hasChanged"=>true,
-            ]);
+        if (Hash::check($request->oldPassword, $user->password))
+        {
+            return DB::transaction(function () use($validated,$user) {
+                $user->update([
+                    "password" => bcrypt($validated['password']),
+//                    "hasChanged"=>true,
+                ]);
 
-            return $this->successMessage();
-        });
+                return $this->successMessage();
+            });
+        }else{
+            return $this->error("oldPassWrong",403);
+        }
+//        if ($user->hasChanged)
+//            return $this->error("permissionForUser",403);
+
     }
 
     public function forgetPassword(UserForgetPasswordValidation $validation){

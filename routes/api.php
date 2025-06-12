@@ -46,7 +46,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('user', [AuthenticationController::class, 'user']);
     Route::post('user/changePassword', [AuthenticationController::class, 'changePassword']);
     Route::post('user/update', [UserController::class, 'update']);
-    Route::post('/studyPlanStore', [StudyController::class, 'studyPlanStore']);
+//    Route::post('/studyPlanStore', [StudyController::class, 'studyPlanStore']);
 
     //School Api
     Route::prefix("schools")->group(function () {

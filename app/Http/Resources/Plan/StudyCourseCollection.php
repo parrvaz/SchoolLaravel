@@ -21,6 +21,7 @@ class StudyCourseCollection extends ResourceCollection
                 'title' => $item['title'],
                 'course_id' =>$item['course_id'],
                 "date"=> $item['date'],
+                "time"=> $item['time'],
                 "isFix"=>$item['isFix'],
             ];
         })->toArray();

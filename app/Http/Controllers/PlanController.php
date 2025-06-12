@@ -105,8 +105,8 @@ class PlanController extends Controller
                 "plan_id"=> $planId,
                 'course_id' => $item['course_id'],
                 'day' => $daysOfWeek[$item['day']],
-                'start' =>$item['start'],
-                'end' => $item['end'],
+                'time' =>$item['time'],
+
             ];
         }
 
@@ -127,8 +127,9 @@ class PlanController extends Controller
                 "plan_id"=> $newPlan->id,
                 'course_id' => $item['course_id'],
                 'day' =>$item['day'],
-                'start' =>$item['start'],
-                'end' => $item['end'],
+                'time' =>$item['time'],
+//                'start' =>$item['start'],
+//                'end' => $item['end'],
             ];
         }
 

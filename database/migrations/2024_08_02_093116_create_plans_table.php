@@ -24,8 +24,7 @@ return new class extends Migration
             $table->foreignId('plan_id')->constrained()->cascadeOnDelete();
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->tinyInteger('day');
-            $table->time('start');
-            $table->time('end');
+            $table->unsignedInteger("time");
             $table->timestamps();
         });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Plan;
 
+use App\Rules\JalaliDateValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StudyStoreValidation extends FormRequest
@@ -16,7 +17,8 @@ class StudyStoreValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => 'required',
+            'date' => ['required', new JalaliDateValidation()],
+            'time' => "required|numeric|min:1",
             'course_id'=>'required|exists:courses,id',
         ];
     }

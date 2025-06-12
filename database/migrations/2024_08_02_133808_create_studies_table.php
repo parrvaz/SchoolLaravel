@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId("student_id")->constrained()->cascadeOnDelete();
             $table->foreignId("course_id")->constrained()->cascadeOnDelete();
             $table->date("date");
-            $table->time("start");
-            $table->time("end");
+            $table->unsignedInteger("time");
+//            $table->time("start");
+//            $table->time("end");
             $table->timestamps();
         });
 
@@ -26,8 +27,9 @@ return new class extends Migration
             $table->foreignId("student_id")->constrained()->cascadeOnDelete();
             $table->foreignId("course_id")->constrained()->cascadeOnDelete();
             $table->date("date");
-            $table->time("start");
-            $table->time("end");
+            $table->unsignedInteger("time");
+//            $table->time("start");
+//            $table->time("end");
             $table->timestamps();
         });
     }

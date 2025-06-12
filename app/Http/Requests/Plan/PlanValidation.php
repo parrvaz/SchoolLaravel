@@ -4,7 +4,7 @@ namespace App\Http\Requests\Plan;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlanValidation extends FormRequest
+class   PlanValidation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,9 @@ class PlanValidation extends FormRequest
             'plan'=>'required|array|min:1',
             "plan.*.course_id"=>'required|exists:courses,id',
             "plan.*.day"=>'required|string',
-            "plan.*.start"=>'required',
-//            "plan.*.start"=>'required|date_format:H:i',
-//            "plan.*.end"=>'required|date_format:H:i',
-            "plan.*.end"=>'required',
+            "plan.*.time"=>'required|numeric|min:1|max:1200',
+//            "plan.*.start"=>'required',
+//            "plan.*.end"=>'required',
 
         ];
     }

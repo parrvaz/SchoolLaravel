@@ -20,7 +20,8 @@ class StudyCourseResource extends JsonResource
             'id' =>$this->id,
             'title' => $this->course->name,
             'course_id' =>$this->course_id,
-            "date"=>  $this->dateStr,
+            "date"=>  $this->date,
+            "time"=>  $this->time,
             "isFix"=>false,
         ];
     }

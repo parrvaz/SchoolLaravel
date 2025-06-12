@@ -55,7 +55,8 @@ class StudyController extends Controller
                 'id' =>$planItem->id,
                 'title' => $planItem->course->name,
                 'course_id' => $planItem->course_id,
-                "date"=>$this->makeDateString($planItem,$this->findDate($planItem)->format("Y/m/d")) ,
+                "date"=>$this->findDate($planItem)->format("Y/m/d") ,
+                "time"=>$planItem->time ,
                 "isFix"=>true,
             ];
         }
@@ -63,16 +64,16 @@ class StudyController extends Controller
 
         //past Fix
         $threeWeeksAgo = Carbon::now()->subWeeks(3);
-        $studyPlans = StudyPlan::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();
-        foreach ($studyPlans as $item){
-            $allItems[]=[
-                'id' =>$item->id,
-                'title' => $item->course->name,
-                'course_id' => $item->course_id,
-                "date"=>$this->makeDateString($item,self::gToJ($item->date)) ,
-                "isFix"=>true,
-            ];
-        }
+//        $studyPlans = StudyPlan::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();
+//        foreach ($studyPlans as $item){
+//            $allItems[]=[
+//                'id' =>$item->id,
+//                'title' => $item->course->name,
+//                'course_id' => $item->course_id,
+//                "date"=>$this->makeDateString($item,self::gToJ($item->date)) ,
+//                "isFix"=>true,
+//            ];
+//        }
 
 
 
@@ -84,7 +85,8 @@ class StudyController extends Controller
                 'id' =>$studyItem->id,
                 'title' => $studyItem->course->name,
                 'course_id' => $studyItem->course_id,
-                "date"=>$this->makeDateString($studyItem,self::gToJ($studyItem->date)) ,
+                "date"=>self::gToJ($studyItem->date) ,
+                "time"=>$studyItem->time ,
                 "isFix"=>false,
             ];
         }
@@ -97,19 +99,14 @@ class StudyController extends Controller
 
 
     private function storeMtd($validation,$student){
-        $space = explode(" ", $validation["date"]);
-        $dash = explode("-", $space[1]);
         $study = Study::create(
             [
                 "student_id" => $student->id,
                 "course_id" => $validation["course_id"],
-                "date" => self::jToG($space[0]),
-                "start" => $dash[0],
-                "end" => $dash[1],
+                "date" => self::jToG($validation["date"]),
+                "time" => $validation['time'],
             ]
         );
-
-        $study->dateStr = $validation["date"];
 
         return (new StudyCourseResource($study))
             ->additional(['message' => "با موفقیت ثبت شد"]);

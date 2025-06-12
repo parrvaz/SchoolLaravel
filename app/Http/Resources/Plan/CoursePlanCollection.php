@@ -20,8 +20,9 @@ class CoursePlanCollection extends ResourceCollection
                 'title' => $item->course->name,
                 'course_id' => $item->course_id,
                 'day' =>  config("constant.day.$item->day") ,
-                'start' => \Carbon\Carbon::createFromFormat('H:i:s', $item->start)->format('H:i'),
-                'end' => \Carbon\Carbon::createFromFormat('H:i:s', $item->end)->format('H:i'),
+                'time' =>  $item->time ,
+//                'start' => \Carbon\Carbon::createFromFormat('H:i:s', $item->start)->format('H:i'),
+//                'end' => \Carbon\Carbon::createFromFormat('H:i:s', $item->end)->format('H:i'),
             ];
         })->toArray();
     }

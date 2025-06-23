@@ -47,23 +47,27 @@ class StudyController extends Controller
 
         //present Fix
         $plan= $student->plan->first();
-        if ($plan==null)
-            return $this->error("haveNotPlan");
-        $planCourses = $plan->coursePlans;
-        foreach ($planCourses as $planItem ){
-            $allItems[]=[
-                'id' =>$planItem->id,
-                'title' => $planItem->course->name,
-                'course_id' => $planItem->course_id,
-                "date"=>$this->findDate($planItem)->format("Y/m/d") ,
-                "time"=>$planItem->time ,
-                "isFix"=>true,
-            ];
+        if ($plan!=null) {
+
+
+//            return $this->error("haveNotPlan");
+            $planCourses = $plan->coursePlans;
+            foreach ($planCourses as $planItem) {
+                $allItems[] = [
+                    'id' => $planItem->id,
+                    'title' => $planItem->course->name,
+                    'course_id' => $planItem->course_id,
+                    "date" => $this->findDate($planItem)->format("Y/m/d"),
+                    "time" => $planItem->time,
+                    "isFix" => true,
+                ];
+            }
+        }else{
+            $plan = new Plan();
         }
 
-
         //past Fix
-        $threeWeeksAgo = Carbon::now()->subWeeks(3);
+        $threeWeeksAgo = Carbon::now()->subWeeks(1);
 //        $studyPlans = StudyPlan::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();
 //        foreach ($studyPlans as $item){
 //            $allItems[]=[

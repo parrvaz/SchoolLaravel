@@ -19,7 +19,7 @@ class StudyResource extends JsonResource
         return [
             'id' =>$this->id,
             'title' => $this->title,
-            'field_id' => $this->classroom->field_id,
+            'field_id' => $this->classroom->field_id ?? null,
             'field' => $this->classroom->field->title ?? null,
             'plan'=> new StudyCourseCollection($this->allItems)
         ];

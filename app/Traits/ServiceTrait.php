@@ -103,11 +103,13 @@ trait ServiceTrait
 
 
     public function scoreFeedback($score,$total,$expected){
-        if ($score === null)
-            return null;
+//        if ($score === null)
+//            return null;
         $feedback = null;
 
-        if  ($score == $total)
+        if (is_null($score))
+            $feedback =  "🫢";
+        elseif  ($score == $total)
             $feedback = "😎";
         elseif ( $score >$total-(($total-$expected)/2))
             $feedback = "👌🏻";

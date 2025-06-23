@@ -27,6 +27,8 @@ class ScoreCollection extends ResourceCollection
                 'expected' => $item->exam->expected,
                 'totalScore' => $item->exam->totalScore,
                 'type' => new TypeExamResource( $item->exam) ,
+                'isPresent' => is_null($item->isPresent) ? null : (bool) $item->isPresent,
+
 
             ];
         })];

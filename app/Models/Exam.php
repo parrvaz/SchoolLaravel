@@ -27,7 +27,7 @@ class Exam extends Model
     }
 
     public function getClassroomTitleAttribute(){
-        return $this->classroom->title;
+        return $this->classroom->title ?? null;
     }
 
     public function course(){

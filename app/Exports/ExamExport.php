@@ -44,7 +44,7 @@ class ExamExport implements FromCollection,WithMapping,WithHeadings, ShouldAutoS
             $row->student->firstName,
             $row->student->lastName,
             $row->student->classroom->title,
-            $this->zeroChar($row->score),
+            is_null($row->score)? "غایب": $this->zeroChar($row->score),
             $row->rank ?? null,
         ];
     }

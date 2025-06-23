@@ -4,6 +4,7 @@ namespace App\Http\Resources\Exam;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use function PHPUnit\Framework\isNull;
 
 class StudentScoreCollection extends ResourceCollection
 {
@@ -20,6 +21,7 @@ class StudentScoreCollection extends ResourceCollection
                 'student_id' => $item->student_id,
                 'name'=> $item->student->name,
                 'score' => $item->score,
+                'isPresent' => is_null($item->isPresent) ? null : (bool) $item->isPresent,
             ];
         })->toArray();
     }

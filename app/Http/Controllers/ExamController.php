@@ -14,6 +14,7 @@ use App\Models\StudentExam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use function PHPUnit\Framework\isNull;
 
 class ExamController extends Controller
 {
@@ -45,8 +46,9 @@ class ExamController extends Controller
                foreach ($validation->students as $std){
                    $students[]=[
                        "student_id"=>$std['student_id'],
-                       "score"=>$std['score'],
-                       'scaledScore' => $validation->totalScore ? ($std['score'] * 100) / $validation->totalScore : 0,
+                       "isPresent"=> $std['isPresent'] ?? null ,
+                       "score"=>$std['score'] ?? null,
+                       'scaledScore' => is_null($std['score']??null) ? null : ($validation->totalScore ? ($std['score'] * 100) / $validation->totalScore : 0),
                    ];
                }
                $exam->students()->createMany($students);
@@ -144,8 +146,9 @@ class ExamController extends Controller
                foreach ($validation->students as $std){
                    $students[]=[
                        "student_id"=>$std['student_id'],
-                       "score"=>$std['score'],
-                       'scaledScore' => ($std['score'] * 100) / $validation->totalScore,
+                       "isPresent"=> $std['isPresent'] ?? null ,
+                       "score"=>$std['score'] ?? null,
+                       'scaledScore' => is_null($std['score']??null) ? null : ($validation->totalScore ? ($std['score'] * 100) / $validation->totalScore : 0),
                    ];
                }
                $exam->students()->createMany($students);
@@ -191,7 +194,7 @@ class ExamController extends Controller
         $total = $exam->totalScore;
 
         foreach ($students as $std){
-            $score = $std->score;
+            $score = $std->score ?? null;
             $std->rank = $this->scoreFeedback($score,$total,$expected);
         }
 

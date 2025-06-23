@@ -34,7 +34,8 @@ class ExamStoreValidation extends FormRequest
 
             'students'=> request()->isFinal ?   'required|array|min:1' :'nullable|array' ,
             'students.*.student_id'=>'required|exists:students,id',
-            'students.*.score'=>'required|numeric|min:0|max:100',
+            'students.*.score'=>'nullable|numeric|min:0|max:100',
+            'students.*.isPresent'=>'nullable|boolean',
         ];
     }
 }

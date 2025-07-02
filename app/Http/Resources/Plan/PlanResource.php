@@ -4,6 +4,7 @@ namespace App\Http\Resources\Plan;
 
 use App\Http\Resources\Exam\ContentCollection;
 use App\Http\Resources\Exam\StudentScoreCollection;
+use App\Http\Resources\Student\StudentShortCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,7 +23,9 @@ class PlanResource extends JsonResource
             'field_id' => $this->classroom->field->id ?? null,
             'field' => $this->classroom->field->title ?? null,
             'title' => $this->title,
-            'plan'=> new CoursePlanCollection($this->coursePlans)
+            'plan'=> new CoursePlanCollection($this->coursePlans),
+            'students'=>new StudentShortCollection($this->students)
+
         ];
     }
 }

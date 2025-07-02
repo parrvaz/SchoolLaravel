@@ -26,6 +26,10 @@ class PlanController extends Controller
 
             $items = $this->makeItems($validation, $plan->id);
             $coursePlans = CoursePlan::insert($items);
+
+
+            $plan->students()->attach($validation->students);
+
             return $this->successMessage();
         });
     }
@@ -38,9 +42,13 @@ class PlanController extends Controller
             ]);
 
             $planModel->coursePlans()->delete();
+            $planModel->students()->delete();
 
             $items = $this->makeItems($validation, $planModel->id);
             $coursePlans = CoursePlan::insert($items);
+
+            $planModel->students()->attach($validation->students);
+
             return $this->successMessage();
         });
     }

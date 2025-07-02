@@ -23,6 +23,10 @@ class   PlanValidation extends FormRequest
             "plan.*.course_id"=>'required|exists:courses,id',
             "plan.*.day"=>'required|string',
             "plan.*.time"=>'required|numeric|min:1|max:1200',
+
+            "students"=>'nullable|array|min:0',
+            "students.*"=>'required|exists:students,id',
+
 //            "plan.*.start"=>'required',
 //            "plan.*.end"=>'required',
 

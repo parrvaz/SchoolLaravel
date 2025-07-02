@@ -17,6 +17,7 @@ class PlanAssignValidation extends FormRequest
     {
         return [
             "data"=>'nullable|array|min:0',
+            "data.*.id"=>'nullable|exists:plans,id',
             "data.*.classroom_id"=>'nullable|exists:classrooms,id',
             "data.*.isDuplicate"=>'nullable|boolean',
             "data.*.title"=>'required|string|min:1|max:100',

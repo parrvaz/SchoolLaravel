@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Plan\StudyStoreValidation;
+use App\Http\Requests\Report\FilterValidation;
 use App\Http\Resources\Bell\BellCollection;
 use App\Http\Resources\Plan\StudyCourseResource;
 use App\Http\Resources\Plan\StudyResource;
@@ -17,9 +18,9 @@ use Morilog\Jalali\Jalalian;
 class StudyController extends Controller
 {
 
-    public function show(Request $request){
+    public function show(Request $request,FilterValidation $validation){
         $student = auth()->user()->student;
-        return $this->showMtd($student);
+        return $this->showMtd($student,$validation);
     }
 
     public function store(Request $request,StudyStoreValidation $validation){
@@ -34,15 +35,15 @@ class StudyController extends Controller
     }
 
 
-    public function showStudent($schoolGrade,Student $student){
-        return $this->showMtd($student);
+    public function showStudent($schoolGrade,Student $student,FilterValidation $validation){
+        return $this->showMtd($student,$validation);
     }
 
     public function storeStudent(StudyStoreValidation $validation,$schoolGrade,Student $student){
         return $this->storeMtd($validation,$student);
     }
 
-    private function showMtd($student){
+    private function showMtd($student,$validation){
         $allItems =[];
 
         //present Fix
@@ -67,7 +68,7 @@ class StudyController extends Controller
         }
 
         //past Fix
-        $threeWeeksAgo = Carbon::now()->subWeeks(1);
+//        $threeWeeksAgo = Carbon::now()->subWeeks(1);
 //        $studyPlans = StudyPlan::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();
 //        foreach ($studyPlans as $item){
 //            $allItems[]=[
@@ -82,7 +83,14 @@ class StudyController extends Controller
 
 
         //studies
-        $study = Study::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();
+        $study = null;
+        if ($validation->startDate != null && $validation->endDate != null){
+            $study = Study::where("student_id",$student->id)->whereB('date', [ $validation->startDate , $validation->endDate])->get();
+        }else
+        {
+            $threeWeeksAgo = Carbon::now()->subWeeks(1);
+            $study = Study::where("student_id",$student->id)->where('date', '>=', $threeWeeksAgo)->get();
+        }
 
         foreach ($study as $studyItem){
             $allItems[]=[

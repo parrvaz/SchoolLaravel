@@ -3,11 +3,13 @@
 namespace App\Http\Resources\Messages;
 
 use App\Http\Resources\Course\ContentCollection;
+use App\Traits\ServiceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class InboxCollection extends ResourceCollection
 {
+    use ServiceTrait;
     /**
      * Transform the resource collection into an array.
      *
@@ -18,8 +20,10 @@ class InboxCollection extends ResourceCollection
         return ['data'=>$this->collection->map(function ($item){
             return[
                 'id'=> $item->id,
+                'date'=> self::gToJ($item->created_at),
                 'sender_id'=> $item->message->user_id,
                 'sender'=> $item->message->sender->name,
+                'picture'=> $item->message->sender->picture ?? null,
                 'subject'=> $item->message->subject,
                 'body'=> $item->message->body,
                 'type'=> $item->message->type ==2 ? "sms":"system",

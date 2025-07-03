@@ -52,16 +52,16 @@ class AuthenticationController extends Controller
             ]);
 
             //bells create ******************
-//            for ($i=0 ; $i<4 ; $i++){
-//                $startTime =Carbon::parse("7:30")->addMinute($i * 90);
-//                $items[] = [
-//                    'school_id' =>$school->id,
-//                    'order' => $i+1,
-//                    'startTime' => $startTime,
-//                    'endTime' =>Carbon::parse($startTime)->subMinutes(15),
-//                ];
-//            }
-//            $bell = Bell::insert($items);
+            for ($i=0 ; $i<4 ; $i++){
+                $startTime =Carbon::parse("7:30")->addMinute($i * 105);
+                $items[] = [
+                    'school_id' =>$school->id,
+                    'order' => $i+1,
+                    'startTime' => $startTime,
+                    'endTime' =>Carbon::parse($startTime)->addMinute(90),
+                ];
+            }
+            $bell = Bell::insert($items);
             //bells create ******************
 
 

@@ -9,11 +9,14 @@ use App\Http\Requests\User\UserLoginByCodeValidation;
 use App\Http\Requests\User\UserLoginValidation;
 use App\Http\Requests\User\UserRegisterValidation;
 use App\Http\Resources\Auth\UserResource;
+use App\Models\Bell;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use function Laravel\Prompts\form;
 use function PHPUnit\Framework\throwException;
 
 class AuthenticationController extends Controller
@@ -44,9 +47,24 @@ class AuthenticationController extends Controller
                 "idInRole"=>$user->id
             ]);
 
-            $user->school()->create([
+            $school =  $user->school()->create([
                 "title"=> "مدرسه " . $user->name
             ]);
+
+            //bells create ******************
+//            for ($i=0 ; $i<4 ; $i++){
+//                $startTime =Carbon::parse("7:30")->addMinute($i * 90);
+//                $items[] = [
+//                    'school_id' =>$school->id,
+//                    'order' => $i+1,
+//                    'startTime' => $startTime,
+//                    'endTime' =>Carbon::parse($startTime)->subMinutes(15),
+//                ];
+//            }
+//            $bell = Bell::insert($items);
+            //bells create ******************
+
+
 
             (new SMSController)->sendOtp($otp,$request->phone);
 

@@ -44,21 +44,21 @@ class StudyController extends Controller
     }
 
     private function showMtd($student,$validation){
+
+
         $allItems =[];
 
         //present Fix
         $plan= $student->plan->first();
+
         if ($plan!=null) {
-
-
-//            return $this->error("haveNotPlan");
             $planCourses = $plan->coursePlans;
             foreach ($planCourses as $planItem) {
                 $allItems[] = [
                     'id' => $planItem->id,
                     'title' => $planItem->course->name,
                     'course_id' => $planItem->course_id,
-                    "date" => $this->findDate($planItem)->format("Y/m/d"),
+                    "date" => $this->findDateWithFilter($planItem,$validation->startDate),
                     "time" => $planItem->time,
                     "isFix" => true,
                 ];
@@ -85,7 +85,7 @@ class StudyController extends Controller
         //studies
         $study = null;
         if ($validation->startDate != null && $validation->endDate != null){
-            $study = Study::where("student_id",$student->id)->whereB('date', [ $validation->startDate , $validation->endDate])->get();
+            $study = Study::where("student_id",$student->id)->whereBetween('date', [ self::Jtog($validation->startDate) , self::Jtog($validation->endDate)])->get();
         }else
         {
             $threeWeeksAgo = Carbon::now()->subWeeks(1);
@@ -143,10 +143,26 @@ class StudyController extends Controller
         $dayDifference = $item->day - $currentWeekDay;
         // تنظیم تاریخ نهایی با اضافه کردن اختلاف روز
         $targetDate = $today->addDays($dayDifference);
-        return $targetDate;
+        return $targetDate->format("Y/m/d");
 
     }
 
 
+
+    //temporary
+    private function findDateWithFilter($item,$startDate) {
+        if ($startDate == null)
+            return $this->findDate($item);
+
+        // ساخت شیء جلالی از تاریخ شروع هفته
+        $startDate = Jalalian::fromFormat('Y/m/d', $startDate);
+
+        // محاسبه روز مورد نظر
+        $targetDate = $startDate->addDays($item->day - 1);
+
+        // بازگرداندن تاریخ شمسی به فرمت YYYY-MM-DD
+        return $targetDate->format('Y/m/d');
+
+    }
 
 }

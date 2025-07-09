@@ -37,17 +37,21 @@ class PlanController extends Controller
     public function update(PlanValidation $validation,$schoolGrade, Plan $planModel){
         return DB::transaction(function () use($planModel,$validation) {
 
+
+            $planModel->coursePlans()->delete();
+            $planModel->students()->detach();
+
+
             $planModel->update([
                 'title' => $validation->title,
             ]);
 
-            $planModel->coursePlans()->delete();
-            $planModel->students()->delete();
 
             $items = $this->makeItems($validation, $planModel->id);
             $coursePlans = CoursePlan::insert($items);
 
             $planModel->students()->attach($validation->students);
+
 
             return $this->successMessage();
         });

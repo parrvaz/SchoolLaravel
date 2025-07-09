@@ -40,7 +40,7 @@ class SMSController extends Controller
             . "\n\n"
             . "در اولین فرصت نسبت به تغییر رمز خود اقدام نمایید"."\n"
             . "لینک ورود"."\n"
-            . env("APP_URL")."/api/login";
+            .( env("APP_FRONT_URL") ?? "https://app.peaket.ir" )."/login" ;
 
         $this->sendMessage($message,$user->phone);
     }

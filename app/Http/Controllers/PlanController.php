@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Plan\PlanAssignValidation;
+use App\Http\Requests\Plan\PlanUpdateValidation;
 use App\Http\Requests\Plan\PlanValidation;
 use App\Http\Resources\Plan\PlanCollection;
 use App\Http\Resources\Plan\PlanResource;
 use App\Models\Bell;
 use App\Models\CoursePlan;
 use App\Models\Plan;
+use App\Models\PlanStudent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -34,8 +36,15 @@ class PlanController extends Controller
         });
     }
 
-    public function update(PlanValidation $validation,$schoolGrade, Plan $planModel){
+    public function update(PlanUpdateValidation $validation,$schoolGrade, Plan $planModel){
         return DB::transaction(function () use($planModel,$validation) {
+
+            $plan_student =  PlanStudent::where("plan_id","!=",$planModel->id)->whereIn("student_id",$validation->students)->get();
+            if (count($plan_student)!= 0)
+                return response()->json([
+                    'message' =>  "برای دانش آموز ". $plan_student->first()->student->name ." برنامه مطالعاتی دیگری ثبت شده است",
+                    'status' => 'error',
+                ], 404);
 
 
             $planModel->coursePlans()->delete();

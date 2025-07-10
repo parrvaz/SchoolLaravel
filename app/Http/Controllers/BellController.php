@@ -32,7 +32,17 @@ class BellController extends Controller
 
     public function update(Request $request, BellStoreValidation $validation,$schoolGrade){
 
-        return DB::transaction(function () use($validation,$request) {
+        return DB::transaction(function () use($validation,$request,$schoolGrade) {
+            $orders = array_column( $validation->list,"order");
+            if (count($orders) !== count(array_unique($orders)))
+                return $this->error("orderRepeat");
+
+            $diff = array_diff(
+                $request->schoolGrade->school->bells->pluck("id")->toArray(),
+                array_column( $validation->list,"id"));
+
+            if (count($diff) != 0)
+                return $this->error();
 
             $items = [];
             foreach ($validation->list as $item) {

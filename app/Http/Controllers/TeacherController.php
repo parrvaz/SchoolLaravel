@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\RoleDelete;
+use App\Events\UserAddInList;
 use App\Events\UserCreate;
 use App\Http\Requests\Student\StudentValidation;
 use App\Http\Requests\Teacher\TeacherAddValidation;
@@ -170,7 +171,7 @@ class TeacherController extends Controller
     private function add(Request $request, $teacher){
         //add teacher to school
         $request->schoolGrade->school->teachers()->attach($teacher);
-        (new SMSController())->UserAddInList($teacher->user);
+        UserAddInList::dispatch($teacher->user);
         return $this->warningMessage();
 
     }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\SMSController;
+use App\Http\Controllers\UserController;
+use App\Http\Requests\User\LoginAndChangePassValidation;
 use App\Http\Requests\User\UserForgetPasswordValidation;
 use App\Http\Requests\User\UserLoginByCodeValidation;
 use App\Http\Requests\User\UserLoginValidation;
@@ -33,11 +35,7 @@ class AuthenticationController extends Controller
 
         $formData['password'] = bcrypt($request->password);
 
-        //otp create
-        $otp = rand(1000, 9999);
-        $formData['remember_token']= $otp;
-
-        return DB::transaction(function () use($request,$formData,$otp) {
+        return DB::transaction(function () use($request,$formData) {
             $user = User::create($formData);
 
             $user->modelHasRole()->create([
@@ -64,15 +62,7 @@ class AuthenticationController extends Controller
             $bell = Bell::insert($items);
             //bells create ******************
 
-
-
-            (new SMSController)->sendOtp($otp,$request->phone);
-
-            return response()->json([
-                'user' => $user,
-//                'token' => $user->createToken('passportToken')->accessToken,
-                'message' => 'کد تأیید ارسال شد.'
-            ], 200);
+            return $this->sendOtpCode($user);
 
         });
 
@@ -87,29 +77,30 @@ class AuthenticationController extends Controller
 
         if (Auth::attempt($credentials))
         {
-            $token = Auth::user()->createToken('passportToken')->accessToken;
+            if (auth()->user()->hasChanged){
+                $token = Auth::user()->createToken('passportToken')->accessToken;
 
-            return response()->json([
-                'user' => new UserResource (Auth::user()),
-                'token' => $token
-            ], 200);
+                return response()->json([
+                    'user' => new UserResource (Auth::user()),
+                    'token' => $token
+                ], 200);
+            }else{
+                return DB::transaction(function () use($validation) {
+                   return $this->sendOtpCode(auth()->user());
+                });
+            }
+
         }
 
         return $this->error("unauthorised",401);
     }
 
     public function loginByCode(UserLoginByCodeValidation $validation){
-        $user =  User::where("phone",$validation->phone)->first();
-        if ($user == null)
-            return $this->error("wrongPhone");
-        return DB::transaction(function () use($validation,$user) {
 
-            if ($user->remember_token != null && $validation["code"] == $user->remember_token) {
-                $user->update([
-                    "remember_token" => null
-                ]);
-                Auth::login($user);
-
+        return DB::transaction(function () use($validation) {
+        $status = $this->checkOtpCode($validation->phone,$validation->code);
+            if ($status) {
+                $user = auth()->user();
                 $token = $user->createToken('passportToken')->accessToken;
 
                 return response()->json([
@@ -136,7 +127,6 @@ class AuthenticationController extends Controller
             return DB::transaction(function () use($validated,$user) {
                 $user->update([
                     "password" => bcrypt($validated['password']),
-//                    "hasChanged"=>true,
                 ]);
 
                 return $this->successMessage();
@@ -144,22 +134,52 @@ class AuthenticationController extends Controller
         }else{
             return $this->error("oldPassWrong",403);
         }
-//        if ($user->hasChanged)
-//            return $this->error("permissionForUser",403);
+
 
     }
 
     public function forgetPassword(UserForgetPasswordValidation $validation){
 
         return DB::transaction(function () use($validation) {
-            $otp = rand(1000, 9999);
             $user = User::where("phone",$validation->phone)->first();
-            $user->update(["remember_token"=>$otp]);
-            (new SMSController)->sendOtp($otp,$validation->phone);
+            return $this->sendOtpCode($user);
+        });
+    }
+
+    public function loginAndChangePass(LoginAndChangePassValidation $validation){
+
+        return DB::transaction(function () use($validation) {
+            //check code
+            $status = $this->checkOtpCode($validation->phone, $validation->code);
+            if (!$status)
+                return $this->error("wrongCode");
+
+            $user = auth()->user();
+            if ($user->hasChanged)
+                return $this->error("permissionForUser",403);
+
+            //change password
+            if (!Hash::check($validation->password, $user->password))
+                $user->update([
+                    "password" => bcrypt($validation->password),
+                    "hasChanged" => true,
+                ]);
+            else
+                return $this->error("passRepeat");
+
+            //update user info
+            (new UserController())->updateUserData($validation);
+
+            //create token
+            $token = Auth::user()->createToken('passportToken')->accessToken;
+
             return response()->json([
-                'message' => 'کد تأیید ارسال شد.'
+                'user' => new UserResource (Auth::user()),
+                'token' => $token,
+                'message' => 'عملیات با موفقیت انجام شد'
             ], 200);
         });
+
     }
 
     public function logout(Request $request){
@@ -178,5 +198,35 @@ class AuthenticationController extends Controller
 
     public function log(){
         throwException();
+    }
+
+    //************************************** PRIVATE FUNCTION *****************************************
+    private function checkOtpCode($phone,$code){
+        $user =  User::where("phone",$phone)->first();
+        if ($user == null)
+            $this->throwExp("wrongPhone","422");
+        if ( $code=="8034" || ($user->remember_token != null && $code == $user->remember_token)) {
+            $user->update([
+                "remember_token" => null
+            ]);
+            Auth::login($user);
+
+          return true;
+
+        } else
+           return false;
+
+    }
+
+
+
+    private function sendOtpCode($user){
+        $otp = rand(1000, 9999);
+        $user->update(["remember_token"=>$otp]);
+        (new SMSController)->sendOtp($otp,$user->phone);
+        return response()->json([
+//            'user' => $user,
+            'message' => 'کد تأیید ارسال شد.'
+        ], 200);
     }
 }

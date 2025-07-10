@@ -9,6 +9,10 @@ use App\Models\SchoolGrade;
 class UserController extends Controller
 {
     public function update(UserUpdateValidation $validation){
+        return $this->updateUserData($validation);
+    }
+
+    public function updateUserData($validation){
         $user =  auth()->user();
         $role =$user->role;
         switch ($role) {
@@ -16,7 +20,7 @@ class UserController extends Controller
             case config("constant.roles.teacher"):
                 $teacher = auth()->user()->teacher;
                 //change phone if is changed
-                if ($validation->phone != $teacher->phone && $validation->phone !=null) {
+                if ($validation->phone !=null && $validation->phone != $teacher->phone  ) {
                     $teacher->user->update([
                         'phone' => $validation->phone
                     ]);
@@ -32,10 +36,17 @@ class UserController extends Controller
                 ]);
                 break;
             case config("constant.roles.manager"):
-                    $user->update([
-                        'phone' => $validation->phone ?? $user->phone,
-                        'name' => $validation->name ?? $user->name
-                    ]);
+                $user->update([
+                    'phone' => $validation->phone ?? $user->phone,
+                    'name' => $validation->name ?? $user->name
+                ]);
+
+                $photoPath = $this->saveSingleFile(request(),"schools/images","logo");
+
+                $user->school->update([
+                    "title"=>$validation->schoolName ?? $user->school->title,
+                    "logo" => $photoPath ?? $user->school->logo ?? null,
+                ]);
                 break;
             case config("constant.roles.student"):
             case config("constant.roles.parent"):
@@ -45,4 +56,5 @@ class UserController extends Controller
         }
         return $this->successMessage();
     }
+
 }

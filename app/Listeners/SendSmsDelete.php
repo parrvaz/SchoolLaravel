@@ -7,7 +7,7 @@ use App\Http\Controllers\SMSController;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendSmsDelete
+class SendSmsDelete implements ShouldQueue
 {
     /**
      * Create the event listener.

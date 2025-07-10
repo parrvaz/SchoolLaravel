@@ -7,7 +7,7 @@ use App\Http\Controllers\SMSController;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendSmsPassword
+class SendSmsPassword implements ShouldQueue
 {
     /**
      * Create the event listener.

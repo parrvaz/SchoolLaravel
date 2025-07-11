@@ -111,11 +111,16 @@ class StudyController extends Controller
 
 
     private function storeMtd($validation,$student){
+        $dateG = self::jToG($validation["date"]);
+        $now = Carbon::now()->endOfWeek();
+        if ($now->lt($dateG))
+            return $this->error("dateLtNow");
+
         $study = Study::create(
             [
                 "student_id" => $student->id,
                 "course_id" => $validation["course_id"],
-                "date" => self::jToG($validation["date"]),
+                "date" => $dateG,
                 "time" => $validation['time'],
             ]
         );

@@ -14,9 +14,12 @@ use Illuminate\Support\Facades\DB;
 class MessageController extends Controller
 {
     public function send(Request $request, MessageValidation $validation){
-        $type = ($validation->type=="sms" ?? 1) ? 2 :1;
+        $user = auth()->user();
+        $role = $user->role;
 
-        $role = auth()->user()->role;
+        if ( in_array( $user->id,$validation->recipients ))
+            return $this->error("messageSelf");
+
         switch ($role){
             case config("constant.roles.parent"):
                 return $this->error("permissionForUser",403);
@@ -30,6 +33,7 @@ class MessageController extends Controller
                 break;
         }
 
+        $type = ($validation->type=="sms" ?? 1) ? 2 :1;
         return DB::transaction(function () use($request,$validation,$type) {
 
             // ایجاد پیام جدید

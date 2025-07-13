@@ -140,7 +140,7 @@ class PlanController extends Controller
         $newPlan = Plan::create([
             'school_grade_id' => $request->schoolGrade->id,
             'title' => $validation['title'],
-            'classroom_id' => $validation['classroom_id'],
+            'classroom_id' => $plan['classroom_id'],
         ]);
 
         $items=[];

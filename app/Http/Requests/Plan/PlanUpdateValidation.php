@@ -29,8 +29,7 @@ class   PlanUpdateValidation extends FormRequest
             "plan.*.time"=>'required|numeric|min:1|max:1200',
 
             "students"=>'nullable|array|min:0',
-            "students.*"=>['required','exists:students,id',
-            ],
+            "students.*"=>['required','exists:students,id'],
 //            "unique:plan_student,student_id"
 
 //            "plan.*.start"=>'required',

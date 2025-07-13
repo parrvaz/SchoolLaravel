@@ -53,6 +53,7 @@ class PlanController extends Controller
 
             $planModel->update([
                 'title' => $validation->title,
+                'classroom_id' => $validation->classroom_id ?? $planModel->classroom_id,
             ]);
 
 

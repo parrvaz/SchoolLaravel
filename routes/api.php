@@ -62,9 +62,9 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix("grades")->group(function () {
 //        Route::post('/store', [SchoolGradeController::class, 'store']);
         Route::post('/storeAdmin', [SchoolGradeController::class, 'storeAdmin']);
-        Route::post('/update/{user_grade}', [SchoolGradeController::class, 'update']);
+        Route::post('/update/{schoolGrade}', [SchoolGradeController::class, 'update']);
         Route::get('/show', [SchoolGradeController::class, 'show']);
-        Route::post('/delete/{user_grade}', [SchoolGradeController::class, 'delete']);
+        Route::post('/delete/{schoolGrade}', [SchoolGradeController::class, 'delete']);
         Route::get('/items', [MenuItemController::class, 'show']);
 
     });

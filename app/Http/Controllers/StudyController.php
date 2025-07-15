@@ -25,7 +25,6 @@ class StudyController extends Controller
 
     public function store(Request $request,StudyStoreValidation $validation){
         $student = auth()->user()->student;
-
         return $this->storeMtd($validation,$student);
     }
 
@@ -112,6 +111,13 @@ class StudyController extends Controller
 
     private function storeMtd($validation,$student){
         $dateG = self::jToG($validation["date"]);
+
+        //delete old study if exists
+        $oldStudy = Study::where("date",$dateG)->where("course_id",$validation["course_id"]);
+        if ($oldStudy->count() > 0)
+            $oldStudy->delete();
+
+
         $now = Carbon::now()->endOfWeek();
         if ($now->lt($dateG))
             return $this->error("dateLtNow");

@@ -12,7 +12,6 @@ use App\Models\FileHomework;
 use App\Models\Homework;
 use App\Models\Student;
 use App\Models\StudentHomework;
-use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -52,7 +51,7 @@ class HomeworkController extends Controller
     public function setFinal(Request $request,$schoolGrade,Homework $homework){
         if (!$this->checkAccess($request,$homework))
             return $this->error("permissionForUser",403);
-        
+
         return DB::transaction(function () use($homework) {
             $homework->timestamps = false;
             $homework->isFinal = !$homework->isFinal;
@@ -165,6 +164,9 @@ class HomeworkController extends Controller
     public function showScore(Request $request,$schoolGrade, Homework $homework){
        if (!$this->checkAccess($request,$homework))
            return $this->error("permissionForUser",403);
+
+        $allStudents = $homework->students->merge($homework->notSubmittedStudents);
+        $homework->allStudentTmp  =$allStudents;
         return new ScoreHomeworkResource($homework);
     }
 

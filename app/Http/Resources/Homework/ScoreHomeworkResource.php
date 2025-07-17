@@ -29,9 +29,10 @@ class ScoreHomeworkResource extends JsonResource
             'expected' => $this->expected,
             "isFinal"=>(bool) $this->isFinal,
 
-            'submitted'=> new ScoreListHomeworkCollection($this->students),
-            'notSubmitted'=> new ScoreNotSubmittedListHomeworkCollection($this->notSubmittedStudents),
+//            'submitted'=> new ScoreListHomeworkCollection($this->students),
+//            'notSubmitted'=> new ScoreNotSubmittedListHomeworkCollection($this->notSubmittedStudents),
 
+            'students'=> new ScoreListAllHomeworkCollection($this->allStudentTmp),
         ];
     }
 }

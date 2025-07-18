@@ -15,16 +15,16 @@ class TeacherResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->id,
-            'firstName'=>$this->firstName,
-            'lastName'=>$this->lastName,
-            'nationalId'=>$this->nationalId,
-            'degree'=>$this->degree,
-            'personalId'=>$this->personalId,
-            'phone'=>$this->phone,
-            'user_grade_id'=>$this->school_grade_id,
-            'isAssistant'=> (bool) $this->isAssistant,
-            "user_id"=> $this->user->id
+            'id'=>$this->id ?? null,
+            'firstName'=>$this->firstName ?? null,
+            'lastName'=>$this->lastName ?? null,
+            'nationalId'=>$this->nationalId ?? null,
+            'degree'=>$this->degree ?? null,
+            'personalId'=>$this->personalId ?? null,
+            'phone'=>$this->phone ?? null,
+            'user_grade_id'=>$this->school_grade_id ?? null,
+            'isAssistant'=> (bool) ($this->isAssistant ?? null) ?? null,
+            "user_id"=> $this->user->id ?? null
 
         ];
     }

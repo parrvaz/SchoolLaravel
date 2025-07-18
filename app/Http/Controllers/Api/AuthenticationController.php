@@ -11,6 +11,7 @@ use App\Http\Requests\User\UserLoginByCodeValidation;
 use App\Http\Requests\User\UserLoginValidation;
 use App\Http\Requests\User\UserRegisterValidation;
 use App\Http\Resources\Auth\UserResource;
+use App\Http\Resources\Teacher\TeacherResource;
 use App\Models\Bell;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,8 +63,9 @@ class AuthenticationController extends Controller
             $bell = Bell::insert($items);
             //bells create ******************
 
-            return $this->sendOtpCode($user);
+//            return $this->sendOtpCode($user);
 
+            return $school->id;
         });
 
     }
@@ -86,7 +88,17 @@ class AuthenticationController extends Controller
                 ], 200);
             }else{
                 return DB::transaction(function () use($validation) {
-                   return $this->sendOtpCode(auth()->user());
+                    $user= auth()->user();
+                    $this->sendOtpCode($user);
+                    $teacher = null;
+                    if ($user->role == config("constant.roles.teacher") || $user->role == config("constant.roles.assistant") )
+                    {
+                         $teacher = $user->teacher;
+                    }
+                    return response()->json([
+                        'teacher' => $teacher!= null ? new TeacherResource($teacher) : null,
+                        'message' => 'کد تأیید ارسال شد.'
+                    ], 200);
                 });
             }
 

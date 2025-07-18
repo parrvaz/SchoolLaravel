@@ -30,7 +30,7 @@ class AuthenticationController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'hasChanged' => true,
+            'hasChanged' => false,
         ];
 
         $formData['password'] = bcrypt($request->password);

@@ -16,7 +16,7 @@ class CourseValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'list'=>'required|array|min:1',
+            'list'=>'nullable|array|min:0',
             'list.*.course_id'=>'required|exists:courses,id',
             'list.*.classroom_id'=>'required|exists:classrooms,id',
             'list.*.teacher_id'=>'required|exists:teachers,id',

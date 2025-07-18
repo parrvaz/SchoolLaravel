@@ -22,8 +22,35 @@ class UserLoginValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'phone'=>'required|numeric|digits:11|exists:users,phone',
-            'password' => ['required','string','min:6'],
+//            'phone'=>'required|numeric|digits:11|exists:users,phone',
+//            'password' => ['required','string','min:6'],
+
+            'phone' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if ($value === 'demo') {
+                        return true;
+                    }
+
+                    if (!preg_match('/^\d{11}$/', $value)) {
+                        return $fail('شماره تلفن باید ۱۱ رقم عددی باشد.');
+                    }
+
+                },
+            ],
+            'password' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if ($value === 'demo') {
+                        return true; // مجاز است
+                    }
+
+                    if (strlen($value) < 6) {
+                        return $fail('رمز عبور باید حداقل ۶ کاراکتر باشد.');
+                    }
+                },
+            ],
         ];
     }
 }

@@ -19,7 +19,10 @@ use Illuminate\Support\Str;
 class SchoolController extends Controller
 {
     public function testt(AnalysisValidation $validation){
+        $firstName = ["محمد","رضا","علی","سینا","اشکان","مصطفی","سهیل","صادق","حسین","نیما","مرتضی","نوید","هادی","مهدی","آرمین"];
+        $lastName = ["جعفری","مسلمی","اسدی","معماری","فاطمی","عرب","قربانی","کریمی","کیانی","بیگی","عزتی","صفایی","رادخوش","عنایتی","جباری","محمدی","کاظمی"];
 
+        return  $firstName[array_rand($firstName)];
     }
 
 

@@ -46,7 +46,7 @@ class AuthenticationController extends Controller
             ]);
 
             $school =  $user->school()->create([
-                "title"=> "مدرسه " . $user->name
+                "title"=> $user->name
             ]);
 
             //bells create ******************

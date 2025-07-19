@@ -89,16 +89,7 @@ class AuthenticationController extends Controller
             }else{
                 return DB::transaction(function () use($validation) {
                     $user= auth()->user();
-                    $this->sendOtpCode($user);
-                    $teacher = null;
-                    if ($user->role == config("constant.roles.teacher") || $user->role == config("constant.roles.assistant") )
-                    {
-                         $teacher = $user->teacher;
-                    }
-                    return response()->json([
-                        'teacher' => $teacher!= null ? new TeacherResource($teacher) : null,
-                        'message' => 'کد تأیید ارسال شد.'
-                    ], 200);
+                    return $this->sendOtpCode($user);
                 });
             }
 
@@ -238,6 +229,7 @@ class AuthenticationController extends Controller
         (new SMSController)->sendOtp($otp,$user->phone);
         return response()->json([
 //            'user' => $user,
+            'user' => new UserResource ($user),
             'message' => 'کد تأیید ارسال شد.'
         ], 200);
     }
